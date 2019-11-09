@@ -1,0 +1,1989 @@
+(defrule
+	(true)
+=>
+	(do-nothing)
+)
+
+; ---------------------------
+; Civilization-specific units
+; ---------------------------
+
+#load-if-defined BRITON-CIV
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 25)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count archer-line < 25)
+	(can-train archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+(defrule
+	(strategic-number sn-military-level < 6)
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count archer-line < 50)
+	(can-train archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count trebuchet-set < 5)
+	(up-compare-goal castle-train-count < 3)
+	;(up-compare-goal not-countered-trebuchet > 2)
+	(can-train trebuchet)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train trebuchet)
+)
+#end-if
+
+#load-if-defined BYZANTINE-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 8)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count skirmisher-line < 25)
+	(can-train skirmisher-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-skirmisher > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count spearman-line < 25)
+	(can-train spearman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-spearman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count camel-line < 13)
+	(can-train camel-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-camel > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train camel-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count fire-ship-line < 9)
+	(up-compare-goal dock-train-count < 3)
+	(can-train fire-ship-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+)
+#end-if
+
+#load-if-defined CELTIC-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 11)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count spearman-line < 16)
+	(can-train spearman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-spearman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 25)
+	(unit-type-count militiaman-line < 12)
+	(can-train militiaman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count mangonel-line < 3)
+	(can-train mangonel-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-mangonel > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train mangonel-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count scorpion-line < 7)
+	(can-train scorpion-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-scorpion > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count battering-ram-line < 4)
+	(can-train battering-ram-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-battering-ram > 2)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train battering-ram-line)
+)
+#end-if
+
+#load-if-defined CHINESE-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 38)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count scorpion-line < 18)
+	(can-train scorpion-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-scorpion > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+)
+#end-if
+
+#load-if-defined FRANKISH-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count knight-line < 14)
+	(can-train-with-escrow knight-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-knight > 2)
+=>
+	(release-escrow gold)
+	(release-escrow food)
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+)
+(defrule
+	(current-age > feudal-age)
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count scout-cavalry-line < 23)
+	(can-train scout-cavalry-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-scout-cavalry > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 23)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+#end-if
+
+#load-if-defined GOTHIC-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 23)
+	(can-train my-unique-unit-line)
+	(or	(up-compare-goal castle-train-count < 3) 
+		(up-compare-goal barracks-train-count < 3))
+=>
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 25)
+	(unit-type-count militiaman-line < 36)
+	(can-train militiaman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+
+(defrule
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count spearman-line < 52)
+	(can-train spearman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-spearman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+#end-if
+
+#load-if-defined JAPANESE-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 26)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(nand (current-age < imperial-age)
+		(wood-amount < 150))
+	(unit-type-count fishing-ship < 15)
+	(can-train fishing-ship)
+	(up-compare-goal dock-train-count < 3) 
+	(nand (game-time > 2700)
+		(goal warship-training-disabled 1))
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fishing-ship)
+)
+
+
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count trebuchet-set < 6)
+	(up-compare-goal castle-train-count < 3)
+	;(up-compare-goal not-countered-trebuchet > 2)
+	(can-train trebuchet)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train trebuchet)
+)
+#end-if
+
+#load-if-defined MONGOL-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 8)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count cavalry-archer-line < 9)
+	(can-train cavalry-archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count scout-cavalry-line < 12)
+	(can-train scout-cavalry-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-scout-cavalry > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count mangonel-line < 3)
+	(can-train mangonel-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-mangonel > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train mangonel-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count battering-ram-line < 4)
+	(can-train battering-ram-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-battering-ram > 2)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train battering-ram-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count scorpion-line < 7)
+	(can-train scorpion-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-scorpion > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+)
+#end-if
+
+#load-if-defined PERSIAN-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count knight-line < 15)
+	(can-train-with-escrow knight-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-knight > 2)
+=>
+	(release-escrow gold)
+	(release-escrow food)
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count cavalry-archer-line < 15)
+	(can-train cavalry-archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 10)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-knight > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+#end-if
+
+#load-if-defined SARACEN-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 8)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count camel-line < 10)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-camel > 2)
+	(can-train camel-line)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train camel-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count cavalry-archer-line < 11)
+	(can-train cavalry-archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count galley-line < 9)
+	(up-compare-goal dock-train-count < 3)
+	(can-train galley-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count monk < 11)
+	(up-compare-goal church-train-count < 3)
+	;(up-compare-goal not-countered-monk > 2)
+	(can-train monk)
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+#end-if
+
+#load-if-defined TEUTONIC-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 9)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count monk < 11)
+	(up-compare-goal church-train-count < 3)
+	;(up-compare-goal not-countered-monk > 2)
+	(can-train monk)
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count mangonel-line < 4)
+	(can-train mangonel-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-mangonel > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train mangonel-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count battering-ram-line < 5)
+	(can-train battering-ram-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-battering-ram > 2)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train battering-ram-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count scorpion-line < 8)
+	(can-train scorpion-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-scorpion > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+)
+#end-if
+
+#load-if-defined TURKISH-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 8)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-hand-cannoneer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count cannon-galleon-line < 2)
+	(up-compare-goal dock-train-count < 3)
+	(can-train cannon-galleon-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count bombard-cannon < 2)
+	(can-train bombard-cannon)
+	(up-compare-goal siege-train-count < 3) 
+	;(up-compare-goal not-countered-bombard-cannon > 2)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train bombard-cannon)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count hand-cannoneer < 8)
+	(can-train hand-cannoneer)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-hand-cannoneer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train hand-cannoneer)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count scout-cavalry-line < 12)
+	(can-train scout-cavalry-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-scout-cavalry > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count cavalry-archer-line < 8)
+	(can-train cavalry-archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+)
+#end-if
+
+#load-if-defined VIKING-CIV
+
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 10)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count longboat-line < 6)
+	(up-compare-goal dock-train-count < 3)
+	(can-train longboat-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train longboat-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count galley-line < 8)
+	(up-compare-goal dock-train-count < 3)
+	(can-train galley-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count cannon-galleon-line < 3)
+	(up-compare-goal dock-train-count < 3)
+	(can-train cannon-galleon-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 25)
+	(unit-type-count spearman-line < 16)
+	(can-train spearman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-spearman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 25)
+	(unit-type-count militiaman-line < 12)
+	(can-train militiaman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+#end-if
+
+#load-if-defined AZTEC-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 10)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count militiaman-line < 12)
+	(can-train militiaman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count monk < 9)
+	(up-compare-goal church-train-count < 3)
+	;(up-compare-goal not-countered-monk > 2)
+	(can-train monk)
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count eagle-warrior-line < 13)
+	(can-train eagle-warrior-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-eagle-warrior > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train eagle-warrior-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count skirmisher-line < 16)
+	(can-train skirmisher-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-skirmisher > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count spearman-line < 16)
+	(can-train spearman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-spearman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+#end-if
+
+#load-if-defined HUN-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 16)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-scout-cavalry > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(current-age == castle-age)
+	(gold-amount > 150)
+	(unit-type-count villager > 50)
+	(unit-type-count cavalry-archer-line < 21)
+	(can-train cavalry-archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count cavalry-archer-line < 23)
+	(can-train cavalry-archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count trebuchet-set < 5)
+	(up-compare-goal castle-train-count < 3)
+	;(up-compare-goal not-countered-trebuchet > 2)
+	(can-train trebuchet)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train trebuchet)
+)
+#end-if
+
+#load-if-defined KOREAN-CIV
+
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 11)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	;apparently turtle ships "need galleons to function"
+	(unit-type-count villager > 50)
+	(unit-type-count galley-line < 5)
+	(up-compare-goal dock-train-count < 3)
+	(can-train galley-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+)
+
+(defrule
+	;these things eat gold, so no point in limiting it to gold
+	(unit-type-count villager > 50)
+	(unit-type-count turtle-ship-line < 5)
+	(up-compare-goal dock-train-count < 3)
+	(can-train turtle-ship-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train turtle-ship-line)
+)
+
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count mangonel-line < 6)
+	(can-train mangonel-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-mangonel > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train mangonel-line)
+)
+#end-if
+
+#load-if-defined MAYAN-CIV ;mayans are even archerier than britons
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 23)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(current-age == feudal-age)
+	(gold-amount > 150)
+	(unit-type-count villager > 25)
+	(unit-type-count archer-line < 26)
+	(can-train archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+
+(defrule
+	(current-age == castle-age)
+	(gold-amount > 150)
+	(unit-type-count villager > 50)
+	(unit-type-count archer-line < 28)
+	(can-train archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count archer-line < 29)
+	(can-train archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+
+(defrule ;mayans randomly turn into a mix in the imperial age
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count eagle-warrior-line < 27)
+	(can-train eagle-warrior-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-eagle-warrior > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train eagle-warrior-line)
+)
+#end-if
+
+#load-if-defined SPANISH-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 9)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+;missionaries are only for if AI is winning
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count missionary < 11)
+	(up-compare-goal church-train-count < 3)
+	;(up-compare-goal not-countered-cavalry-archer > 2);what else am I supposed to do?
+	(can-train missionary)
+	(strategic-number sn-military-level > 5)
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train missionary)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count monk < 11)
+	(up-compare-goal church-train-count < 3)
+	;(up-compare-goal not-countered-cavalry-archer > 2);what else am I supposed to do?
+	(can-train monk)
+	(strategic-number sn-military-level < 6)
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count cannon-galleon-line < 4)
+	(up-compare-goal dock-train-count < 3)
+	(can-train cannon-galleon-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count hand-cannoneer < 10)
+	(can-train hand-cannoneer)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-hand-cannoneer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train hand-cannoneer)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count bombard-cannon < 3)
+	(can-train bombard-cannon)
+	(up-compare-goal siege-train-count < 3) 
+	;(up-compare-goal not-countered-bombard-cannon > 2)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train bombard-cannon)
+)
+#end-if
+
+;incans are a good mix of infantry and archers
+#load-if-defined INCAN-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 16)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-spearman > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count slinger < 20)
+	(can-train slinger)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train slinger)
+)
+(defrule
+	(current-age > feudal-age)
+	(not (and (current-age == castle-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count skirmisher-line < 23)
+	(can-train skirmisher-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-skirmisher > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+)
+
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count eagle-warrior-line < 20)
+	(can-train eagle-warrior-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-eagle-warrior > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train eagle-warrior-line)
+)
+#end-if
+
+;they love elephants, camels, and hand-cannoneers
+#load-if-defined INDIAN-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (up-pending-objects c: villager < 1)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 10)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule ;swarm with camels
+	(not (and (current-age < imperial-age)
+		(or (up-pending-objects c: villager < 1)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count camel-line < 22)
+	(can-train camel-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-camel > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train camel-line)
+)
+
+(defrule ;swarm with hand cannoneers
+	(unit-type-count villager > 75)
+	(unit-type-count hand-cannoneer < 20)
+	(can-train hand-cannoneer)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-hand-cannoneer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train hand-cannoneer)
+)
+#end-if
+
+;italians have a LOT of unique units, and an obsession with gunpowder
+#load-if-defined ITALIAN-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 8)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+;warships are more important than fishing ships because defense and stuff
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count cannon-galleon-line < 2)
+	(up-compare-goal dock-train-count < 3)
+	(can-train cannon-galleon-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+)
+(defrule;number of economy units gets divided by 1.6667 to balance 
+	(nand (current-age < imperial-age)
+		(wood-amount < 150))
+	(unit-type-count fishing-ship < 6);they absolutely want to make sure they at least have a few fishing ships at all times
+	(can-train fishing-ship)
+	(up-compare-goal dock-train-count < 3) 
+	(nand (game-time > 2700)
+		(goal warship-training-disabled 1))
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fishing-ship)
+)
+
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count condottiero < 9)
+	(can-train condottiero)
+	(up-compare-goal barracks-train-count < 3) 
+	(up-compare-goal condottiero > 2)
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train condottiero)
+)
+
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count bombard-cannon < 2)
+	(can-train bombard-cannon)
+	(up-compare-goal siege-train-count < 3) 
+	;(up-compare-goal not-countered-bombard-cannon > 2)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train bombard-cannon)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count hand-cannoneer < 8) ;only a few guaranteed, because expensive - but good, so guaranteed
+	(can-train hand-cannoneer)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-hand-cannoneer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train hand-cannoneer)
+)
+
+(defrule ;only start archers in late castle age
+	(current-age > feudal-age)
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count archer-line < 11)
+	(can-train archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+#end-if
+
+;lots of cavalry, and some foot archers
+#load-if-defined MAGYAR-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(up-pending-objects c: villager < 1)))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 16)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-scout-cavalry > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(up-pending-objects c: villager < 1)))
+	(unit-type-count villager > 25)
+	(unit-type-count scout-cavalry-line < 20)
+	(can-train scout-cavalry-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-scout-cavalry > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count cavalry-archer-line < 12)
+	(can-train cavalry-archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+)
+(defrule 
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count archer-line < 20)
+	(can-train archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+#end-if
+
+;another civ with tons of unit focuses... and much variety. everything but archers, really
+#load-if-defined SLAVIC-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count battering-ram-line < 4)
+	(can-train battering-ram-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-battering-ram > 2)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train battering-ram-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 6);expensive, and we have a lot to do besides
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-knight > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count mangonel-line < 4)
+	(can-train mangonel-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-mangonel > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train mangonel-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count scorpion-line < 7)
+	(can-train scorpion-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-scorpion > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count monk < 8)
+	(up-compare-goal church-train-count < 3)
+	;(up-compare-goal not-countered-monk > 2)
+	(can-train monk)
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count militiaman-line < 10)
+	(can-train militiaman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count spearman-line < 13)
+	(can-train spearman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-spearman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+#end-if
+
+;they love themselves some camels and ships
+;they also have the most "liked units" of anyone: 8 types
+;they seem to like the castle age most
+#load-if-defined BERBERS-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 6);expensive, and we have a lot to do besides
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age == castle-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count genitour-line < 9)
+	(can-train skirmisher-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-skirmisher > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train genitour-line)
+)
+(defrule
+	(not (and (current-age == castle-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count knight-line < 6)
+	(can-train-with-escrow knight-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-knight > 2)
+=>
+	(release-escrow gold)
+	(release-escrow food)
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+)
+(defrule
+	(not (and (current-age == castle-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count camel-line < 8)
+	(can-train camel-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-camel > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train camel-line)
+)
+(defrule
+	(current-age > feudal-age)
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count scout-cavalry-line < 11)
+	(can-train scout-cavalry-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-scout-cavalry > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count fire-ship-line < 6)
+	(up-compare-goal dock-train-count < 3)
+	(can-train fire-ship-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count cannon-galleon-line < 3)
+	(up-compare-goal dock-train-count < 2)
+	(can-train cannon-galleon-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count galley-line < 5)
+	(up-compare-goal dock-train-count < 3)
+	(can-train galley-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+)
+#end-if
+
+#load-if-defined ETHIOPIAN-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 11);they'll run through this in a heartbeat
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count archer-line < 13)
+	(can-train archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count spearman-line < 16)
+	(can-train spearman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-spearman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count mangonel-line < 3)
+	(can-train mangonel-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-mangonel > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train mangonel-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count battering-ram-line < 4)
+	(can-train battering-ram-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-battering-ram > 2)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train battering-ram-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 75)
+	(unit-type-count scorpion-line < 7)
+	(can-train scorpion-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-scorpion > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+)
+#end-if
+
+;start off as infantry, and then explode with cavalry upon reaching the imperial age
+#load-if-defined MALIAN-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 10)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(current-age > dark-age)
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 25)
+	(unit-type-count militiaman-line < 12)
+	(can-train militiaman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count spearman-line < 16)
+	(can-train spearman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-spearman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 50)
+	(unit-type-count camel-line < 9)
+	(can-train camel-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-camel > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train camel-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 50)
+	(unit-type-count knight-line < 7)
+	(can-train-with-escrow knight-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-knight > 2)
+=>
+	(release-escrow gold)
+	(release-escrow food)
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+)
+(defrule
+	(current-age > castle-age)
+	(unit-type-count villager > 50)
+	(unit-type-count scout-cavalry-line < 12)
+	(can-train scout-cavalry-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-scout-cavalry > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+)
+#end-if
+
+
+;it's like the turks, sort of, except water-based
+;and it absolutely NEEDS imperial age to thrive
+#load-if-defined PORTUGUESE-CIV
+
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 8)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count fire-ship-line < 6)
+	(up-compare-goal dock-train-count < 3)
+	(can-train fire-ship-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+)
+
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count caravel-line < 6)
+	(up-compare-goal dock-train-count < 3)
+	(can-train caravel-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train caravel-line)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count cannon-galleon-line < 3)
+	(up-compare-goal dock-train-count < 2)
+	(can-train cannon-galleon-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count galley-line < 5)
+	(up-compare-goal dock-train-count < 3)
+	(can-train galley-line)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count bombard-cannon < 2)
+	(can-train bombard-cannon)
+	(up-compare-goal siege-train-count < 3) 
+	;(up-compare-goal not-countered-bombard-cannon > 2)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train bombard-cannon)
+)
+(defrule
+	(unit-type-count villager > 75)
+	(unit-type-count hand-cannoneer < 8)
+	(can-train hand-cannoneer)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-hand-cannoneer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train hand-cannoneer)
+)
+#end-if
+
+#load-if-defined BURMESE-CIV
+;arambai unique (110 wood and gold)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 7)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count battle-elephant-line < 4)
+	(can-train battle-elephant-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-knight > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train battle-elephant-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 25)
+	(unit-type-count militiaman-line < 10)
+	(can-train militiaman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count spearman-line < 13)
+	(can-train spearman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-spearman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count monk < 8)
+	(up-compare-goal church-train-count < 3)
+	;(up-compare-goal not-countered-monk > 2)
+	(can-train monk)
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+(defrule
+	(current-age == imperial-age)
+	(unit-type-count villager > 75)
+	(unit-type-count knight-line < 14)
+	(can-train-with-escrow knight-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-knight > 2)
+=>
+	(release-escrow gold)
+	(release-escrow food)
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+)
+(defrule
+	(current-age > feudal-age)
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count scout-cavalry-line < 23)
+	(can-train scout-cavalry-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-scout-cavalry > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+)
+#end-if
+
+#load-if-defined KHMER-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 10)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count battle-elephant-line < 10)
+	(can-train battle-elephant-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-knight > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train battle-elephant-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count scorpion-line < 13)
+	(can-train scorpion-line)
+	(up-compare-goal siege-train-count < 3)
+	;(up-compare-goal not-countered-scorpion > 2)
+	(unit-type-count battering-ram-line > 1)
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+)
+;battle elephants = 190 = 10
+;ballista elephant unique = 180 = 10
+;scorpions = 150 = 13
+#end-if
+
+#load-if-defined MALAY-CIV
+;explode with the little guys
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 80)
+			(gold-amount < 60))))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 40)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(nand (current-age < imperial-age)
+		(wood-amount < 150))
+	(unit-type-count fishing-ship < 11)
+	(can-train fishing-ship)
+	(up-compare-goal dock-train-count < 3) 
+	(nand (game-time > 2700)
+		(goal warship-training-disabled 1))
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fishing-ship)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count battle-elephant-line < 8)
+	(can-train battle-elephant-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-knight > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train battle-elephant-line)
+)
+(defrule
+	(current-age == imperial-age)
+	(unit-type-count villager > 25)
+	(unit-type-count militiaman-line < 23)
+	(can-train militiaman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	;(up-compare-goal not-countered-militiaman > 2)
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+#end-if
+
+#load-if-defined VIETNAMESE-CIV
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count my-unique-unit-line < 12)
+	(can-train my-unique-unit-line)
+	(up-compare-goal castle-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 50)
+	(unit-type-count cavalry-archer-line < 10)
+	(can-train cavalry-archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-cavalry-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+)
+(defrule 
+	(not (and (current-age < imperial-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count archer-line < 16)
+	(can-train archer-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-archer > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(unit-type-count skirmisher-line < 19)
+	(can-train skirmisher-line)
+	(up-compare-goal archery-train-count < 3) 
+	;(up-compare-goal not-countered-skirmisher > 2)
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+)
+(defrule
+	(not (and (current-age < imperial-age)
+		(or (food-amount < 150)
+			(gold-amount < 150))))
+	(unit-type-count villager > 50)
+	(unit-type-count battle-elephant-line < 6)
+	(can-train battle-elephant-line)
+	(up-compare-goal stable-train-count < 3) 
+	;(up-compare-goal not-countered-knight > 2)
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train battle-elephant-line)
+)
+#end-if

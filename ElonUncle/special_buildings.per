@@ -1,0 +1,634 @@
+
+; ---------------------------
+; SPECIAL BUILDINGS PERTAINING TO CIVS OR STRATEGIES
+; ---------------------------
+
+
+#load-if-defined PORTUGUESE-CIV
+;The Feitoria: One of the portuguese's most powerful assets, yet very tricky.
+;Only build if we're low on stone (which means we're using it, are not under attack, and are at least about tied with whomever we're fighting.
+;Feitoria can tip the scales in our direction, but it can only do it so far.
+(defrule
+	(current-age > castle-age)
+	(stone-amount < 150)
+	(can-build-with-escrow feitoria)
+	(goal am-under-attack 0)
+	(strategic-number sn-military-level > 3)
+=>
+	(release-escrow wood)
+	(release-escrow gold)
+	(build feitoria)
+)
+#end-if
+
+
+; ---------------------------
+; FORWARD BARRACKS
+; ---------------------------
+
+
+(defrule
+	(goal strategy-forward-barracks 1)
+	(up-research-status c: feudal-age >= research-pending)
+	(can-build barracks)
+	(players-military-population every-enemy < 40)
+=>
+	(build-forward barracks)
+)
+
+
+; ---------------------------
+; SCOUT RUSH
+; ---------------------------
+
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-scout-flush 1)
+	(building-type-count stable < 1)
+	(can-build stable)
+=>
+	(build stable)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-scout-flush 1)
+	(strategic-number sn-military-level < 7)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count stable < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count stable < 3)))
+	(game-time > 900)
+	(can-build stable)
+=>
+	(build stable)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-scout-flush 1)
+	(or (or (game-time > 1500)
+		(current-age > feudal-age))
+		(up-research-status c: castle-age >= research-pending))
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count stable < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count stable < 3)))
+	(can-build stable)
+=>
+	(build stable)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-scout-flush 1)
+	(goal strategy-flush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count stable < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count stable < 3)))
+	(can-build stable)
+=>
+	(build stable)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-flush 1)
+	(goal strategy-scout-flush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count stable < 3))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count stable < 4)))
+	(can-build stable)
+	(current-age > feudal-age)
+=>
+	(build stable)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-flush 1)
+	(goal strategy-scout-flush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count stable < 4))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count stable < 5)))
+	(can-build stable)
+	(current-age > feudal-age)
+=>
+	(build stable)
+)
+
+; ---------------------------
+; ARCHER FLUSH
+; ---------------------------
+
+(defrule
+	(goal save-for-town-center 0)
+	(or (goal strategy-archer-flush 1)
+		(and (current-age > feudal-age)
+			(goal strategy-archer-crush 1)))
+	(current-age > dark-age)
+	(building-type-count archery-range < 1)
+	(can-build archery-range)
+=>
+	(build archery-range)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(or (goal strategy-archer-flush 1)
+		(and (current-age > feudal-age)
+			(goal strategy-archer-crush 1)))
+	(strategic-number sn-military-level < 7)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count archery-range < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count archery-range < 3)))
+	(game-time > 900)
+	(can-build archery-range)
+=>
+	(build archery-range)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(or (goal strategy-archer-flush 1)
+		(and (current-age > feudal-age)
+			(goal strategy-archer-crush 1)))
+	(or (or (game-time > 1500)
+		(current-age > feudal-age))
+		(up-research-status c: castle-age >= research-pending))
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count archery-range < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count archery-range < 3)))
+	(can-build archery-range)
+=>
+	(build archery-range)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(or (goal strategy-archer-flush 1)
+		(and (current-age > feudal-age)
+			(goal strategy-archer-crush 1)))
+	(goal strategy-flush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count archery-range < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count archery-range < 3)))
+	(can-build archery-range)
+=>
+	(build archery-range)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-flush 1)
+	(or (goal strategy-archer-flush 1)
+		(and (current-age > feudal-age)
+			(goal strategy-archer-crush 1)))
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count archery-range < 3))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count archery-range < 4)))
+	(can-build archery-range)
+	(current-age > feudal-age)
+=>
+	(build archery-range)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-flush 1)
+	(or (goal strategy-archer-flush 1)
+		(and (current-age > feudal-age)
+			(goal strategy-archer-crush 1)))
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count archery-range < 4))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count archery-range < 5)))
+	(can-build archery-range)
+	(current-age > feudal-age)
+=>
+	(build archery-range)
+)
+
+; ---------------------------
+; MONK RUSH
+; ---------------------------
+
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-monk-rush 1)
+	(current-age > feudal-age)
+	(building-type-count monastery < 1)
+	(can-build monastery)
+=>
+	(build monastery)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(current-age > feudal-age)
+	(goal strategy-monk-rush 1)
+	(strategic-number sn-military-level < 7)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count monastery < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count monastery < 3)))
+	(game-time > 900)
+	(can-build monastery)
+=>
+	(build monastery)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-monk-rush 1)
+	(or (or (game-time > 1500)
+		(current-age > castle-age))
+		(up-research-status c: castle-age >= research-pending))
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count monastery < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count monastery < 3)))
+	(can-build monastery)
+=>
+	(build monastery)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(current-age > feudal-age)
+	(goal strategy-monk-rush 1)
+	(goal strategy-flush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count monastery < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count monastery < 3)))
+	(can-build monastery)
+=>
+	(build monastery)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-flush 1)
+	(goal strategy-monk-rush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count monastery < 3))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count monastery < 4)))
+	(can-build monastery)
+	(current-age > castle-age)
+=>
+	(build monastery)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-flush 1)
+	(goal strategy-monk-rush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count monastery < 4))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count monastery < 5)))
+	(can-build monastery)
+	(current-age > castle-age)
+=>
+	(build monastery)
+)
+
+; ---------------------------
+; KNIGHT RUSH
+; ---------------------------
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-knight-rush 1)
+	(current-age > feudal-age)
+	(building-type-count stable < 1)
+	(can-build stable)
+=>
+	(build stable)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(current-age > feudal-age)
+	(goal strategy-knight-rush 1)
+	(strategic-number sn-military-level < 7)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count stable < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count stable < 3)))
+	(game-time > 900)
+	(can-build stable)
+=>
+	(build stable)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-knight-rush 1)
+	(or (or (game-time > 1500)
+		(current-age > castle-age))
+		(up-research-status c: castle-age >= research-pending))
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count stable < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count stable < 3)))
+	(can-build stable)
+=>
+	(build stable)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(current-age > feudal-age)
+	(goal strategy-knight-rush 1)
+	(goal strategy-flush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count stable < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count stable < 3)))
+	(can-build stable)
+=>
+	(build stable)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-flush 1)
+	(goal strategy-knight-rush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count stable < 3))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count stable < 4)))
+	(can-build stable)
+	(current-age > castle-age)
+=>
+	(build stable)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-flush 1)
+	(goal strategy-knight-rush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count stable < 4))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count stable < 5)))
+	(can-build stable)
+	(current-age > castle-age)
+=>
+	(build stable)
+)
+
+; ---------------------------
+; INFANTRY FLUSH
+; ---------------------------
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-infantry-flush 1)
+	(current-age > dark-age)
+	(building-type-count barracks < 1)
+	(can-build barracks)
+=>
+	(build barracks)
+)
+
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-infantry-flush 1)
+	(strategic-number sn-military-level < 7)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count barracks < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count barracks < 3)))
+	(game-time > 900)
+	(can-build barracks)
+=>
+	(build barracks)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-infantry-flush 1)
+	(or (or (game-time > 1500)
+		(current-age > feudal-age))
+		(up-research-status c: castle-age >= research-pending))
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count barracks < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count barracks < 3)))
+	(can-build barracks)
+=>
+	(build barracks)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-infantry-flush 1)
+	(goal strategy-flush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count barracks < 2))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count barracks < 3)))
+	(current-age > dark-age)
+	(can-build barracks)
+=>
+	(build barracks)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-flush 1)
+	(goal strategy-infantry-flush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count barracks < 3))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count barracks < 4)))
+	(can-build barracks)
+	(current-age > feudal-age)
+=>
+	(build barracks)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-flush 1)
+	(goal strategy-infantry-flush 1)
+	(or (and (goal strategy-extra-spawners 0) 
+			(building-type-count barracks < 4))
+		(and (goal strategy-extra-spawners 1) 
+			(building-type-count barracks < 5)))
+	(current-age > feudal-age)
+	(can-build barracks)
+=>
+	(build barracks)
+)
+
+; ---------------------------
+; TRUSH: TRASH RUSH
+; ---------------------------
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-trush 1)
+	(building-type-count archery-range < 2)
+	(can-build archery-range)
+=>
+	(build archery-range)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-trush 1)
+	(current-age > dark-age)
+	(building-type-count barracks < 2)
+	(can-build barracks)
+=>
+	(build barracks)
+)
+
+
+(defrule
+	(goal strategy-extra-spawners 1)
+	(goal save-for-town-center 0)
+	(goal strategy-trush 1)
+	(building-type-count archery-range < 3)
+	(can-build archery-range)
+=>
+	(build archery-range)
+)
+
+(defrule
+	(goal strategy-extra-spawners 1)
+	(goal save-for-town-center 0)
+	(goal strategy-trush 1)
+	(current-age > dark-age)
+	(building-type-count barracks < 3)
+	(can-build barracks)
+=>
+	(build barracks)
+)
+
+; ---------------------------
+; DRUSH: DARK-AGE RUSH
+; ---------------------------
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal strategy-drush 1)
+	(building-type-count mill > 0)
+	(building-type-count lumber-camp > 0)
+	(can-build barracks)
+	(building-type-count barracks < 1)
+=>
+	(build barracks)
+)
+(defrule
+	(goal strategy-drush 1)
+	(unit-type-count militiaman-line < 3)
+	(goal disable-drush-training 0)
+	(can-train militiaman-line)
+=>
+	(train militiaman-line)
+)
+(defrule
+	(goal strategy-drush 1)
+	(unit-type-count militiaman-line > 2)
+=>
+	(set-goal disable-drush-training 1)
+	(disable-self)
+)
+
+(defrule
+	(goal strategy-forward-castle 1)
+	(can-build-with-escrow castle)
+	(strategic-number sn-military-level > 4)
+	(building-type-count castle < 1)
+=>
+	(up-assign-builders c: castle c: 8)
+	(up-retask-gatherers wood c: 8)
+	(release-escrow stone)
+	(build-forward castle)
+)
+
+; ---------------------------
+; HEAVY CASTLING: MAYAN RUSH-TO-CASTLE-AGE AND BUILD TWO CASTLES AND A TOWN CENTER
+; ---------------------------
+
+(defrule
+	(up-compare-goal strategy-heavy-castling > 0)
+	(building-type-count castle < 1)
+	(current-age == castle-age)
+	(strategic-number sn-maximum-town-size < 30)
+=>
+	(up-modify-sn sn-maximum-town-size c:+ 15)
+	(up-modify-goal current-town-size c:+ 15)
+	(chat-local-to-self "expanding for castle")
+	(disable-self)
+)
+
+(defrule
+	(or (and (goal strategy-heavy-castling 1)
+		(building-type-count castle < 1))
+		(and (goal strategy-heavy-castling 2)
+		(building-type-count castle < 2)))
+	(can-build-with-escrow castle)
+=>
+	(release-escrow stone)
+	(build castle)
+)
+
+;	(and (nand (goal strategy-heavy-castling 1)
+;		(building-type-count castle < 1)))
+;		(nand (goal strategy-heavy-castling 2)
+;		(building-type-count castle < 2)))
+
+(defrule
+	(or (and (goal strategy-heavy-castling 1)
+		(building-type-count castle > 0))
+		(and (goal strategy-heavy-castling 2)
+		(building-type-count castle > 1)))
+	(can-build-with-escrow town-center)
+	(building-type-count town-center < 2)
+=>
+	(release-escrow stone)
+	(release-escrow wood)
+	(build town-center)
+)
+
+(defrule
+	(goal save-for-town-center 1)
+	(can-build-with-escrow town-center)
+=>
+	(release-escrow stone)
+	(release-escrow wood)
+	(build town-center)
+)
+(defrule
+	(goal strategy-trush 1)
+	(current-age > feudal-age)
+	(can-build watch-tower-line)
+	(building-type-count castle > 0)
+	(goal am-under-attack 0)
+	(strategic-number sn-military-level < 7)
+=>
+	(build-forward watch-tower-line)
+)
+
+(defrule
+	(nand (goal strategy-fast-walls 1)
+		(building-type-count stone-wall-line < 5))
+	(goal strategy-five-towers 1);five towers is simple. Build five towers. It's about the same cost as a castle.
+	(can-build watch-tower-line)
+	(building-type-count-total watch-tower-line < 5)
+=>
+	(build watch-tower-line)
+)

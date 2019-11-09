@@ -1,0 +1,345 @@
+; ---------------------------
+; Civilization-specific counters
+; Sticking to Non-Seige units because of limited micro of AI
+; ---------------------------
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player chinese)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-skirmisher c:+ 1)
+	(up-modify-goal can-skirmisher-counter c:+ 1)
+	(up-modify-goal not-countered-knight c:+ 1)
+	(up-modify-goal can-knight-counter c:+ 1)
+	(up-modify-goal not-countered-eagle-warrior c:+ 1)
+	(up-modify-goal can-eagle-warrior-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player briton)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-skirmisher c:+ 1)
+	(up-modify-goal can-skirmisher-counter c:+ 1)
+	(up-modify-goal not-countered-knight c:+ 1)
+	(up-modify-goal can-knight-counter c:+ 1)
+	(up-modify-goal not-countered-eagle-warrior c:+ 1)
+	(up-modify-goal can-eagle-warrior-counter c:+ 1)
+)
+
+;(defrule ;byzantines are so well balanced it's hard to know what to do
+	;(goal recompare-enemy-count 2)
+;	(players-civ target-player byzantine)
+;=>
+;	(up-modify-goal not-countered-archer c:+ 1)
+;	(up-modify-goal can-archer-counter c:+ 1)
+;	(up-modify-goal not-countered-knight c:+ 1)
+;	(up-modify-goal can-knight-counter c:+ 1)
+;	(up-modify-goal not-countered-cavalry-archer c:+ 1)
+;	(up-modify-goal can-cavalry-archer-counter c:+ 1)
+;)
+
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player celtic)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-archer c:+ 1)
+	(up-modify-goal can-archer-counter c:+ 1)
+	(up-modify-goal not-countered-cavalry-archer c:+ 1)
+	(up-modify-goal can-cavalry-archer-counter c:+ 1)
+	(up-modify-goal not-countered-hand-cannoneer c:+ 1)
+	(up-modify-goal can-hand-cannoneer-counter c:+ 1)
+	(up-modify-goal not-countered-knight c:+ 1)
+	(up-modify-goal can-knight-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player frankish)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal not-countered-camel c:+ 1)
+	(up-modify-goal can-camel-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player gothic) ;there's only one weakness to a gothic civ
+	(players-military-population target-player > 10)
+=> 
+	(up-modify-goal not-countered-mangonel c:+ 1) ;a metric fuckton of mangonels
+	(up-modify-goal can-mangonel-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player japanese)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-archer c:+ 1)
+	(up-modify-goal can-archer-counter c:+ 1)
+	(up-modify-goal not-countered-hand-cannoneer c:+ 1)
+	(up-modify-goal can-hand-cannoneer-counter c:+ 1)
+	(up-modify-goal not-countered-knight c:+ 1)
+	(up-modify-goal can-knight-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player mongol)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal not-countered-skirmisher c:+ 1)
+	(up-modify-goal can-skirmisher-counter c:+ 1)
+	(up-modify-goal not-countered-camel c:+ 1)
+	(up-modify-goal can-camel-counter c:+ 1)
+	(up-modify-goal not-countered-eagle-warrior c:+ 1)
+	(up-modify-goal can-eagle-warrior-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player persian)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal not-countered-camel c:+ 1)
+	(up-modify-goal can-camel-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player saracen)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal not-countered-militiaman c:+ 1)
+	(up-modify-goal can-militiaman-counter c:+ 1)
+	(up-modify-goal not-countered-archer c:+ 1)
+	(up-modify-goal can-archer-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player teutonic)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-archer c:+ 1)
+	(up-modify-goal can-archer-counter c:+ 1)
+	(up-modify-goal not-countered-cavalry-archer c:+ 1)
+	(up-modify-goal can-cavalry-archer-counter c:+ 1)
+	(up-modify-goal not-countered-hand-cannoneer c:+ 1)
+	(up-modify-goal can-hand-cannoneer-counter c:+ 1)
+	(up-modify-goal not-countered-monk c:+ 1)
+	(up-modify-goal can-monk-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player turkish)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-skirmisher c:+ 1)
+	(up-modify-goal can-skirmisher-counter c:+ 1)
+	(up-modify-goal not-countered-knight c:+ 1)
+	(up-modify-goal can-knight-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player viking)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-archer c:+ 1)
+	(up-modify-goal can-archer-counter c:+ 1)
+	(up-modify-goal not-countered-hand-cannoneer c:+ 1)
+	(up-modify-goal can-hand-cannoneer-counter c:+ 1)
+)
+
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player aztec)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-archer c:+ 1)
+	(up-modify-goal can-archer-counter c:+ 1)
+	(up-modify-goal not-countered-hand-cannoneer c:+ 1)
+	(up-modify-goal can-hand-cannoneer-counter c:+ 1)
+	(up-modify-goal not-countered-cavalry-archer c:+ 1)
+	(up-modify-goal can-cavalry-archer-counter c:+ 1)
+	(up-modify-goal not-countered-knight c:+ 1)
+	(up-modify-goal can-knight-counter c:+ 1)
+)
+
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player hun)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal not-countered-camel c:+ 1)
+	(up-modify-goal can-camel-counter c:+ 1)
+)
+
+(defrule;lots of choices, koreans only truly shine with their navy and economy
+	(goal recompare-enemy-count 2)
+	(players-civ target-player korean)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal not-countered-skirmisher c:+ 1)
+	(up-modify-goal can-skirmisher-counter c:+ 1)
+	(up-modify-goal not-countered-knight c:+ 1)
+	(up-modify-goal can-knight-counter c:+ 1)
+	(up-modify-goal not-countered-camel c:+ 1)
+	(up-modify-goal can-camel-counter c:+ 1)
+	(up-modify-goal not-countered-eagle-warrior c:+ 1)
+	(up-modify-goal can-eagle-warrior-counter c:+ 1)
+	(up-modify-goal not-countered-monk c:+ 1)
+	(up-modify-goal can-monk-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player mayan)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-knight c:+ 1)
+	(up-modify-goal can-knight-counter c:+ 1)
+	(up-modify-goal not-countered-eagle-warrior c:+ 1)
+	(up-modify-goal can-eagle-warrior-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player spanish)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal not-countered-skirmisher c:+ 1)
+	(up-modify-goal can-skirmisher-counter c:+ 1)
+	(up-modify-goal not-countered-camel c:+ 1)
+	(up-modify-goal can-camel-counter c:+ 1)
+	(up-modify-goal not-countered-eagle-warrior c:+ 1)
+	(up-modify-goal can-eagle-warrior-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player incan)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-archer c:+ 1)
+	(up-modify-goal can-archer-counter c:+ 1)
+	(up-modify-goal not-countered-hand-cannoneer c:+ 1)
+	(up-modify-goal can-hand-cannoneer-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player indian)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal not-countered-militiaman c:+ 1)
+	(up-modify-goal can-militiaman-counter c:+ 1)
+	(up-modify-goal not-countered-archer c:+ 1)
+	(up-modify-goal can-archer-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player italian)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-skirmisher c:+ 1)
+	(up-modify-goal can-skirmisher-counter c:+ 1)
+	(up-modify-goal not-countered-eagle-warrior c:+ 1)
+	(up-modify-goal can-eagle-warrior-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player magyar)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal not-countered-camel c:+ 1)
+	(up-modify-goal can-camel-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player slavic)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal not-countered-archer c:+ 1)
+	(up-modify-goal can-archer-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player berbers)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal not-countered-skirmisher c:+ 1)
+	(up-modify-goal can-skirmisher-counter c:+ 1)
+	(up-modify-goal not-countered-camel c:+ 1)
+	(up-modify-goal can-camel-counter c:+ 1)
+	(up-modify-goal not-countered-eagle-warrior c:+ 1)
+	(up-modify-goal can-eagle-warrior-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player ethiopian)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-skirmisher c:+ 1)
+	(up-modify-goal can-skirmisher-counter c:+ 1)
+	(up-modify-goal not-countered-eagle-warrior c:+ 1)
+	(up-modify-goal can-eagle-warrior-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player malian)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-monk c:+ 1)
+	(up-modify-goal can-monk-counter c:+ 1)
+	(up-modify-goal not-countered-hand-cannoneer c:+ 1)
+	(up-modify-goal can-hand-cannoneer-counter c:+ 1)
+	(up-modify-goal not-countered-knight c:+ 1)
+	(up-modify-goal can-knight-counter c:+ 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-civ target-player portuguese)
+	(players-military-population target-player > 10)
+=>
+	(up-modify-goal not-countered-knight c:+ 1)
+	(up-modify-goal can-knight-counter c:+ 1)
+)

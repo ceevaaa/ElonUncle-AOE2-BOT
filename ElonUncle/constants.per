@@ -1,0 +1,645 @@
+(defconst asked-for-help 1)
+(defconst spam-attack 2)
+(defconst attack-cycle 3)
+;attack-cycle 0: we have not considered attacking yet
+;attack-cycle 1: we are building up for an attack, and do not feel threatened
+;attack-cycle 2: we are building up for an even bigger attack
+(defconst military-explorers 4)
+(defconst gathering-stuff 5)
+(defconst initialized-attack 83)
+(defconst am-retreating 84)
+(defconst try-to-retreat 85)
+(defconst retreat-timed-out 86)
+(defconst sn-military-level 91)
+(defconst winning-player 92)
+(defconst victory-type 93)
+(defconst victory-time 94)
+(defconst attacked-early 96)
+(defconst closest-enemy-number 97)
+(defconst first-attack 99)
+(defconst targeting-method 100)
+(defconst target-reevaluation 101)
+(defconst threat-time 102)
+(defconst threat-player 103)
+(defconst threat-source 104)
+(defconst threat-target 105)
+(defconst warn-allies 106)
+(defconst attack-stage 107)
+(defconst retreat-reason 108)
+(defconst spam-retreat 109)
+(defconst can-first-attack 132)
+(defconst am-under-attack 140)
+(defconst allowed-to-attack 150)
+(defconst should-resign 166)
+(defconst enemies-in-view 168)
+
+
+
+
+
+(defconst ri-herbal-medicine 441)
+(defconst ri-treadmill-crane 54)
+; ---------------------------
+; TIMERS
+; ---------------------------
+
+(defconst half-attack-timer 1)
+(defconst enemy-check 5)
+(defconst attack-timer 7)
+(defconst house-timer 9)
+(defconst retreat-timer 10)
+(defconst one-minute-timer 11)
+(defconst lumber-timer 12)
+(defconst under-attack-timer 13)
+(defconst town-expansion-timer 14)
+(defconst springboard-timer 15)
+(defconst attack-timeout-timer 16)
+(defconst quarter-attack-timer 17)
+(defconst unique-research-timer 18)
+; ---------------------------
+; ANTI-COUNTER CONSTANTS
+; ---------------------------
+
+;2 = <10, 3 = <20, 4 = <40, 5= <80
+(defconst not-countered-spearman 6)
+(defconst not-countered-militiaman 7)
+(defconst not-countered-eagle-warrior 8)
+(defconst not-countered-skirmisher 9)
+(defconst not-countered-archer 10)
+(defconst not-countered-hand-cannoneer 11)
+(defconst not-countered-cavalry-archer 12)
+(defconst not-countered-monk 13)
+(defconst not-countered-scout-cavalry 14)
+(defconst not-countered-camel 15)
+(defconst not-countered-knight 16)
+(defconst not-countered-scorpion 17)
+(defconst not-countered-battering-ram 18)
+(defconst not-countered-mangonel 19)
+(defconst not-countered-bombard-cannon 20)
+(defconst not-countered-petard 21)
+(defconst not-countered-trebuchet 22)
+(defconst enemies-sighted 23) ; AI's memory of enemy army size
+(defconst have-enemy 24)
+
+	(defconst can-spearman-counter 30)
+	(defconst can-militiaman-counter 31)
+	(defconst can-eagle-warrior-counter 32)
+	(defconst can-skirmisher-counter 33)
+	(defconst can-archer-counter 34)
+	(defconst can-hand-cannoneer-counter 35)
+	(defconst can-cavalry-archer-counter 36)
+	(defconst can-monk-counter 37)
+	(defconst can-camel-counter 38)
+	(defconst can-knight-counter 39)
+	(defconst can-scout-cavalry-counter 40)
+	(defconst can-scorpion-counter 41)
+	(defconst can-battering-ram-counter 42)
+	(defconst can-mangonel-counter 43)
+	(defconst can-bombard-cannon-counter 44)
+	(defconst can-petard-counter 45)
+	(defconst can-trebuchet-counter 46)
+	(defconst can-galley-counter 47)
+	(defconst can-cannon-galleon-counter 48)
+	(defconst can-fire-ship-counter 49)
+	(defconst can-demolition-ship-counter 50)
+
+(defconst counter-int-castle 51)
+(defconst counter-int-house 52)
+(defconst counter-int-five 53)
+(defconst counter-int-ten 54)
+(defconst counter-int-not-countered 55)
+(defconst counter-int-sighted-enemies 56)
+(defconst counter-loops 57)
+(defconst counter-int-build-a 58)
+(defconst counter-int-build-b 59)
+(defconst cnt-military-pop 60)
+(defconst cnt-enemies-sighted 61)
+(defconst cnt-set-enemies-sighted 62)
+(defconst have-archery-counter 63)
+(defconst have-barracks-counter 64)
+(defconst have-stable-counter 65)
+(defconst have-siege-counter 66)
+(defconst have-castle-counter 67)
+(defconst have-dock-counter 68)
+
+(defconst recompare-enemy-count 29)
+
+; ---------------------------
+; RESOURCE CONSTANTS
+; ---------------------------
+
+(defconst dropsite-max-distance 25)
+(defconst villager-not-building 72)
+(defconst forager-level 82)
+(defconst sheep-searching 98)
+(defconst age-advancement 131)
+(defconst castle-unique-goal 169)
+(defconst imperial-unique-goal 170)
+(defconst normalize-food-escrow 171)
+(defconst normalize-wood-escrow 172)
+(defconst normalize-gold-escrow 173)
+(defconst normalize-stone-escrow 174)
+(defconst finished-castle-unique 175)
+(defconst finished-imperial-unique 176)
+(defconst failed-unique-research 177)
+
+; ---------------------------
+; BUILDING CONSTANTS
+; ---------------------------
+
+(defconst current-town-size 26)
+(defconst town-normal-size 27) ;defunct
+(defconst settled-down 28)
+(defconst am-superbuilding 69)
+(defconst could-superbuild 70)
+(defconst am-trying-to-build-houses 73)
+(defconst house-expansion 81)
+(defconst have-built-siege-workshop 87)
+(defconst saving-for-siege-workshop 88)
+(defconst enemy-dock-sighted 89)
+(defconst should-train-transports 95)
+(defconst want-to-house 110)
+(defconst sn-houses-built 111)
+(defconst disable-dark-building 154)
+(defconst save-for-town-center 155)
+(defconst build-palisade 178)
+
+;(defconst 600 71)
+
+; ---------------------------
+; UNIT TRAINING CONSTANTS
+; ---------------------------
+
+(defconst barracks-train-count 74)
+(defconst archery-train-count 75)
+(defconst stable-train-count 76)
+(defconst siege-train-count 77)
+(defconst dock-train-count 78)
+(defconst castle-train-count 79)
+(defconst church-train-count 80)
+(defconst warship-training-disabled 90)
+(defconst disable-villager-training 129)
+(defconst disable-melee-training 130)
+(defconst single-villager-training 133)
+(defconst disable-gold-training 134)
+(defconst disable-drush-training 135)
+(defconst no-research 145)
+(defconst disable-all-training 146)
+(defconst gold-change 162)
+(defconst food-change 163)
+(defconst stone-change 164)
+
+
+; ---------------------------
+; STRATEGY
+; ---------------------------
+
+(defconst strategy-save-escrow 112);CHINESE, BYZANTINE, CELTS
+(defconst strategy-boom 113);BRITONS, GOTHS
+(defconst strategy-drush 114);CELTS
+(defconst strategy-flush 115);BRITONS, CELTS, FRANKS, GOTHS
+(defconst strategy-archer-flush 116);BRITONS, CHINESE, FRANKS
+(defconst strategy-trush 117)
+(defconst strategy-scout-flush 118)
+(defconst strategy-infantry-flush 119);CELTS, GOTHS
+(defconst strategy-gush 120)
+(defconst strategy-fire-rush 121)
+(defconst strategy-crush 122)
+(defconst strategy-smush 123)
+(defconst strategy-trash-rush 134);BYZANTINE
+(defconst strategy-spring 124);spanish, byzantines, franks, saracens, persians, indians, italians, portuguese
+(defconst strategy-springboard 125);mayans, aztecs, chinese, persians, japanese (water only), celts, koreans, slavs, incas, italians, indians, turks
+(defconst strategy-counter-springboard 126);huns, goths, mongols, incas, indians, aztecs, magyars
+(defconst strategy-support 127)
+(defconst strategy-turtle 128)
+(defconst strategy-fast-castle 136)
+(defconst strategy-extra-spawners 137);GOTHS
+(defconst strategy-knight-rush 138);FRANKS
+(defconst strategy-fast-feudal 141)
+(defconst strategy-archer-crush 142)
+(defconst strategy-forward-castle 143);FRANKS
+(defconst strategy-no-feudal-research 144)
+(defconst strategy-raiding 147)
+(defconst strategy-monk-rush 148)
+(defconst strategy-stone-for-gold 149)
+(defconst strategy-fast-walls 151)
+(defconst strategy-heavy-castling 152)
+(defconst strategy-counter 153)
+(defconst eligible-for-springboard 156)
+(defconst eligible-for-spring 157)
+(defconst strategy-forward-barracks 158)
+(defconst strategy-five-towers 159)
+(defconst am-in-peril 160)
+(defconst strategy-fast-imperial 161)
+(defconst strategy-improved-imperial 165)
+(defconst strategy-boom-no-castle 167)
+
+#load-if-defined BRITON-CIV
+(defconst r1-food 750)
+(defconst r1-wood 0)
+(defconst r1-gold 450)
+(defconst r1-stone 0) 
+(defconst r2-food 0)
+(defconst r2-wood 500)
+(defconst r2-gold 250)
+(defconst r2-stone 0)
+(defconst ri-castle-research my-unique-research);ri-yeomen does not work
+(defconst ri-imperial-research ri-war-wolf)
+#end-if
+
+#load-if-defined BYZANTINE-CIV
+(defconst r1-food 250)
+(defconst r1-wood 0)
+(defconst r1-gold 300)
+(defconst r1-stone 0) 
+(defconst r2-food 1000)
+(defconst r2-wood 0)
+(defconst r2-gold 600)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-greek-fire)
+(defconst ri-imperial-research my-unique-research);ri-logistica does not work
+#end-if
+
+
+#load-if-defined CELTIC-CIV
+(defconst r1-food 250)
+(defconst r1-wood 0)
+(defconst r1-gold 200)
+(defconst r1-stone 0) 
+(defconst r2-food 750)
+(defconst r2-wood 0)
+(defconst r2-gold 450)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-stronghold)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+
+#load-if-defined CHINESE-CIV
+(defconst r1-food 0)
+(defconst r1-wood 400)
+(defconst r1-gold 0)
+(defconst r1-stone 200) 
+(defconst r2-food 0)
+(defconst r2-wood 750)
+(defconst r2-gold 750)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-great-wall)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined FRANKISH-CIV
+(defconst r1-food 0)
+(defconst r1-wood 400)
+(defconst r1-gold 400)
+(defconst r1-stone 0) 
+(defconst r2-food 400)
+(defconst r2-wood 0)
+(defconst r2-gold 400)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-chivalry)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined GOTHIC-CIV
+(defconst r1-food 450)
+(defconst r1-wood 0)
+(defconst r1-gold 250)
+(defconst r1-stone 0) 
+(defconst r2-food 0)
+(defconst r2-wood 400)
+(defconst r2-gold 600)
+(defconst r2-stone 0)
+(defconst ri-castle-research 16);anarchy
+(defconst ri-imperial-research 457);perfusion
+#end-if
+
+#load-if-defined JAPANESE-CIV
+(defconst r1-food 300)
+(defconst r1-wood 300)
+(defconst r1-gold 0)
+(defconst r1-stone 0) 
+(defconst r2-food 0)
+(defconst r2-wood 750)
+(defconst r2-gold 400)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-yasama)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined MONGOL-CIV
+(defconst r1-food 0)
+(defconst r1-wood 300)
+(defconst r1-gold 150)
+(defconst r1-stone 0) 
+(defconst r2-food 0)
+(defconst r2-wood 500)
+(defconst r2-gold 450)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-nomads)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined PERSIAN-CIV
+(defconst r1-food 0)
+(defconst r1-wood 200)
+(defconst r1-gold 0)
+(defconst r1-stone 100) 
+(defconst r2-food 300)
+(defconst r2-wood 0)
+(defconst r2-gold 300)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-boiling-oil)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined SARACEN-CIV
+(defconst r1-food 200)
+(defconst r1-wood 0)
+(defconst r1-gold 100)
+(defconst r1-stone 0) 
+(defconst r2-food 750)
+(defconst r2-wood 0)
+(defconst r2-gold 800)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-madrasah)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined TEUTONIC-CIV
+(defconst r1-food 0)
+(defconst r1-wood 400)
+(defconst r1-gold 350)
+(defconst r1-stone 0) 
+(defconst r2-food 600)
+(defconst r2-wood 0)
+(defconst r2-gold 0)
+(defconst r2-stone 400)
+(defconst ri-castle-research ri-ironclad)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined TURKISH-CIV
+(defconst r1-food 350)
+(defconst r1-wood 0)
+(defconst r1-gold 150)
+(defconst r1-stone 0) 
+(defconst r2-food 0)
+(defconst r2-wood 0)
+(defconst r2-gold 500)
+(defconst r2-stone 450)
+(defconst ri-castle-research ri-sipahi)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined VIKING-CIV
+(defconst r1-food 400)
+(defconst r1-wood 0)
+(defconst r1-gold 300)
+(defconst r1-stone 0) 
+(defconst r2-food 850)
+(defconst r2-wood 0)
+(defconst r2-gold 400)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-chieftains)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined AZTEC-CIV
+(defconst r1-food 400)
+(defconst r1-wood 0)
+(defconst r1-gold 350)
+(defconst r1-stone 0) 
+(defconst r2-food 450)
+(defconst r2-wood 0)
+(defconst r2-gold 700)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-atlatl)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined HUN-CIV
+(defconst r1-food 0)
+(defconst r1-wood 300)
+(defconst r1-gold 200)
+(defconst r1-stone 0) 
+(defconst r2-food 500)
+(defconst r2-wood 0)
+(defconst r2-gold 500)
+(defconst r2-stone 0)
+(defconst ri-castle-research 483);marauders
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined KOREAN-CIV
+(defconst r1-food 300)
+(defconst r1-wood 300)
+(defconst r1-gold 0)
+(defconst r1-stone 0) 
+(defconst r2-food 0)
+(defconst r2-wood 800)
+(defconst r2-gold 500)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-panokseon)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined MAYAN-CIV
+(defconst r1-food 300)
+(defconst r1-wood 0)
+(defconst r1-gold 300)
+(defconst r1-stone 0) 
+(defconst r2-food 750)
+(defconst r2-wood 0)
+(defconst r2-gold 450)
+(defconst r2-stone 0)
+(defconst ri-castle-research 485);obsidian arrows
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined SPANISH-CIV
+(defconst r1-food 100)
+(defconst r1-wood 0)
+(defconst r1-gold 300)
+(defconst r1-stone 0) 
+(defconst r2-food 400)
+(defconst r2-wood 0)
+(defconst r2-gold 250)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-inquisition)
+(defconst ri-imperial-research my-unique-research)
+#end-if
+
+#load-if-defined INCAN-CIV
+(defconst r1-food 200)
+(defconst r1-wood 0)
+(defconst r1-gold 300)
+(defconst r1-stone 0) 
+(defconst r2-food 400)
+(defconst r2-wood 0)
+(defconst r2-gold 200)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-andean-sling)
+(defconst ri-imperial-research ri-couriers)
+#end-if
+
+#load-if-defined INDIAN-CIV
+(defconst r1-food 400)
+(defconst r1-wood 400)
+(defconst r1-gold 0)
+(defconst r1-stone 0) 
+(defconst r2-food 500)
+(defconst r2-wood 0)
+(defconst r2-gold 300)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-sultans)
+(defconst ri-imperial-research ri-shatagni)
+#end-if
+
+#load-if-defined ITALIAN-CIV
+(defconst r1-food 300)
+(defconst r1-wood 0)
+(defconst r1-gold 150)
+(defconst r1-stone 0) 
+(defconst r2-food 500)
+(defconst r2-wood 0)
+(defconst r2-gold 250)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-pavise)
+(defconst ri-imperial-research ri-silk-road)
+#end-if
+
+#load-if-defined MAGYAR-CIV
+(defconst r1-food 200)
+(defconst r1-wood 0)
+(defconst r1-gold 300)
+(defconst r1-stone 0) 
+(defconst r2-food 0)
+(defconst r2-wood 600)
+(defconst r2-gold 400)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-mercenaries)
+(defconst ri-imperial-research ri-recurve-bow)
+#end-if
+
+#load-if-defined SLAVIC-CIV
+(defconst r1-food 200)
+(defconst r1-wood 0)
+(defconst r1-gold 300)
+(defconst r1-stone 0) 
+(defconst r2-food 1200)
+(defconst r2-wood 0)
+(defconst r2-gold 500)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-orthodoxy)
+(defconst ri-imperial-research ri-druzhina)
+#end-if
+
+#load-if-defined BERBERS-CIV
+(defconst r1-food 250)
+(defconst r1-wood 0)
+(defconst r1-gold 250)
+(defconst r1-stone 0) 
+(defconst r2-food 700)
+(defconst r2-wood 0)
+(defconst r2-gold 300)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-expeditions);kasbah
+(defconst ri-imperial-research ri-camel-corps);maghrabi camels
+#end-if
+
+
+#load-if-defined ETHIOPIAN-CIV
+(defconst r1-food 300)
+(defconst r1-wood 0)
+(defconst r1-gold 300)
+(defconst r1-stone 0) 
+(defconst r2-food 1000)
+(defconst r2-wood 0)
+(defconst r2-gold 600)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-royal-heirs)
+(defconst ri-imperial-research ri-torsion);torsion engines
+#end-if
+
+#load-if-defined MALIAN-CIV
+(defconst r1-food 200)
+(defconst r1-wood 300)
+(defconst r1-gold 0)
+(defconst r1-stone 0) 
+(defconst r2-food 650)
+(defconst r2-wood 0)
+(defconst r2-gold 400)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-tigui)
+(defconst ri-imperial-research ri-mandekalu);farimba
+#end-if
+
+#load-if-defined PORTUGUESE-CIV
+(defconst r1-food 0)
+(defconst r1-wood 200)
+(defconst r1-gold 300)
+(defconst r1-stone 0) 
+(defconst r2-food 700)
+(defconst r2-wood 0)
+(defconst r2-gold 400)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-carrack)
+(defconst ri-imperial-research ri-arquebus)
+#end-if
+
+#load-if-defined BURMESE-CIV
+(defconst r1-food 200)
+(defconst r1-wood 300)
+(defconst r1-gold 0)
+(defconst r1-stone 0) 
+(defconst r2-food 650)
+(defconst r2-wood 0)
+(defconst r2-gold 400)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-howdah)
+(defconst ri-imperial-research ri-manipur-cavalry)
+
+#end-if
+
+#load-if-defined KHMER-CIV
+(defconst r1-food 0)
+(defconst r1-wood 200)
+(defconst r1-gold 300)
+(defconst r1-stone 0) 
+(defconst r2-food 700)
+(defconst r2-wood 0)
+(defconst r2-gold 400)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-tusk-swords)
+(defconst ri-imperial-research ri-double-crossbow)
+
+#end-if
+
+#load-if-defined MALAY-CIV
+(defconst r1-food 300)
+(defconst r1-wood 0)
+(defconst r1-gold 300)
+(defconst r1-stone 0) 
+(defconst r2-food 1000)
+(defconst r2-wood 0)
+(defconst r2-gold 600)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-thalassocracy)
+(defconst ri-imperial-research ri-forced-levy)
+
+#end-if
+
+#load-if-defined VIETNAMESE-CIV
+(defconst r1-food 250)
+(defconst r1-wood 0)
+(defconst r1-gold 250)
+(defconst r1-stone 0) 
+(defconst r2-food 800)
+(defconst r2-wood 0)
+(defconst r2-gold 200)
+(defconst r2-stone 0)
+(defconst ri-castle-research ri-chatras)
+(defconst ri-imperial-research ri-paper-money)
+
+#end-if

@@ -1,0 +1,804 @@
+
+(defrule
+	(or (game-time > 600)
+		(and (building-type-count lumber-camp > 0)
+			(wood-amount > 150)))
+	(building-type-count mill < 1)
+	(can-build mill)
+	(current-age == dark-age)
+=>
+	(build mill)
+)
+
+(defrule
+	(goal settled-down 2)
+	(resource-found wood)
+	(unit-type-count villager > 8)
+	(building-type-count lumber-camp < 1)
+	(can-build lumber-camp)
+	(not (and (food-amount > 10000)
+		(current-age == imperial-age)))
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(build lumber-camp)
+)
+
+(defrule
+	(resource-found gold)
+	(building-type-count mining-camp < 1)
+	(dropsite-min-distance gold > 5)
+	(building-type-count mill > 0)
+	(or (or (or (game-time > 900)
+		(current-age > dark-age))
+		(up-research-status c: feudal-age >= research-pending))
+		(and (current-age == dark-age)
+			(gold-amount < 20)))
+	(not (and (gold-amount > 5000)
+		(current-age == imperial-age)))
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(build mining-camp)
+	(disable-self)
+)
+
+(defrule
+	(resource-found stone)
+	(building-type-count mining-camp < 2)
+	(dropsite-min-distance stone > 5)
+	(up-research-status c: feudal-age >= research-pending)
+	(can-build mining-camp)
+	(or (or (or (or (game-time > 1500)
+		(current-age > feudal-age))
+		(up-research-status c: castle-age >= research-pending))
+		(up-compare-goal strategy-heavy-castling > 0))
+		(and (current-age == feudal-age)
+			(stone-amount < 125)))
+	(not (and (stone-amount > 2500)
+		(current-age == imperial-age)))
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(build mining-camp)
+	(disable-self)
+)
+
+(defrule
+	(current-age == castle-age)
+	(unit-type-count villager >= 15)
+=>
+	(set-strategic-number sn-camp-max-distance 30)
+	(set-strategic-number sn-maximum-fish-boat-drop-distance -1)
+	(set-strategic-number sn-maximum-town-size 12)
+	(set-strategic-number sn-maximum-hunt-drop-distance 18)
+	(set-strategic-number sn-maximum-gold-drop-distance 14)
+	(set-strategic-number sn-maximum-stone-drop-distance 14)
+	(set-strategic-number sn-wood-dropsite-distance 3)
+	(disable-self))
+
+
+(defrule
+	(current-age == feudal-age)
+=>
+	(enable-timer lumber-timer 60)
+	(disable-self)
+)
+
+#load-if-not-defined DEATH-MATCH
+(defrule
+	(building-type-count town-center >= 1); this idea from ER rarely fails
+	(game-time >= 15); increase lumber camp distance when we still found no wood after 15s
+	(or ; so the scout has some time to find a forest
+		(not (resource-found wood))
+		(building-type-count-total stone-wall-line > 15); also increase in walled maps, as we may find the forest with the wall
+	)
+	(strategic-number sn-mill-max-distance < 30)
+=>
+	(set-strategic-number sn-camp-max-distance 18)
+	(disable-self)
+)
+
+(defrule
+	(building-type-count town-center >= 1)
+	(game-time >= 18); and even further when still no wood after 18s
+	(not (resource-found wood))
+	(strategic-number sn-mill-max-distance < 30)
+=>
+	(set-strategic-number sn-camp-max-distance 21)
+	(disable-self)
+)
+
+(defrule
+	(building-type-count-total lumber-camp > 0)
+	(building-type-count-total stone-wall-line < 15)
+	(or (dropsite-min-distance gold > 12)
+		(building-type-count-total mining-camp > 0))
+=>
+	(set-strategic-number sn-maximum-food-drop-distance 15)
+	(set-strategic-number sn-camp-max-distance 30)
+	(set-strategic-number sn-wood-dropsite-distance 3); move wood gatherers from far stragglers to the camp
+	(disable-self)
+)
+
+(defrule
+	(building-type-count-total lumber-camp > 1)
+	(building-type-count-total mining-camp == 0)
+	(dropsite-min-distance gold > 3)
+	(dropsite-min-distance gold < 12); close gold like in gold rush maps
+=>
+	(set-strategic-number sn-camp-max-distance 12); so only a small camp max distance is required, else the gold will be skipped.
+	(set-strategic-number sn-wood-dropsite-distance 3)
+	(disable-self)
+)
+
+(defrule
+	(current-age == dark-age); don't trigger this later when initial gold is gone.
+	(building-type-count town-center >= 1); mainly a fix for nomad map where gold may be farther away
+	(building-type-count-total lumber-camp > 0); as the computer doesn't care about resources when placing the initial TC.
+	(unit-type-count villager >= 24)
+	(dropsite-min-distance gold > 24)
+	(dropsite-min-distance gold < 64)
+=>
+	(set-strategic-number sn-camp-max-distance 60)
+	(disable-self)
+)
+
+(defrule
+	(wood-amount < 10000)
+	(or (dropsite-min-distance wood > 10)
+		(unit-type-count villager > 8))
+	(building-type-count lumber-camp > 0)
+	(resource-found wood)
+(or (dropsite-min-distance wood >= 7)
+(or (and (wood-amount >= 300)
+		(strategic-number sn-wood-gatherer-percentage >= 7))
+(or (building-type-count-total mill > 0)
+	(and (wood-amount > 200)
+		(strategic-number sn-mill-max-distance > 30)))))
+	(building-type-count-total lumber-camp == 0)
+	(can-build lumber-camp)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	;(chat-local-to-self "LCamp 1")
+	(build lumber-camp)
+)
+#end-if ; no DM
+
+(defrule
+	(resource-found wood)
+	(unit-type-count villager >= 20)
+	(players-unit-type-count every-computer galley-line < 3) 
+	(players-unit-type-count every-human galley-line < 3) 
+	(dropsite-min-distance wood < 4)
+	(wood-amount < 160)
+	(current-age == dark-age)
+=>
+	(up-jump-rule 1)
+)
+
+;first lumber camp
+(defrule ;build additional lumber camps
+	(wood-amount < 10000)
+	(or (dropsite-min-distance wood > 10)
+		(unit-type-count villager > 8))
+	(resource-found wood)
+	(unit-type-count villager >= 20)
+(or (building-type-count-total lumber-camp < 1)
+	(unit-type-count villager >= 42))
+(or (building-type-count-total lumber-camp < 2)
+	(unit-type-count villager >= 64))
+(or (dropsite-min-distance wood >= 3)
+	(building-type-count-total lumber-camp < 3))
+	(building-type-count-total lumber-camp < 4)
+	(can-build lumber-camp)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(build lumber-camp)
+	;(chat-local-to-self "LCamp 2")
+	(set-strategic-number sn-dropsite-separation-distance 3)
+	(set-strategic-number sn-maximum-wood-drop-distance 30)
+)
+
+#load-if-not-defined POST-IMPERIAL-AGE-START
+(defrule
+	(current-age <= feudal-age)
+	(building-type-count town-center > 0)
+(or (and (building-type-count lumber-camp > 0)
+		(dropsite-min-distance wood > 3))
+	(and (unit-type-count-total villager >= 60)
+		(building-type-count-total lumber-camp == 0))); debug for no placement
+	(strategic-number sn-camp-max-distance < 35)
+	(can-build lumber-camp)
+=>
+	(set-strategic-number sn-camp-max-distance 35)
+	(set-strategic-number sn-dropsite-separation-distance 3)
+;	(chat-to-player my-player-number "bad lumber camp placement!: camp-max-distance 35")
+)
+(defrule
+	(gold-amount < 5000)
+	(building-type-count mill > 0)
+	(or (or (game-time > 900)
+		(current-age > dark-age))
+		(up-research-status c: feudal-age >= research-pending))
+;	(up-pending-objects c: mining-camp == 0)
+	(players-unit-type-count every-computer galley-line < 3) 
+	(players-unit-type-count every-human galley-line < 3) 
+(or (goal strategy-flush 0)
+	(building-type-count-total dock > 0))
+	(resource-found gold)
+	(can-build mining-camp)
+	(building-type-count-total mining-camp < 1)
+	(current-age >= feudal-age)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	;(chat-local-to-self "MCamp 1")
+	(build mining-camp)
+)
+#end-if ; NOT PIDM
+#load-if-defined DARK-AGE-END
+(defrule
+	(gold-amount < 5000)
+	(building-type-count mill > 0)
+	(or (or (game-time > 900)
+		(current-age > dark-age))
+		(up-research-status c: feudal-age >= research-pending))
+	(resource-found gold)
+	(building-type-count-total lumber-camp > 0)
+	(building-type-count-total mill > 0)
+	(building-type-count-total mining-camp < 1)
+	(can-build mining-camp)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	;(chat-local-to-self "MCamp 2")
+	(build mining-camp)
+)
+#end-if
+(defrule
+	(gold-amount < 5000)
+	(building-type-count mill > 0)
+	(or (or (game-time > 900)
+		(current-age > dark-age))
+		(up-research-status c: feudal-age >= research-pending))
+;	(up-pending-objects c: mining-camp == 0)
+	(resource-found gold)
+	(goal strategy-flush 1)
+	(current-age >= feudal-age)
+(or
+;	(and
+	(or (building-type-count-total stable > 0)
+			(building-type-count-total archery-range > 1))
+;		(wood-amount > 135))
+	(and (or (unit-type-count archer-line > 5)
+		(unit-type-count militiaman-line > 5))
+			(building-type-count-total barracks > 0)))
+	(can-build mining-camp)
+	(building-type-count-total mining-camp == 0)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	;(chat-local-to-self "MCamp 3")
+	(build mining-camp)
+)
+(defrule
+	(gold-amount < 5000)
+	(building-type-count mill > 0)
+	(or (or (game-time > 900)
+		(current-age > dark-age))
+		(up-research-status c: feudal-age >= research-pending))
+;	(up-pending-objects c: mining-camp == 0)
+	(current-age >= feudal-age)
+	(resource-found gold)
+	(players-unit-type-count every-computer galley-line < 3) 
+	(players-unit-type-count every-human galley-line < 3) 
+	(building-type-count-total blacksmith > 0)
+	(building-type-count-total market > 0)
+	(can-build mining-camp)
+	(building-type-count-total mining-camp == 0)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	;(chat-local-to-self "MCamp 4")
+	(build mining-camp)
+)
+(defrule
+	(gold-amount < 5000)
+	(building-type-count mill > 0)
+	(or (or (game-time > 900)
+		(current-age > dark-age))
+		(up-research-status c: feudal-age >= research-pending))
+	(up-pending-objects c: mining-camp == 0)
+	(resource-found gold)
+	(or
+		(or
+			(unit-type-count-total 229 >= 1); dead miners detected
+			(unit-type-count-total 221 >= 1)
+		)
+		(strategic-number sn-gold-gatherer-percentage > 30)
+	)
+	(unit-type-count-total villager > 33)
+	(can-build mining-camp)
+	(building-type-count-total mining-camp < 2)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	(build mining-camp)
+	;(chat-local-to-self "MCamp 5")
+	(set-strategic-number sn-maximum-stone-drop-distance 40)
+	(set-strategic-number sn-stone-dropsite-distance 40)
+	(set-strategic-number sn-maximum-gold-drop-distance 3)
+	(set-strategic-number sn-gold-dropsite-distance 3)
+)
+(defrule
+	(wood-amount < 10000)
+	(or (dropsite-min-distance wood > 10)
+		(unit-type-count villager > 8))
+	(up-pending-objects c: lumber-camp < 1)
+	(players-unit-type-count every-computer galley-line < 3) 
+	(players-unit-type-count every-human galley-line < 3) 
+	(resource-found wood)
+	(unit-type-count 979 > 0); lumberjack
+	(building-type-count-total lumber-camp < 1)
+	(or
+		(unit-type-count villager > 14)
+		(current-age > dark-age)
+	)
+	(wood-amount > 200)
+	(can-build lumber-camp)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(build lumber-camp)
+	;(chat-local-to-self "LCamp 3")
+)
+(defrule
+	(gold-amount < 5000)
+	(building-type-count mill > 0)
+	(or (or (game-time > 900)
+		(current-age > dark-age))
+		(up-research-status c: feudal-age >= research-pending))
+	(up-pending-objects c: mining-camp < 1)
+	(resource-found gold)
+	(dropsite-min-distance gold > 5);rebuild  bad camps
+	(dropsite-min-distance gold < 480)
+	(building-type-count mining-camp > 0)
+	(can-build mining-camp)
+	(or
+		(building-type-count mining-camp < 5)
+		(and
+			(strategic-number sn-camp-max-distance > 45)
+			(dropsite-min-distance gold > 13); don't spam camps if it's in an unreachable spot
+		)
+	)
+	(building-type-count-total mining-camp < 15)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	(build mining-camp)
+	;(chat-local-to-self "MCamp 6")
+	(set-strategic-number sn-dropsite-separation-distance 6)
+)
+(defrule
+	(stone-amount < 2500)
+	(building-type-count mill > 0)
+	(or (or (game-time > 900)
+		(current-age > dark-age))
+		(up-research-status c: feudal-age >= research-pending))
+	(up-pending-objects c: mining-camp < 1)
+	(resource-found stone)
+	(dropsite-min-distance stone > 5)
+	(dropsite-min-distance stone < 480)
+	(building-type-count mining-camp > 1)
+	(or
+		(building-type-count mining-camp < 4)
+		(and
+			(strategic-number sn-camp-max-distance > 45)
+			(dropsite-min-distance stone > 13)
+		)
+	)
+	(can-build mining-camp)
+	(strategic-number sn-stone-gatherer-percentage > 0)
+	(building-type-count-total mining-camp < 15)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	(build mining-camp)
+	;(chat-local-to-self "MCamp 7")
+	(set-strategic-number sn-dropsite-separation-distance 6)
+)
+
+(defrule
+	(gold-amount < 5000)
+	(building-type-count mill > 0)
+	(or (or (game-time > 900)
+		(current-age > dark-age))
+		(up-research-status c: feudal-age >= research-pending))
+	(up-pending-objects c: mining-camp < 1)
+	(wood-amount > 200)
+	(dropsite-min-distance gold > 3); 1
+	(dropsite-min-distance gold < 480); check for gold still on the map
+	(civilian-population > 80)
+	(game-time < 2400)
+	(can-build mining-camp)
+	(building-type-count-total mining-camp < 4)
+=>
+	(set-strategic-number sn-camp-max-distance 45)
+	(build mining-camp)
+	;(chat-local-to-self "MCamp 8")
+)
+
+#load-if-not-defined WONDER-RACE
+(defrule
+	(building-type-count mill > 0)
+	(or (or (game-time > 900)
+		(current-age > dark-age))
+		(up-research-status c: feudal-age >= research-pending))
+	(up-pending-objects c: mining-camp < 1)
+	(wood-amount > 300)
+	(or (or (up-research-status c: ri-bow-saw >= research-pending)
+			(building-type-count town-center >= 2))
+		(or (strategic-number sn-stone-gatherer-percentage > 0)
+			(wood-amount > 210)))
+	(stone-amount < 100)
+	(current-age-time > 90)
+	(building-type-count-total mining-camp < 4)
+	(dropsite-min-distance stone > 5)
+	(can-build mining-camp)
+=>
+	(build mining-camp)
+	;(chat-local-to-self "MCamp 9")
+)
+#end-if
+
+#load-if-defined SARACEN-CIV
+(defrule
+	(stone-amount < 2500)
+	(building-type-count mill > 0)
+	(or (or (game-time > 900)
+		(current-age > dark-age))
+		(up-research-status c: feudal-age >= research-pending))
+	(up-pending-objects c: mining-camp < 1)
+	(wood-amount > 300)
+	(building-type-count-total market > 0)
+	(building-type-count-total blacksmith > 0)
+	(commodity-selling-price stone > 100)
+	(building-type-count-total mining-camp < 4)
+	(or
+		(and (building-type-count-total mining-camp < 2)
+			(dropsite-min-distance stone > 5))
+		(and (current-age == castle-age)
+			(building-type-count stable > 1)))
+	(can-build mining-camp)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	(build mining-camp)
+	;(chat-local-to-self "MCamp 10")
+)
+#end-if
+
+
+#load-if-not-defined DEATH-MATCH
+(defrule
+	(or (game-time > 2100)
+		(dropsite-min-distance wood > 15))
+	(strategic-number sn-camp-max-distance < 60)
+=>
+	(set-strategic-number sn-camp-max-distance 60)
+)
+(defrule
+	(game-time > 2700)
+	(strategic-number sn-camp-max-distance < 90)
+=>
+	(set-strategic-number sn-camp-max-distance 90)
+)
+#end-if
+
+(defrule
+	(current-age >= castle-age)
+	(wood-amount < 10000)
+	(or (dropsite-min-distance wood > 10)
+		(unit-type-count villager > 8))
+	(up-pending-objects c: lumber-camp < 1)
+	(dropsite-min-distance wood < 480)
+	(dropsite-min-distance wood > 3)
+	(can-build lumber-camp)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(build lumber-camp)
+	;(chat-local-to-self "LCamp 4")
+	(set-strategic-number sn-dropsite-separation-distance 6)
+)
+
+(defrule
+	(wood-amount < 10000)
+	(or (dropsite-min-distance wood > 10)
+		(unit-type-count villager > 8))
+	(up-pending-objects c: lumber-camp < 1)
+	(unit-type-count villager >= 75)
+	(can-build lumber-camp)
+	(dropsite-min-distance wood >= 0)
+	(dropsite-min-distance wood < 480)
+	(timer-triggered lumber-timer)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(build lumber-camp)
+	;(chat-local-to-self "LCamp 5")
+	(enable-timer lumber-timer 180)
+	(set-strategic-number sn-dropsite-separation-distance 4)
+)
+
+(defrule
+	(wood-amount < 10000)
+	(or (dropsite-min-distance wood > 10)
+		(unit-type-count villager > 8))
+	(up-pending-objects c: lumber-camp < 1)
+	(or (unit-type-count-total 219 >= 1)
+		(unit-type-count-total 228 >= 1))
+	(can-build lumber-camp)
+	(dropsite-min-distance wood > 1)
+	(dropsite-min-distance wood < 480)
+	(timer-triggered lumber-timer)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(build lumber-camp)
+	;(chat-local-to-self "LCamp 6")
+	(enable-timer lumber-timer 120)
+	(set-strategic-number sn-dropsite-separation-distance 12)
+)
+
+(defrule
+	(wood-amount < 10000)
+	(or (dropsite-min-distance wood > 10)
+		(unit-type-count villager > 8))
+	(up-pending-objects c: lumber-camp == 0)
+	(resource-found wood)
+	(unit-type-count-total villager >= 10)
+	(dropsite-min-distance wood > 5)
+	(dropsite-min-distance wood < 255)
+	(building-type-count-total mill >= 1)
+	(building-type-count-total town-center >= 1)
+	(strategic-number sn-camp-max-distance <= 476)
+	(can-build lumber-camp)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(up-modify-sn sn-camp-max-distance c:+ 4)
+	(build lumber-camp)
+	;(chat-local-to-self "LCamp 7")
+)
+
+(defrule
+	(building-type-count mill > 0)
+	(building-type-count-total town-center == 1)
+	(or
+		(goal strategy-flush 1)
+		(building-type-count farm > 18))
+	(building-type-count farm > 15)
+	(building-type-count-total mill < 2)
+	(can-build mill)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	(set-strategic-number sn-mill-max-distance 17)
+	(set-strategic-number sn-dropsite-separation-distance 10)
+	(build mill)
+)
+
+(defrule
+	(building-type-count mill > 0)
+	(building-type-count farm > 24)
+	(or
+		(building-type-count farm > 27)
+		(building-type-count-total town-center == 1))
+	(building-type-count-total mill < 3)
+	(can-build mill)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	(set-strategic-number sn-mill-max-distance 20)
+	(set-strategic-number sn-dropsite-separation-distance 10)
+	(build mill)
+)
+
+(defrule
+	(building-type-count mill > 0)
+	(building-type-count farm > 33)
+	(or
+		(building-type-count-total mill < 4)
+		(building-type-count farm > 45))
+	(building-type-count-total mill < 5)
+	(can-build mill)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	(set-strategic-number sn-mill-max-distance 23)
+	(set-strategic-number sn-dropsite-separation-distance 10)
+	(build mill)
+)
+
+
+(defrule
+	(wood-amount < 10000)
+	(or (dropsite-min-distance wood > 10)
+		(unit-type-count villager > 8))
+	(up-pending-objects c: lumber-camp < 1)
+	(resource-found wood)
+	(or	(unit-type-count-total 219 >= 1)
+		(unit-type-count-total 228 >= 1))
+	(building-type-count-total blacksmith > 0)
+	(game-time < 1800)
+	(can-build lumber-camp)
+	(building-type-count-total lumber-camp < 5)
+	(strategic-number sn-camp-max-distance <= 35)
+	(current-age >= castle-age)
+=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(build lumber-camp)
+	;(chat-local-to-self "LCamp 8")
+	(set-strategic-number sn-camp-max-distance 35)
+	(set-strategic-number sn-dropsite-separation-distance 10)
+)
+
+
+
+
+
+(defrule
+	(current-age >= feudal-age)
+	(strategic-number sn-camp-max-distance < 30)
+=>
+	(set-strategic-number sn-camp-max-distance 30)
+)
+
+(defrule
+	(or (game-time > 1640)
+		(building-type-count-total town-center >= 3))
+	(or (game-time > 1200)
+		(and (goal am-under-attack 0)
+			(strategic-number sn-military-level >= 5)))
+	(strategic-number sn-camp-max-distance < 40)
+=>
+	(set-strategic-number sn-camp-max-distance 40)
+)
+
+(defrule
+	(or (game-time > 3000)
+		(and (game-time > 2100)
+			(strategic-number sn-military-level >= 7)))
+	(strategic-number sn-military-level >= 0)
+	(strategic-number sn-camp-max-distance < 70)
+=>
+	(set-strategic-number sn-camp-max-distance 70)
+)
+
+(defrule
+	(game-time > 3150)
+	(or (game-time > 7800)
+		(strategic-number sn-military-level >= 7))
+	(or (population >= 173)
+		(current-age >= imperial-age))
+	(strategic-number sn-camp-max-distance < 100)
+=>
+	(set-strategic-number sn-camp-max-distance 100)
+)
+
+(defrule
+	(game-time > 3600)
+	(or (game-time > 12600)
+		(strategic-number sn-military-level >= 9))
+	(population >= 173)
+	(strategic-number sn-camp-max-distance < 255)
+=>
+	(set-strategic-number sn-camp-max-distance 255)
+)
+
+(defrule
+	(game-time > 7200)
+	(or (game-time > 18000)
+		(strategic-number sn-military-level >= 9))
+	(population >= 173)
+	(strategic-number sn-camp-max-distance < 480)
+=>
+	(set-strategic-number sn-camp-max-distance 480)
+)
+
+(defrule
+	(or (game-time > 1320)
+		(and (game-time > 1050)
+			(strategic-number sn-military-level >= 5)))
+	(or (strategic-number sn-maximum-wood-drop-distance < 22)
+		(strategic-number sn-maximum-food-drop-distance < 22))
+=>
+	;extend walking distances
+	(set-strategic-number sn-maximum-wood-drop-distance 22)
+	(set-strategic-number sn-maximum-food-drop-distance 22)
+	(set-strategic-number sn-maximum-hunt-drop-distance 24)
+	(set-strategic-number sn-maximum-gold-drop-distance 10)
+	(set-strategic-number sn-maximum-stone-drop-distance 14)
+)
+
+(defrule
+	(or (game-time > 3000)
+		(and (game-time > 2400)
+			(strategic-number sn-military-level >= 5)))
+	(or (strategic-number sn-maximum-wood-drop-distance < 25)
+		(strategic-number sn-maximum-food-drop-distance < 25))
+=>
+	(set-strategic-number sn-maximum-wood-drop-distance 25)
+	(set-strategic-number sn-maximum-food-drop-distance 25)
+	(set-strategic-number sn-maximum-hunt-drop-distance 25)
+	(set-strategic-number sn-maximum-gold-drop-distance 11)
+	(set-strategic-number sn-maximum-stone-drop-distance 15)
+)
+
+(defrule
+	(or (game-time > 3900)
+		(and (game-time > 3300)
+			(strategic-number sn-military-level >= 5)))
+	(or (strategic-number sn-maximum-wood-drop-distance < 30)
+		(strategic-number sn-maximum-food-drop-distance < 30))
+=>
+	(set-strategic-number sn-maximum-wood-drop-distance 30)
+	(set-strategic-number sn-maximum-food-drop-distance 30)
+	(set-strategic-number sn-maximum-hunt-drop-distance 26)
+	(set-strategic-number sn-maximum-gold-drop-distance 13)
+	(set-strategic-number sn-maximum-stone-drop-distance 16)
+)
+
+(defrule
+	(or (game-time > 5100)
+		(and (game-time > 4500)
+			(strategic-number sn-military-level >= 7)))
+	(or (strategic-number sn-maximum-wood-drop-distance < 35)
+		(strategic-number sn-maximum-food-drop-distance < 35))
+=>
+	(set-strategic-number sn-maximum-wood-drop-distance  35)
+	(set-strategic-number sn-maximum-food-drop-distance  35)
+	(set-strategic-number sn-maximum-hunt-drop-distance  27)
+	(set-strategic-number sn-maximum-gold-drop-distance  16)
+	(set-strategic-number sn-maximum-stone-drop-distance 18)
+)
+
+(defrule
+	(or (game-time > 7800)
+		(and (game-time > 7200)
+			(strategic-number sn-military-level >= 7)))
+	(or (strategic-number sn-maximum-wood-drop-distance < 40)
+		(strategic-number sn-maximum-food-drop-distance < 40))
+=>
+	(set-strategic-number sn-maximum-wood-drop-distance  40)
+	(set-strategic-number sn-maximum-food-drop-distance  40)
+	(set-strategic-number sn-maximum-hunt-drop-distance  28)
+	(set-strategic-number sn-maximum-gold-drop-distance  18)
+	(set-strategic-number sn-maximum-stone-drop-distance 19)
+)
+
+(defrule
+	(or (game-time > 10200)
+		(and (game-time > 9600)
+			(strategic-number sn-military-level >= 7)))
+	(or (strategic-number sn-maximum-wood-drop-distance < 60)
+		(strategic-number sn-maximum-food-drop-distance < 50))
+=>
+	(set-strategic-number sn-maximum-wood-drop-distance  60)
+	(set-strategic-number sn-maximum-food-drop-distance  50)
+	(set-strategic-number sn-maximum-hunt-drop-distance  30)
+	(set-strategic-number sn-maximum-gold-drop-distance  22)
+	(set-strategic-number sn-maximum-stone-drop-distance 22)
+)
+
+(defrule
+	(or (game-time > 12600)
+		(and (game-time > 12000)
+			(strategic-number sn-military-level >= 7)))
+	(or (strategic-number sn-maximum-wood-drop-distance < 255)
+		(strategic-number sn-maximum-food-drop-distance < 60))
+=>
+	(set-strategic-number sn-maximum-wood-drop-distance  255)
+	(set-strategic-number sn-maximum-food-drop-distance  60)
+	(set-strategic-number sn-maximum-hunt-drop-distance  60)
+	(set-strategic-number sn-maximum-gold-drop-distance  25)
+	(set-strategic-number sn-maximum-stone-drop-distance 25)
+)
+
+(defrule
+	(or (game-time > 18000)
+		(and (game-time > 14400)
+			(strategic-number sn-military-level >= 9)))
+	(or (strategic-number sn-maximum-wood-drop-distance < 480)
+		(strategic-number sn-maximum-food-drop-distance < 75))
+=>
+	(set-strategic-number sn-maximum-wood-drop-distance  480)
+	(set-strategic-number sn-maximum-food-drop-distance  75)
+	(set-strategic-number sn-maximum-hunt-drop-distance  75)
+	(set-strategic-number sn-maximum-gold-drop-distance  40)
+	(set-strategic-number sn-maximum-stone-drop-distance 40)
+)

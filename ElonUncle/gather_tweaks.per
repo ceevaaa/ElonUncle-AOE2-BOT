@@ -1,0 +1,687 @@
+
+(defrule
+	(true)
+=>
+	(set-goal stone-change 0)
+	(set-goal food-change 0)
+	(set-goal gold-change 0)
+)
+
+; ---------------------------
+; Food
+; ---------------------------
+
+(defrule
+	(or (or (or (and (current-age == imperial-age)
+			(food-amount < 200))
+		(and (current-age == dark-age)
+			(food-amount < 500)))
+		(and (current-age == feudal-age)
+			(food-amount < 800)))
+		(and (current-age == castle-age)
+			(food-amount < 1000)))
+=>
+	(set-goal food-change 2)
+)
+
+(defrule
+	(or (or (or (and (current-age == imperial-age)
+			(food-amount > 200))
+		(and (current-age == dark-age)
+			(food-amount > 500)))
+		(and (current-age == feudal-age)
+			(food-amount > 800)))
+		(and (current-age == castle-age)
+			(food-amount > 1000)))
+=>
+	(set-goal food-change 1)
+)
+
+; ---------------------------
+; Stone
+; ---------------------------
+
+;REGARDLESS OF WHETHER WE HAVE A CASTLE, IF WE HAVE OVER 600 STONE, THAT'S IT
+
+(defrule
+	(current-age > feudal-age)
+	(stone-amount > 650)
+=>
+	(set-goal stone-change 1)
+)
+
+;IF THE CURRENT AGE IS FEUDAL, AND WE'RE "HEAVY-CASTLING", WE NEED ENOUGH STONE FOR IT
+
+(defrule
+	(current-age < castle-age)
+	(or (and (goal strategy-heavy-castling 1)
+			(stone-amount > 750))
+		(and (goal strategy-heavy-castling 2)
+			(stone-amount > 1400)))
+=>
+	(set-goal stone-change 1)
+)
+
+
+;CURRENT AGE IS CASTLE, AND WE'VE EITHER BUILT ENOUGH CASTLES OR HAVE ENOUGH STONE WHILE HEAVY-CASTLING
+
+(defrule
+	(current-age > feudal-age)
+	(or (or (and (goal strategy-heavy-castling 1)
+			(stone-amount > 650))
+			(building-type-count castle > 0))
+		(or (and (goal strategy-heavy-castling 2)
+			(stone-amount > 650))
+			(building-type-count castle > 1)))
+=>
+	(set-goal stone-change 2)
+)
+
+;CURRENT AGE IS FEUDAL, WE'RE NOT HEAVY-CASTLING, AND WE HAVE ENOUGH STONE
+
+(defrule
+	(current-age == feudal-age)
+	(stone-amount > 125)
+	(goal strategy-heavy-castling 0)
+=>
+	(set-goal stone-change 1)
+)
+
+;WE ONLY WANT ONE CASTLE, WE HAVE ONE CASTLE, AND WE HAVE ENOUGH STONE
+
+(defrule
+	(or (goal strategy-heavy-castling 0)
+		(goal strategy-heavy-castling 1))
+	(building-type-count castle > 0)
+	(stone-amount > 200)
+=>
+	(set-goal stone-change 1)
+)
+
+;TRYING TO BOOM; DO NOT NEED TO BE GATHERING STONE
+
+(defrule
+	(goal strategy-boom 1)
+	(building-type-count-total town-center < 3)
+	(stone-amount > 200)
+	(goal am-under-attack 0)
+=>
+	(set-goal stone-change 1)
+)
+
+;WE HAVE NO CASTLE, AND WE WANT ONE AND ARE IN THE CASTLE AGE, BUT NEED STONE
+
+(defrule
+	(building-type-count castle < 1)
+	(current-age > feudal-age)
+	(stone-amount < 650)
+	(or (goal am-under-attack 1)
+		(goal strategy-boom 0))
+=>
+	(set-goal stone-change 2)
+)
+
+;WE ARE IN THE FEUDAL AGE AND HEAVY CASTLING
+
+(defrule
+	(current-age < castle-age)
+	(or (and (goal strategy-heavy-castling 1)
+			(stone-amount < 750))
+		(and (goal strategy-heavy-castling 2)
+			(stone-amount < 1400)))
+=>
+	(set-goal stone-change 2)
+)
+
+;WE ARE CASTLE AGE OR HIGHER AND LACK THE APPROPRIATE NUMBER OF CASTLES
+
+(defrule
+	(current-age > feudal-age)
+	(or (and (and (goal strategy-heavy-castling 1)
+			(stone-amount < 650))
+			(building-type-count castle < 1))
+		(and (and (goal strategy-heavy-castling 2)
+			(stone-amount < 650))
+			(building-type-count castle < 2)))
+	(or (goal am-under-attack 1)
+		(goal strategy-boom 0))
+=>
+	(set-goal stone-change 2)
+)
+
+(defrule
+	(current-age == feudal-age)
+	(stone-amount < 125)
+=>
+	(set-goal stone-change 2)
+)
+
+(defrule
+	(building-type-count castle > 0)
+	(stone-amount < 200)
+=>
+	(set-goal stone-change 2)
+)
+
+; ---------------------------
+; GOLD
+; ---------------------------
+
+(defrule
+	(or (or (and (or (current-age > castle-age)
+				(current-age == feudal-age))
+			(gold-amount > 200))
+		(and (current-age == castle-age)
+			(gold-amount > 800)))
+		(and (current-age == dark-age)
+			(gold-amount > 20)))
+=>
+	(set-goal gold-change 1)
+)
+(defrule
+	(or (or (and (or (current-age > castle-age)
+				(current-age == feudal-age))
+			(gold-amount < 200))
+		(and (current-age == castle-age)
+			(gold-amount < 800)))
+		(and (current-age == dark-age)
+			(gold-amount < 20)))
+=>
+	(set-goal gold-change 2)
+)
+
+
+; ---------------------------
+; FOOD-CRITICAL GATHER TWEAKS
+; ---------------------------
+
+(defrule
+	(timer-triggered one-minute-timer)
+	(food-amount < 50)
+	(strategic-number sn-wood-gatherer-percentage > 2)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 2)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 2)
+	;(chat-local-to-self "less wood, more food")
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(food-amount < 50)
+	(strategic-number sn-gold-gatherer-percentage > 2)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 2)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 2)
+	;(chat-local-to-self "less gold, more food")
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(food-amount < 50)
+	(strategic-number sn-stone-gatherer-percentage > 2)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 2)
+	(up-modify-sn sn-stone-gatherer-percentage c:- 2)
+	;(chat-local-to-self "less stone, more food")
+)
+
+; ---------------------------
+; BOOM-CRITICAL GATHER TWEAKS
+; ---------------------------
+
+(defrule
+	(current-age > feudal-age)
+	(building-type-count town-center < 3)
+	(goal strategy-boom 1)
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(stone-amount < 100)
+	(strategic-number sn-wood-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less wood, more food")
+)
+(defrule
+	(current-age > feudal-age)
+	(building-type-count town-center < 3)
+	(goal strategy-boom 1)
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(stone-amount < 100)
+	(strategic-number sn-gold-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less gold, more food")
+)
+(defrule
+	(current-age > feudal-age)
+	(building-type-count town-center < 3)
+	(goal strategy-boom 1)
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(stone-amount < 100)
+	(strategic-number sn-food-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-food-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less stone, more food")
+)
+
+(defrule
+	(current-age > feudal-age)
+	(building-type-count town-center < 3)
+	(goal strategy-boom 1)
+	(timer-triggered one-minute-timer)
+	(wood-amount < 275)
+	(strategic-number sn-stone-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-stone-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less stone, more food")
+)
+(defrule
+	(current-age > feudal-age)
+	(building-type-count town-center < 3)
+	(goal strategy-boom 1)
+	(dropsite-min-distance wood < 10)
+	(timer-triggered one-minute-timer)
+	(wood-amount < 275)
+	(strategic-number sn-gold-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less gold, more food")
+)
+(defrule
+	(current-age > feudal-age)
+	(building-type-count town-center < 3)
+	(goal strategy-boom 1)
+	(dropsite-min-distance wood < 10)
+	(timer-triggered one-minute-timer)
+	(wood-amount < 275)
+	(strategic-number sn-food-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-food-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less wood, more food")
+)
+
+; ---------------------------
+; NORMAL GATHER TWEAKS
+; ---------------------------
+
+(defrule
+	(timer-triggered one-minute-timer)
+	(goal food-change 2)
+	(wood-amount > 275)
+	(strategic-number sn-wood-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less wood, more food")
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(goal food-change 2)
+	(goal gold-change 1)
+	(strategic-number sn-gold-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less gold, more food")
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(goal food-change 2)
+	(goal stone-change 1)
+	(strategic-number sn-stone-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-stone-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less stone, more food")
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(wood-amount < 275)
+	(goal food-change 1)
+	(strategic-number sn-food-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-food-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less food, more wood")
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(wood-amount < 275)
+	(goal gold-change 1)
+	(strategic-number sn-gold-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less gold, more wood")
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(wood-amount < 275)
+	(goal stone-change 1)
+	(strategic-number sn-stone-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-stone-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less stone, more wood")
+)
+(defrule
+	(dropsite-min-distance gold < 10)
+	(timer-triggered one-minute-timer)
+	(goal gold-change 2)
+	(goal food-change 1)
+	(strategic-number sn-food-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-gold-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-food-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less food, more gold")
+)
+(defrule
+	(dropsite-min-distance gold < 10)
+	(timer-triggered one-minute-timer)
+	(goal gold-change 2)
+	(wood-amount > 275)
+	(strategic-number sn-wood-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-gold-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less wood, more gold")
+)
+(defrule
+	(dropsite-min-distance gold < 10)
+	(timer-triggered one-minute-timer)
+	(goal gold-change 2)
+	(goal stone-change 1)
+	(strategic-number sn-stone-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-gold-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-stone-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less stone, more gold")
+)
+(defrule
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(goal stone-change 2)
+	(goal food-change 1)
+	(strategic-number sn-food-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-food-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less food, more stone")
+)
+(defrule
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(goal stone-change 2)
+	(wood-amount > 275)
+	(strategic-number sn-wood-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less wood, more stone")
+)
+(defrule
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(goal stone-change 2)
+	(goal gold-change 1)
+	(strategic-number sn-gold-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 1)
+	;(chat-local-to-self "less gold, more stone")
+)
+
+
+(defrule
+	(timer-triggered one-minute-timer)
+	(food-amount < 1000)
+	(wood-amount > 1000)
+	(strategic-number sn-wood-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 1)
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(food-amount < 1000)
+	(gold-amount > 1000)
+	(strategic-number sn-gold-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 1)
+)
+(defrule
+	(building-type-count castle > 0)
+	(timer-triggered one-minute-timer)
+	(food-amount < 1000)
+	(stone-amount > 1000)
+	(strategic-number sn-stone-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-stone-gatherer-percentage c:- 1)
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(wood-amount < 1000)
+	(food-amount > 1000)
+	(strategic-number sn-food-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-food-gatherer-percentage c:- 1)
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(wood-amount < 1000)
+	(gold-amount > 1000)
+	(strategic-number sn-gold-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 1)
+)
+(defrule
+	(building-type-count castle > 0)
+	(timer-triggered one-minute-timer)
+	(wood-amount < 1000)
+	(stone-amount > 1000)
+	(strategic-number sn-stone-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-stone-gatherer-percentage c:- 1)
+)
+(defrule
+	(current-age >= feudal-age)
+	(dropsite-min-distance gold < 10)
+	(timer-triggered one-minute-timer)
+	(gold-amount < 1000)
+	(food-amount > 1000)
+	(strategic-number sn-food-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-gold-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-food-gatherer-percentage c:- 1)
+)
+(defrule
+	(current-age >= feudal-age)
+	(dropsite-min-distance gold < 10)
+	(timer-triggered one-minute-timer)
+	(gold-amount < 1000)
+	(wood-amount > 1000)
+	(strategic-number sn-wood-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-gold-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 1)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age >= feudal-age)
+	(dropsite-min-distance gold < 10)
+	(timer-triggered one-minute-timer)
+	(gold-amount < 1000)
+	(stone-amount > 1000)
+	(strategic-number sn-stone-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-gold-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-stone-gatherer-percentage c:- 1)
+)
+(defrule
+	(current-age >= castle-age)
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(stone-amount < 1000)
+	(food-amount > 1000)
+	(strategic-number sn-food-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-food-gatherer-percentage c:- 1)
+)
+(defrule
+	(current-age >= castle-age)
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(stone-amount < 1000)
+	(wood-amount > 1000)
+	(strategic-number sn-wood-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 1)
+)
+(defrule
+	(current-age >= castle-age)
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(stone-amount < 1000)
+	(gold-amount > 1000)
+	(strategic-number sn-gold-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 1)
+)
+
+(defrule
+	(timer-triggered one-minute-timer)
+	(food-amount < 5000)
+	(wood-amount > 5000)
+	(strategic-number sn-wood-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 1)
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(food-amount < 5000)
+	(gold-amount > 5000)
+	(strategic-number sn-gold-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 1)
+)
+(defrule
+	(building-type-count castle > 0)
+	(timer-triggered one-minute-timer)
+	(food-amount < 5000)
+	(stone-amount > 5000)
+	(strategic-number sn-stone-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-food-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-stone-gatherer-percentage c:- 1)
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(wood-amount < 5000)
+	(food-amount > 5000)
+	(strategic-number sn-food-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-food-gatherer-percentage c:- 1)
+)
+(defrule
+	(timer-triggered one-minute-timer)
+	(wood-amount < 5000)
+	(gold-amount > 5000)
+	(strategic-number sn-gold-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 1)
+)
+(defrule
+	(building-type-count castle > 0)
+	(timer-triggered one-minute-timer)
+	(wood-amount < 5000)
+	(stone-amount > 5000)
+	(strategic-number sn-stone-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-wood-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-stone-gatherer-percentage c:- 1)
+)
+(defrule
+	(current-age >= feudal-age)
+	(dropsite-min-distance gold < 10)
+	(timer-triggered one-minute-timer)
+	(gold-amount < 5000)
+	(food-amount > 5000)
+	(strategic-number sn-food-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-gold-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-food-gatherer-percentage c:- 1)
+)
+(defrule
+	(current-age >= feudal-age)
+	(dropsite-min-distance gold < 10)
+	(timer-triggered one-minute-timer)
+	(gold-amount < 5000)
+	(wood-amount > 5000)
+	(strategic-number sn-wood-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-gold-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 1)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age >= feudal-age)
+	(dropsite-min-distance gold < 10)
+	(timer-triggered one-minute-timer)
+	(gold-amount < 5000)
+	(stone-amount > 5000)
+	(strategic-number sn-stone-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-gold-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-stone-gatherer-percentage c:- 1)
+)
+(defrule
+	(current-age >= castle-age)
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(stone-amount < 5000)
+	(food-amount > 5000)
+	(strategic-number sn-food-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-food-gatherer-percentage c:- 1)
+)
+(defrule
+	(current-age >= castle-age)
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(stone-amount < 5000)
+	(wood-amount > 5000)
+	(strategic-number sn-wood-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 1)
+)
+(defrule
+	(current-age >= castle-age)
+	(dropsite-min-distance stone < 10)
+	(timer-triggered one-minute-timer)
+	(stone-amount < 5000)
+	(gold-amount > 5000)
+	(strategic-number sn-gold-gatherer-percentage > 1)
+=>
+	(up-modify-sn sn-stone-gatherer-percentage c:+ 1)
+	(up-modify-sn sn-gold-gatherer-percentage c:- 1)
+)

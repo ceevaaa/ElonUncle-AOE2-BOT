@@ -1,0 +1,6902 @@
+(load "ElonUncle/constants")
+
+; ==========Goals==========
+; 1 = Attacking
+; 3 = Military explorers
+; ==========GROUPS=========
+
+(defrule
+	(game-time > 3600)
+=>
+	(enable-timer town-expansion-timer 600)
+	(disable-self)
+)
+
+(defrule
+	(timer-triggered town-expansion-timer)
+	(goal am-under-attack 0)
+=>
+	(disable-timer town-expansion-timer)
+	(enable-timer town-expansion-timer 600)
+	(up-modify-sn sn-maximum-town-size c:+ 5)
+	(up-modify-goal current-town-size c:+ 5)
+)
+
+(defrule
+	(timer-triggered town-expansion-timer)
+	(goal am-under-attack 1)
+	(strategic-number sn-maximum-town-size > 19)
+=>
+	(disable-timer town-expansion-timer)
+	(enable-timer town-expansion-timer 600)
+	(up-modify-sn sn-maximum-town-size c:- 5)
+	(up-modify-goal current-town-size c:- 5)
+)
+
+(defrule
+	(population < 200)
+=>
+	(set-strategic-number sn-attack-group-gather-spacing 4)
+)
+
+(defrule
+	(population > 200)
+=>
+	(set-strategic-number sn-attack-group-gather-spacing 8)
+)
+
+(defrule
+	(true)
+=>
+	(set-goal barracks-train-count 0)
+	(set-goal archery-train-count 0)
+	(set-goal stable-train-count 0)
+	(set-goal siege-train-count 0)
+	(set-goal dock-train-count 0)
+	(set-goal castle-train-count 0)
+	(set-goal church-train-count 0)
+	(set-goal disable-villager-training 0)
+	(set-goal disable-melee-training 0)
+	(set-goal single-villager-training 0)
+	(set-goal disable-gold-training 0)
+	(set-goal no-research 0)
+	(set-goal allowed-to-attack 1)
+	(set-goal save-for-town-center 0)
+)
+
+(defrule
+	(game-time > 1800)
+	(building-type-count town-center < 2)
+	(goal am-under-attack 0)
+	(strategic-number sn-military-level > 3)
+=>
+	(set-goal save-for-town-center 1)
+)
+
+
+(load "ElonUncle/strategy")
+
+(defrule
+	(or (or	(players-unit-type-count any-enemy fire-ship-line > 2)
+		(players-unit-type-count any-enemy galley-line > 2))
+		(players-unit-type-count any-enemy fishing-ship > 4))
+=>
+	(set-goal enemy-dock-sighted 1)
+	(set-goal warship-training-disabled 0)
+	(chat-local-to-self "Enabling warship training")
+	(set-strategic-number sn-dock-training-filter 0)
+	(disable-self)
+)
+
+(defrule
+	(true)
+=>
+	(set-goal strategy-save-escrow 0)
+	(set-strategic-number sn-houses-built 0)
+	(set-goal targeting-method 3)
+	(set-goal target-reevaluation 0)
+	(set-goal sheep-searching 0)
+	(set-goal attacked-early 0)
+	(set-goal should-train-transports 0)
+	(set-goal enemy-dock-sighted 0)
+	(set-strategic-number sn-target-player-number 0);BY DEFAULT, ATTACK THE WINNING PLAYER TO KNOCK THEM DOWN
+	(enable-timer one-minute-timer 60)
+	(set-goal first-attack 0)
+	(set-goal am-under-attack 0)
+	(set-strategic-number sn-enable-training-queue 1)
+	(set-goal castle-unique-goal 0)
+	(set-goal imperial-unique-goal 0)
+	(disable-self)
+)
+
+(defrule
+	(true)
+=>
+	(set-difficulty-parameter ability-to-dodge-missiles 0)
+	(set-difficulty-parameter ability-to-maintain-distance 0)
+	(set-goal normalize-food-escrow 0)
+	(set-goal normalize-wood-escrow 0)
+	(set-goal normalize-gold-escrow 0)
+	(set-goal normalize-stone-escrow 0)
+	(set-goal finished-castle-unique 0)
+	(set-goal finished-imperial-unique 0)
+	(set-goal failed-unique-research 0)
+	(disable-self)
+)
+
+;TRAIN EXTRA VILLAGERS IN THE DARK AGE WHEN POSSIBLE
+
+(defrule
+	(or (food-amount > 400)
+		(current-age != dark-age))
+=>
+	(set-strategic-number sn-enable-training-queue 0)
+	(disable-self)
+)
+
+(defrule
+	(game-time > 1800)
+	(goal enemy-dock-sighted 0)
+=>
+	(set-goal warship-training-disabled 1)
+	(chat-local-to-self "Disabling warship training")
+	(set-strategic-number sn-dock-training-filter 1)
+	(disable-self)
+)
+(defrule
+	(players-unit-type-count any-enemy transport-ship > 0)
+=>
+	(set-goal should-train-transports 1)
+	(disable-self)
+)
+(defrule
+	(game-time < 1800)
+	(goal am-under-attack 1)
+=>
+	(set-goal attacked-early 1)
+	(disable-self)
+)
+(defrule
+	(game-time > 1800)
+	(goal attacked-early 0)
+=>
+	(set-goal should-train-transports 1)
+	(disable-self)
+)
+(defrule
+	(true)
+=>
+	(set-goal saving-for-siege-workshop 0)
+	(set-goal have-built-siege-workshop 0)
+	(enable-timer one-minute-timer 60)
+	(set-strategic-number sn-ignore-attack-group-under-attack 0)
+	(enable-timer house-timer 9001)
+	(set-goal house-expansion 0)
+	(set-strategic-number sn-percent-building-cancellation 75)
+	(set-goal am-superbuilding 0)
+	(set-goal settled-down 1)
+	(set-strategic-number sn-forage-defend-priority 1)
+	(set-strategic-number sn-gold-defend-priority 1)
+	(set-strategic-number sn-stone-defend-priority 1)
+	(set-strategic-number sn-livestock-defend-priority 1)
+	(disable-self)
+)
+(defrule
+	(true)
+=>	
+	(set-goal dropsite-max-distance 25)
+   	(set-strategic-number sn-intelligent-gathering 1)
+	(set-strategic-number sn-retask-gather-amount 0)
+	(set-goal gathering-stuff 1)
+	(set-goal spam-attack 0)
+	(set-goal asked-for-help 0)
+   	(set-strategic-number sn-maximum-hunt-drop-distance 30)
+	(set-strategic-number sn-cap-civilian-gatherers 200)
+	(disable-self)
+)
+(defrule
+	(players-unit-type-count any-enemy trebuchet < 1)
+=>
+	(set-strategic-number sn-wall-targeting-mode 1)
+)
+(defrule
+	(players-unit-type-count any-enemy trebuchet > 0)
+=>
+	(set-strategic-number sn-wall-targeting-mode 0)
+)
+(defrule
+	(or
+		(building-type-count town-center > 0)
+		(and (wood-amount > 5000)
+			(stone-amount > 1000))
+	)
+=>
+	(set-goal settled-down 2)
+)
+(defrule
+	(building-type-count town-center < 1)
+	(wood-amount < 5000)
+	(stone-amount < 1000)
+=>
+	(set-goal settled-down 1)
+)
+(defrule
+	(goal settled-down 1)
+	(or
+		(building-type-count town-center > 0)
+		(and (wood-amount > 5000)
+			(stone-amount > 1000))
+	)
+=>
+	(chat-local-to-self "Have settled down.")
+	(disable-self)
+)
+(defrule
+	(goal settled-down 1)
+	(or
+		(building-type-count town-center < 1)
+		(or (not (wood-amount > 5000))
+			(not (stone-amount > 1000)))
+	)
+=>
+	(chat-local-to-self "Looking for a place to settle down.")
+	(disable-self)
+)
+(defrule
+	(goal attack-cycle 1)
+=>
+	(set-strategic-number sn-percent-civilian-explorers 10)
+	(set-strategic-number sn-percent-civilian-builders 10)
+	(set-strategic-number sn-percent-civilian-gatherers 80)
+	(chat-local-to-self "Checking to see if I missed something.")
+	(disable-self)
+)
+(defrule
+	(goal attack-cycle 2)
+=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(chat-local-to-self "Let's get on with it!.")
+	(disable-self)
+)
+(defrule
+	(game-time < 30)
+	(food-amount > 5000)
+=>
+	(set-strategic-number sn-maximum-town-size 20)
+	(set-strategic-number current-town-size 20)
+)
+(defrule
+	(game-time < 30)
+	(food-amount < 1500)
+=>
+	(set-strategic-number sn-maximum-town-size 15)
+	(set-strategic-number current-town-size 15)
+)
+(defrule
+	(true)
+=>
+	(set-goal military-explorers 1)
+        	(set-strategic-number sn-camp-max-distance 20)
+        	(set-strategic-number sn-mill-max-distance 20)
+	(set-strategic-number sn-percent-enemy-sighted-response 100)
+	(set-strategic-number sn-enemy-sighted-response-distance 0) 
+	(set-strategic-number sn-blot-exploration-map 1)
+	(set-strategic-number sn-percent-attack-soldiers 100)
+	(set-strategic-number sn-maximum-attack-group-size 50)
+	(set-strategic-number sn-number-explore-groups 1)
+	(set-strategic-number sn-task-ungrouped-soldiers 0)
+	(set-strategic-number sn-group-form-distance 20) 
+	(set-strategic-number sn-group-leader-defense-distance 3)
+	(set-strategic-number sn-build-frequency 1)
+	(set-strategic-number sn-number-build-attempts-before-skip 5)
+	(set-strategic-number sn-coop-share-attacking 1); usually helps ally too late, but better than nothing
+	(set-strategic-number sn-coop-share-information 1); gives information to an AI ally
+	(set-strategic-number sn-minimum-water-body-size-for-dock 999); don't build docks in small puddles
+	(disable-self)
+)
+(defrule
+	(true)
+=>
+	(set-strategic-number sn-target-evaluation-continent 0)
+	(set-strategic-number sn-target-evaluation-in-progress 0)
+	(set-strategic-number sn-target-evaluation-boat 0)
+	(set-strategic-number sn-target-evaluation-siege-weapon 500);smash those horrible siege weapons with extreme prejudice
+	(set-strategic-number sn-target-evaluation-time-kill-ratio 0)
+	(set-strategic-number sn-target-evaluation-hitpoints 67)
+	(set-strategic-number sn-target-evaluation-damage-capability 1)
+	(set-strategic-number sn-target-evaluation-kills 0)
+	(set-strategic-number sn-target-evaluation-distance 33)
+	(set-strategic-number sn-target-evaluation-attack-attempts 0)
+	(set-strategic-number sn-target-evaluation-range -100)
+	(set-strategic-number sn-target-evaluation-rof 0)
+	(disable-self)
+)
+(defrule
+	(food-amount > 10000)
+	(game-time < 60)
+=>
+	(set-strategic-number sn-number-explore-groups 10)
+	(disable-self)
+)
+(defrule
+	(food-amount < 10000)
+	(or 
+		(and (death-match-game)
+			(game-time > 600))
+		(and (not (death-match-game))
+			(game-time > 900)))
+=>
+	(set-strategic-number sn-number-explore-groups 2)
+)
+
+;------------------------------
+; >>>>>>> ATTACK GROUPS <<<<<<<
+;------------------------------
+
+(defrule
+	(true)
+=>
+	(set-goal 4 10)
+	(set-strategic-number sn-group-commander-selection-method 0)
+	(set-strategic-number sn-maximum-boat-attack-group-size 45)
+	(set-strategic-number sn-minimum-peace-like-level 50)
+	(set-strategic-number sn-minimum-attack-group-size 5)
+	(set-strategic-number sn-do-not-scale-for-difficulty-level 1)
+	(set-strategic-number sn-attack-intelligence 1)
+	(set-strategic-number sn-attack-group-size-randomness 0)
+	(set-strategic-number sn-scale-minimum-attack-group-size 0)
+	(set-strategic-number sn-scale-maximum-attack-group-size 0)
+	(enable-timer 5 300)
+	(disable-self)
+)
+
+; -------------------------
+; >>>>>>> RESIGNING <<<<<<<
+; -------------------------
+
+(defrule
+	(true)
+=>
+	(set-goal should-resign 0)
+)
+
+(defrule
+	(building-type-count-total town-center == 0)
+	(building-type-count-total castle == 0)
+	(unit-type-count-total villager < 2)
+	(not(can-train villager))
+	(or	(population < 2)
+		(and	(military-population < 4)
+			(unit-type-count monk < 2)))
+=>
+	(set-goal should-resign 1)
+)
+
+#load-if-defined VICTORY-CONQUEST
+(defrule
+	(or (or (or (and (military-population < 25)
+			(players-military-population every-enemy > 50))
+		(and (military-population < 50)
+			(players-military-population every-enemy > 100)))
+		(and (military-population < 75)
+			(players-military-population every-enemy > 150)))
+		(and (military-population < 100)
+			(players-military-population every-enemy > 200)))
+	(or (or (or (and (civilian-population < 25)
+			(players-civilian-population every-enemy > 50))
+		(and (civilian-population < 50)
+			(players-civilian-population every-enemy > 100)))
+		(and (civilian-population < 75)
+			(players-civilian-population every-enemy > 150)))
+		(and (civilian-population < 100)
+			(players-civilian-population every-enemy > 200)))	
+=>
+	(set-goal should-resign 1)
+)
+#end-if
+
+(defrule
+	(goal should-resign 1)
+	(game-time > 1800)
+=>
+	(chat-to-all "I can tell I won't win this.")
+	(resign)
+	(disable-self)
+)
+
+
+;TOWN UNDER ATTACK? TARGET NEAREST (TARGETING-METHOD 1)
+;TOWN NOT UNDER ATTACK? TARGET WHOEVER'S TARGETING ALLY'S TOWN (TARGETING-METHOD 2)
+;NO TOWN UNDER ATTACK? TARGET WINNER (TARGETING-METHOD 3)
+
+; ----------------------------------
+; >>>>>>> TAG-TEAM TARGETING <<<<<<<
+; ----------------------------------
+
+(defrule
+	(taunt-detected any-ally 201)
+	(goal targeting-method 2)
+=>
+	(acknowledge-taunt this-any-ally 201)
+	(set-strategic-number sn-target-player-number 1)
+)
+(defrule
+	(taunt-detected any-ally 202)
+	(goal targeting-method 2)
+=>
+	(acknowledge-taunt this-any-ally 202)
+	(set-strategic-number sn-target-player-number 2)
+)
+(defrule
+	(taunt-detected any-ally 203)
+	(goal targeting-method 2)
+=>
+	(acknowledge-taunt this-any-ally 203)
+	(set-strategic-number sn-target-player-number 3)
+)
+(defrule
+	(taunt-detected any-ally 204)
+	(goal targeting-method 2)
+=>
+	(acknowledge-taunt this-any-ally 204)
+	(set-strategic-number sn-target-player-number 4)
+)
+(defrule
+	(taunt-detected any-ally 205)
+	(goal targeting-method 2)
+=>
+	(acknowledge-taunt this-any-ally 205)
+	(set-strategic-number sn-target-player-number 5)
+)
+(defrule
+	(taunt-detected any-ally 206)
+	(goal targeting-method 2)
+=>
+	(acknowledge-taunt this-any-ally 206)
+	(set-strategic-number sn-target-player-number 6)
+)
+(defrule
+	(taunt-detected any-ally 207)
+	(goal targeting-method 2)
+=>
+	(acknowledge-taunt this-any-ally 207)
+	(set-strategic-number sn-target-player-number 7)
+)
+(defrule
+	(taunt-detected any-ally 208)
+	(goal targeting-method 2)
+=>
+	(acknowledge-taunt this-any-ally 208)
+	(set-strategic-number sn-target-player-number 8)
+)
+
+; ---------------------------
+; MILITARY LEVELS AND TARGETING
+; ---------------------------
+
+(defrule
+	(not (goal attack-stage 2))
+	(or (timer-triggered attack-timer)
+		(timer-triggered half-attack-timer))
+	(not (goal first-attack 1))
+	(goal am-under-attack 1)
+=>
+	(set-goal targeting-method 1)
+	(set-goal initialized-attack 0)
+)
+
+(defrule
+	(not (goal attack-stage 2))
+	(or (timer-triggered attack-timer)
+		(timer-triggered half-attack-timer))
+	(not (goal first-attack 1))
+	(goal am-under-attack 0)
+=>
+	(set-goal targeting-method 3)
+	(set-goal initialized-attack 0)
+)
+
+
+(defrule
+	(timer-triggered one-minute-timer)
+=>
+	(up-get-victory-data winning-player victory-type victory-time)
+)
+
+(defrule
+	(goal targeting-method 3)
+=>
+	(up-modify-sn sn-target-player-number g:= winning-player)
+	(up-modify-sn sn-focus-player-number g:= winning-player)
+)
+
+(defrule
+	(goal targeting-method 3)
+	(not (players-stance focus-player enemy));if we're winning, then no! chutiya 
+=>
+	(up-find-player enemy find-closest winning-player);we kindly offer the victor to the closest enemy
+	(up-modify-sn sn-target-player-number g:= winning-player);and prepare to grind them into dust
+);how thoughtful we are
+
+(defrule
+	(or (goal targeting-method 1);if we've recently been under attack, just kill whoever's closest.
+		(strategic-number sn-target-player-number == 0))
+=>
+	(up-find-player enemy find-closest winning-player)
+	(up-modify-sn sn-target-player-number g:= winning-player)
+)
+
+;(defrule
+;	(timer-triggered one-minute-timer)
+;	(military-population >= 10)
+;=>
+;	(up-chat-data-to-self "Targeting player %d" s: sn-target-player-number)
+;)
+	
+(defrule
+	(true)
+=>
+	(set-strategic-number sn-military-level 4)
+)
+
+;A LEVEL OF 5 IS EQUAL, A LEVEL OF 1 IS GETTING CURBSTOMPED, A LEVEL OF 9 IS CURBSTOMPING THE ENEMY
+
+(load "ElonUncle/military_level")
+
+(defrule
+	(strategic-number sn-target-player-number > 0)
+	(players-military-population target-player < 8)
+	(military-population > 7)
+=>
+	(set-strategic-number sn-military-level 9)
+)
+(defrule
+	(or (or (or
+		(and (players-military-population target-player > 300)
+			(military-population < 150))
+		(and (players-military-population target-player > 200)
+			(military-population < 100)))
+		(and (players-military-population target-player > 100)
+			(military-population < 50)))
+		(and (players-military-population target-player > 50)
+			(military-population < 25)))
+=>
+	(set-strategic-number sn-military-level 0);run like hell, boy. run like hell.
+)
+(defrule
+	(or (or (or
+		(and (military-population > 300)
+			(players-military-population target-player < 150))
+		(and (military-population > 200)
+			(players-military-population target-player < 100)))
+		(and (military-population > 100)
+			(players-military-population target-player < 50)))
+		(and (military-population > 50)
+			(players-military-population target-player < 25)))
+=>
+	(set-strategic-number sn-military-level 11) ; let's turn it up to eleven (skip ten entirely :D)
+)
+
+(defrule
+	(game-time > 600)
+	(strategic-number sn-military-level == 11)
+	(goal am-under-attack 0)
+	(timer-triggered one-minute-timer)
+	(goal allowed-to-attack 1)
+	(players-military-population target-player < 40)
+=>
+	(chat-local-to-self "Turning this up to eleven.")
+	;(attack-now);if we're sure we can wipe them out... WIPE THEM OUT.
+	(set-strategic-number sn-group-form-distance 0)
+    (set-strategic-number sn-maximum-attack-group-size 1)
+    (set-strategic-number sn-number-attack-groups 500)
+)
+
+(defrule
+	(timer-triggered one-minute-timer)
+	(game-time > 600)
+	(or (goal am-under-attack 1)
+		(strategic-number sn-military-level != 11))
+	(or	(map-type islands)
+		(map-type team-islands))
+=>
+	(set-strategic-number sn-group-form-distance 40)
+    (set-strategic-number sn-maximum-attack-group-size 40)
+    ;(set-strategic-number sn-number-attack-groups 3)
+)
+
+(defrule
+	(timer-triggered one-minute-timer)
+	(game-time > 600)
+	(or (goal am-under-attack 1)
+		(strategic-number sn-military-level != 11))
+	(nor (map-type islands)
+		(map-type team-islands))
+=>
+	(set-strategic-number sn-group-form-distance 20)
+    (set-strategic-number sn-maximum-attack-group-size 40)
+    ;(set-strategic-number sn-number-attack-groups 3)
+)
+
+;(defrule
+;	(strategic-number sn-target-player-number > 0)
+;	(military-population > 7)
+;	(or	(players-military-population any-ally >= 7)
+;		(players-military-population any-enemy >= 7))
+;	(timer-triggered one-minute-timer)
+;=>
+	;(up-chat-data-to-self "Targeting player %d" s: sn-target-player-number)
+	;(up-chat-data-to-self "Military level: %d." s: sn-military-level)
+	;(up-chat-data-to-self "Targeting method: %d." g: targeting-method)
+;)
+
+(defrule
+	(timer-triggered one-minute-timer)
+	(or (strategic-number sn-military-level < 5)
+		(military-population < 10))
+	(goal am-under-attack 0)
+=>
+	(set-strategic-number sn-enemy-sighted-response-distance 0)
+	(set-strategic-number sn-task-ungrouped-soldiers 0)
+	(set-strategic-number sn-sentry-distance 1)
+)
+
+(defrule
+	(timer-triggered one-minute-timer)
+	(military-population > 9)
+	(or	(strategic-number sn-military-level > 4)
+		(goal am-under-attack 1))
+=>
+	(set-strategic-number sn-enemy-sighted-response-distance 22)
+	(set-strategic-number sn-task-ungrouped-soldiers 1)
+	(set-strategic-number sn-sentry-distance 10)
+)
+
+(defrule
+	(or (or (and (players-current-age target-player == dark-age)
+			(current-age == feudal-age))
+		(and (players-current-age target-player == feudal-age)
+			(current-age == castle-age)))
+		(and (players-current-age target-player == castle-age)
+			(current-age > castle-age)))
+=>
+	(up-modify-sn sn-military-level c:+ 2)
+)
+
+(defrule
+	(or (and (players-current-age target-player == dark-age)
+			(current-age == castle-age))
+		(and (players-current-age target-player == feudal-age)
+			(current-age > castle-age)))
+=>
+	(up-modify-sn sn-military-level c:+ 4)
+)
+
+
+(defrule
+	(and (players-current-age target-player == dark-age)
+		(current-age > castle-age))
+=>
+	(up-modify-sn sn-military-level c:+ 6)
+)
+
+(defrule
+	(or (or (and (players-current-age target-player == feudal-age)
+			(current-age == dark-age))
+		(and (players-current-age target-player == castle-age)
+			(current-age == feudal-age)))
+		(and (players-current-age target-player > castle-age)
+			(current-age == castle-age)))
+=>
+	(up-modify-sn sn-military-level c:- 2)
+)
+
+(defrule
+	(or (and (players-current-age target-player == castle-age)
+			(current-age == dark-age))
+		(and (players-current-age target-player > castle-age)
+			(current-age == feudal-age)))
+=>
+	(up-modify-sn sn-military-level c:- 4)
+)
+
+(defrule
+	(and (players-current-age target-player > castle-age)
+		(current-age == dark-age))
+=>
+	(up-modify-sn sn-military-level c:- 6)
+)
+
+(defrule
+	(strategic-number sn-military-level > 9)
+=>
+	(set-strategic-number sn-military-level 11)
+)
+(defrule
+	(strategic-number sn-military-level < 1)
+=>
+	(set-strategic-number sn-military-level 0)
+)
+
+; ---------------------------
+; VILLAGER ASSIGNMENT
+; ---------------------------
+
+#load-if-not-defined DEATH-MATCH
+(defrule
+	(unit-type-count villager >= 12); -total
+=>
+	(set-strategic-number sn-enable-boar-hunting 1); boar and deer
+	(disable-self)
+)
+
+(defrule
+	(goal military-explorers 3)
+	(unit-type-count villager < 1)
+	(building-type-count town-center < 1)
+=>
+	(set-strategic-number sn-maximum-explore-group-size 200)
+	(set-strategic-number sn-minimum-explore-group-size 5)
+	(set-strategic-number sn-number-explore-groups 5)
+	(set-strategic-number sn-percentage-explore-exterminators 100)
+	(enable-timer 2 60)
+	(set-goal military-explorers 2)
+	(disable-self)
+)
+(defrule
+	(goal military-explorers 2)
+	(timer-triggered 2)
+=>
+	(disable-timer 2)
+	(enable-timer 2 60)
+	(set-goal military-explorers 1)
+	(set-strategic-number sn-maximum-explore-group-size 1)
+	(set-strategic-number sn-number-explore-groups 1)
+	(set-strategic-number sn-minimum-explore-group-size 1)
+	(set-strategic-number sn-percentage-explore-exterminators 50)
+)
+(defrule
+	(goal military-explorers 1)
+	(timer-triggered 2)
+=>
+	(disable-timer 2)
+	(enable-timer 2 60)
+	(set-goal military-explorers 2)
+	(set-strategic-number sn-maximum-explore-group-size 200)
+	(set-strategic-number sn-minimum-explore-group-size 5)
+	(set-strategic-number sn-number-explore-groups 5)
+	(set-strategic-number sn-percentage-explore-exterminators 100)
+)
+
+(defrule
+	(unit-type-count villager < 1)
+	(building-type-count town-center < 1)
+=>
+	(chat-local-to-self "Roamers")
+	(disable-self)
+)
+
+(defrule
+	(unit-type-count villager > 0)
+	(building-type-count town-center > 0)
+=>
+	(chat-local-to-self "Townsmen")
+	(disable-self)
+)
+(defrule
+	(unit-type-count villager < 1)
+	(building-type-count town-center < 1)
+=>
+	(set-goal attack-stage 1)
+	(set-goal first-attack 2)
+	(enable-timer 8 180)
+	(set-strategic-number sn-maximum-explore-group-size 200)
+	(set-strategic-number sn-minimum-explore-group-size 25)
+	(set-strategic-number sn-number-explore-groups 4)
+	(set-strategic-number sn-percentage-explore-exterminators 100)
+	(disable-self)
+)
+(defrule
+	(timer-triggered 8)
+	(goal allowed-to-attack 1)
+=>
+	(attack-now)
+	(disable-timer 8)
+	(enable-timer 8 180)
+	(chat-local-to-self "Why does this timer exist?")
+)
+(defrule
+	(or
+		(unit-type-count villager > 0)
+		(building-type-count town-center > 0)
+	)
+=>
+	(set-strategic-number sn-maximum-explore-group-size 1)
+	(set-strategic-number sn-number-explore-groups 1)
+	(set-strategic-number sn-minimum-explore-group-size 1)
+	(set-strategic-number sn-percentage-explore-exterminators 50)
+	(disable-self)
+)
+#end-if
+(defrule ;explore if no town center
+	(game-time < 60)
+	(unit-type-count villager < 9)
+	(building-type-count town-center == 0)
+=>
+	(set-strategic-number sn-percent-civilian-explorers 85)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 0)
+	(set-strategic-number sn-cap-civilian-explorers 100)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  100)
+	(set-strategic-number sn-gold-gatherer-percentage  0)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  0)
+	(disable-self)
+)
+(defrule ;after finding a good spot for a town-center, be done with it
+	(unit-type-count villager < 9)
+	(resource-found food)
+	(resource-found wood)
+	(or (game-time > 60)
+		(not (resource-found gold)))
+	(building-type-count town-center == 0)
+=>
+	(chat-local-to-self "Found resources.")
+	(build town-center)
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  100)
+	(set-strategic-number sn-gold-gatherer-percentage  0)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  0)
+	(disable-self)
+)
+
+(defrule
+	(building-type-count house < 1)
+	(can-build house)
+	(building-type-count town-center > 0)
+	(up-pending-objects c: house < 1)
+=>
+	(build house)
+)
+
+(defrule
+	(true)
+=>
+	(set-strategic-number sn-maximum-gold-drop-distance 10)
+	(set-strategic-number sn-maximum-stone-drop-distance 10)
+	(set-strategic-number sn-maximum-food-drop-distance 20)
+	(set-strategic-number sn-maximum-wood-drop-distance 10)
+	(disable-self)
+)
+(defrule
+	(game-time > 5);5 seconds to init
+	(current-age == dark-age)
+	(or (food-amount < 1000)
+		(wood-amount < 1000))
+	(unit-type-count villager < 9)
+	(or (and (unit-type-count 594 < 2);no sheep - sheep are important
+			(unit-type-count 833 < 2));no turkeys - turkeys are important too
+		(not (resource-found wood)))
+	;no, really, livestock is incredibly important and can make or break a game.
+	(building-type-count town-center > 0)
+	(game-time < 20)
+=>
+	(set-goal sheep-searching 1)
+	(chat-local-to-self "Searching for resources.")
+	(set-strategic-number sn-percent-civilian-explorers 85)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 0)
+	(set-strategic-number sn-cap-civilian-explorers 100)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  100)
+	(set-strategic-number sn-gold-gatherer-percentage  0)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  0)
+	(disable-self)
+)
+(defrule;default
+	(game-time < 10);init as gatherers
+	(current-age == dark-age)
+	(unit-type-count villager < 9)
+	(building-type-count town-center > 0)
+=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  100)
+	(set-strategic-number sn-gold-gatherer-percentage  0)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  0)
+	(disable-self)
+)
+(defrule
+	(goal sheep-searching 1)
+	(game-time > 10)
+	(or (or (unit-type-count 594 > 1);we found sheep
+			(unit-type-count 833 > 1)); or turkeys
+		(and (game-time > 25); they have fifteen seconds to find livestock before giving up
+			(resource-found food))); giving up and settling for berry bushes or fish
+	(current-age == dark-age)
+	(unit-type-count villager < 9)
+	(resource-found wood)
+	(building-type-count town-center > 0)
+=>
+	(set-goal sheep-searching 0)
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  100)
+	(set-strategic-number sn-gold-gatherer-percentage  0)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  0)
+	(chat-local-to-self "Retasking villagers from the search")
+	(disable-self)
+)
+(defrule
+	(game-time > 20)
+	(or (unit-type-count 594 > 1);we found sheep
+			(unit-type-count 833 > 1));or turkeys
+	(or (unit-type-count 120 > 0); but wtf, the villagers
+		(unit-type-count 354 > 0)); are trying to gather berries?
+	(game-time < 40) ;this early in the game?
+=> 
+	(up-retask-gatherers food c: 10);retask their sorry asses
+	(disable-self);we ain't got time for that shit
+)
+(defrule
+	(current-age == dark-age)
+	(unit-type-count villager > 8)
+	(up-research-status c: feudal-age != research-pending)
+=>
+	(chat-local-to-self "Dark age resource level 1.")
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  75)
+	(set-strategic-number sn-gold-gatherer-percentage  0)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  25)
+	(disable-self)
+)
+(defrule
+	(current-age == dark-age)
+	(housing-headroom < 5)
+	(not (can-build house))
+	(unit-type-count villager > 8)
+	(up-research-status c: feudal-age != research-pending)
+=>
+	(chat-local-to-self "Dark age resource level 2a.")
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  55)
+	(set-strategic-number sn-gold-gatherer-percentage  0)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  45)
+	(disable-self)
+)
+(defrule
+	(current-age == dark-age)
+	(idle-farm-count < 1)
+	(not (can-build farm))
+	(unit-type-count villager > 15)
+	(up-research-status c: feudal-age != research-pending)
+=>
+	(chat-local-to-self "Dark age resource level 2b.")
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  55)
+	(set-strategic-number sn-gold-gatherer-percentage  0)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  45)
+	(disable-self)
+)
+
+(defrule
+	(current-age == dark-age)
+	(up-research-status c: feudal-age != research-pending)
+	(wood-amount > 400)
+	(unit-type-count villager > 15)
+=>
+	(chat-local-to-self "Dark age resource level 3.")
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  75)
+	(set-strategic-number sn-gold-gatherer-percentage  0)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  25)
+	(disable-self)
+)
+(defrule
+	(current-age == dark-age)
+	(or (wood-amount > 800)
+		(unit-type-count villager > 35))
+	(unit-type-count villager > 15)
+	(up-research-status c: feudal-age != research-pending)
+=>
+	(chat-local-to-self "Dark age resource level 4.")
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  95)
+	(set-strategic-number sn-gold-gatherer-percentage  0)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  5)
+	(disable-self)
+)
+
+(defrule
+	(goal strategy-fast-castle 0)
+	(goal strategy-heavy-castling 0)
+	(up-research-status c: feudal-age >= research-pending)
+	(current-age < castle-age)
+=>
+	(chat-local-to-self "Setting gather values to feudal age values.")
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  45)
+	(set-strategic-number sn-gold-gatherer-percentage  20)
+	(set-strategic-number sn-stone-gatherer-percentage 5)
+	(set-strategic-number sn-wood-gatherer-percentage  30)
+	(disable-self)
+)
+(defrule
+	(goal strategy-fast-castle 0)
+	(goal strategy-heavy-castling 0)
+	(current-age == feudal-age)
+=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  45)
+	(set-strategic-number sn-gold-gatherer-percentage  20)
+	(set-strategic-number sn-stone-gatherer-percentage 5)
+	(set-strategic-number sn-wood-gatherer-percentage  30)
+	(disable-self)
+)
+(defrule
+	(goal strategy-fast-castle 0)
+	(goal strategy-heavy-castling 0)
+	(up-research-status c: castle-age >= research-pending)
+	(current-age < imperial-age)
+=>
+	(chat-local-to-self "Castle-age values now")
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 25)
+	(set-strategic-number sn-percent-civilian-gatherers 75)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  30)
+	(set-strategic-number sn-gold-gatherer-percentage  25)
+	(set-strategic-number sn-stone-gatherer-percentage 15)
+	(set-strategic-number sn-wood-gatherer-percentage  30)
+	(disable-self)
+)
+
+
+(defrule
+	(up-research-status c: imperial-age >= research-pending)
+	(gold-amount < 5000)
+	(not (death-match-game))
+=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 25)
+	(set-strategic-number sn-percent-civilian-gatherers 75)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  30)
+	(set-strategic-number sn-gold-gatherer-percentage  25)
+	(set-strategic-number sn-stone-gatherer-percentage 15)
+	(set-strategic-number sn-wood-gatherer-percentage  30)
+	(disable-self)
+)
+(defrule
+	(up-research-status c: imperial-age >= research-pending)
+	(gold-amount < 5000)
+	(death-match-game)
+=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 25)
+	(set-strategic-number sn-percent-civilian-gatherers 75)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  40)
+	(set-strategic-number sn-gold-gatherer-percentage  20)
+	(set-strategic-number sn-stone-gatherer-percentage 10)
+	(set-strategic-number sn-wood-gatherer-percentage  30)
+	(disable-self)
+)
+(defrule;in death match games, spam those houses, foo
+	(current-age == imperial-age)
+	(gold-amount > 5000)
+	(game-time > 90)
+=>
+	(up-assign-builders c: house c: 3)
+	(up-assign-builders c: castle c: 2)
+	(up-assign-builders c: town-center c: 2)
+	(disable-self)
+)
+
+(defrule
+	(current-age == imperial-age)
+	(gold-amount > 5000)
+=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 75)
+	(set-strategic-number sn-percent-civilian-gatherers 25)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  25)
+	(set-strategic-number sn-gold-gatherer-percentage  25)
+	(set-strategic-number sn-stone-gatherer-percentage 25)
+	(set-strategic-number sn-wood-gatherer-percentage  25)
+	(disable-self)
+)
+(defrule
+	(current-age == imperial-age)
+=>
+	(set-strategic-number sn-retask-gather-amount 0)
+	(set-strategic-number sn-build-frequency 1)
+	(set-strategic-number sn-scaling-frequency 1)
+	(set-strategic-number sn-max-skips-per-attempt 5)
+	(disable-self)
+)
+
+; ---------------------------
+; FAST CASTLE STRATEGY LEVELUP
+; ---------------------------
+
+(defrule
+	(goal strategy-fast-castle 1)
+	(up-research-status c: feudal-age >= research-pending)
+	(current-age < castle-age)
+=>
+	(chat-local-to-self "Setting gather values to feudal age values.")
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  50)
+	(set-strategic-number sn-gold-gatherer-percentage  14)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  36)
+	(disable-self)
+)
+(defrule
+	(goal strategy-fast-castle 1)
+	(up-research-status c: castle-age >= research-pending)
+	(current-age < imperial-age)
+=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 25)
+	(set-strategic-number sn-percent-civilian-gatherers 75)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  40)
+	(set-strategic-number sn-gold-gatherer-percentage  14)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  46)
+	(disable-self)
+)
+(defrule
+	(goal strategy-fast-castle 1)
+	(current-age == castle-age)
+=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 25)
+	(set-strategic-number sn-percent-civilian-gatherers 75)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  35)
+	(set-strategic-number sn-gold-gatherer-percentage  20)
+	(set-strategic-number sn-stone-gatherer-percentage 5)
+	(set-strategic-number sn-wood-gatherer-percentage  40)
+	(disable-self)
+)
+
+
+
+; ---------------------------
+; HEAVY CASTLING STRATEGY LEVELUP
+; ---------------------------
+;33,14,28,25 = 39 minutes
+
+(defrule
+	(up-compare-goal strategy-heavy-castling > 0)
+	(up-research-status c: feudal-age >= research-pending)
+	(current-age < castle-age)
+=>
+	(chat-local-to-self "Setting gather values to feudal age values.")
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  51)
+	(set-strategic-number sn-gold-gatherer-percentage  14)
+	(set-strategic-number sn-stone-gatherer-percentage 10)
+	(set-strategic-number sn-wood-gatherer-percentage  25)
+	(disable-self)
+)
+
+(defrule
+	(up-compare-goal strategy-heavy-castling > 0)
+	(up-research-status c: feudal-age >= research-pending)
+	(current-age < castle-age)
+	(food-amount > 400)
+	(or (and (stone-amount < 325)
+			(goal strategy-heavy-castling 1))
+		(and (stone-amount < 700)
+			(goal strategy-heavy-castling 2)))
+=>
+	(chat-local-to-self "Setting gather values to feudal age values.")
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  46)
+	(set-strategic-number sn-gold-gatherer-percentage  14)
+	(set-strategic-number sn-stone-gatherer-percentage 15)
+	(set-strategic-number sn-wood-gatherer-percentage  25)
+	(disable-self)
+)
+
+(defrule
+	(up-compare-goal strategy-heavy-castling > 0)
+	(up-research-status c: feudal-age >= research-pending)
+	(up-research-status c: castle-age < research-pending)
+	(or (and (stone-amount >= 750)
+			(goal strategy-heavy-castling 1))
+		(and (stone-amount >= 1400)
+			(goal strategy-heavy-castling 2)))
+=>
+	(chat-local-to-self "Have gathered enough stone. Focusing on advancement.")
+	(set-strategic-number sn-food-gatherer-percentage  50)
+	(set-strategic-number sn-gold-gatherer-percentage  14)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-wood-gatherer-percentage  36)
+	(up-drop-resources stone c: 1)
+	(up-retask-gatherers stone c: 100)
+	(disable-self)
+)
+
+(defrule
+	(up-compare-goal strategy-heavy-castling > 0)
+	(up-research-status c: castle-age >= research-pending)
+	(current-age < imperial-age)
+	(or (and (stone-amount >= 750)
+			(goal strategy-heavy-castling 1))
+		(and (stone-amount >= 1400)
+			(goal strategy-heavy-castling 2)))
+=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 25)
+	(set-strategic-number sn-percent-civilian-gatherers 75)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  35);15
+	(set-strategic-number sn-gold-gatherer-percentage  20);15
+	(set-strategic-number sn-stone-gatherer-percentage 5);55
+	(set-strategic-number sn-wood-gatherer-percentage  40);15
+	(disable-self)
+)
+(defrule
+	(up-compare-goal strategy-heavy-castling > 0)
+	(up-research-status c: castle-age >= research-pending)
+	(current-age < imperial-age)
+	(or (and (stone-amount < 750)
+			(goal strategy-heavy-castling 1))
+		(and (stone-amount < 1400)
+			(goal strategy-heavy-castling 2)))
+=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 25)
+	(set-strategic-number sn-percent-civilian-gatherers 75)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-builders 100)
+	(set-strategic-number sn-food-gatherer-percentage  35);15
+	(set-strategic-number sn-gold-gatherer-percentage  20);15
+	(set-strategic-number sn-stone-gatherer-percentage 10);55
+	(set-strategic-number sn-wood-gatherer-percentage  35);15
+	(disable-self)
+)
+; ---------------------------
+; DETERMINE WHETHER IT'S TIME TO ATTACK
+; ---------------------------
+
+(defrule
+	(timer-triggered quarter-attack-timer)
+=>
+	(set-goal attack-stage 0)
+)
+
+(defrule
+	(goal attack-stage 0)
+=>
+	(set-strategic-number sn-enemy-sighted-response-distance 0)
+	(set-strategic-number sn-task-ungrouped-soldiers 0)
+	(set-strategic-number sn-sentry-distance 1)
+)
+
+(defrule
+	(not (goal attack-stage 2))
+	(timer-triggered attack-timer)
+	(goal asked-for-help 0)
+=>
+	;(set-strategic-number sn-target-player-number 0);if it's time to attack and no enemies are harassing allies, attack enemies directly
+	(up-find-player enemy find-closest winning-player)
+	(up-modify-sn sn-target-player-number g:= winning-player)
+)
+
+(defrule;drushing, for civs that need it
+	(current-age == dark-age)
+	(goal strategy-drush 1)
+	(or (players-building-type-count any-enemy town-center > 0) ;only if we know where the enemy actually is; pointless otherwise
+		(players-building-type-count any-enemy house > 0))
+	(goal am-under-attack 0)
+	(military-population > 3)
+	(goal allowed-to-attack 1)
+=>
+	(attack-now)
+	(chat-local-to-self "Drushing.")
+	(disable-self)
+)
+
+(defrule
+	(or (players-building-type-count any-enemy town-center > 0) ;only if we know where the enemy actually is; pointless otherwise
+		(players-building-type-count any-enemy house > 0))
+	(goal strategy-archer-flush 0)
+	(current-age == feudal-age)
+	(goal gathering-stuff 1)
+	(goal am-under-attack 0)
+	(military-population > 10)
+	(military-population < 30)
+	(strategic-number sn-military-level > 3)
+	(stone-amount < 1000)
+	(gold-amount < 2000)
+	(food-amount < 4000)
+	(wood-amount < 4000)
+	(goal allowed-to-attack 1)
+=>
+	(attack-now)
+	(disable-self)
+	(chat-local-to-self "Small raid.")
+	(disable-self)
+);
+
+(defrule
+	(true)
+=>
+	(set-goal can-first-attack 0)
+)
+(defrule
+	(goal strategy-raiding 1)
+	(or (players-building-type-count any-enemy town-center > 0) ;only if we know where the enemy actually is; pointless otherwise
+		(players-building-type-count any-enemy house > 0))
+	(military-population > 2)
+	(up-compare-goal attack-stage != 1)
+	(up-compare-goal attack-stage != 2)
+	(up-compare-goal attack-stage != 4)
+	(timer-triggered one-minute-timer)
+	(current-age < imperial-age)
+	(strategic-number sn-military-level > 2)
+	(gold-amount < 2000)
+	(goal am-under-attack 0)
+	(strategic-number sn-military-level < 11)
+	(goal allowed-to-attack 1)
+=>
+	(chat-local-to-self "Small rapid raid.")
+	(set-strategic-number sn-maximum-attack-group-size 5)
+	(set-strategic-number sn-number-attack-groups 1);I'm pretty sure this sends a raid, but not entirely. Can't find any good docs anywhere.
+)	
+
+(defrule
+	(goal strategy-flush 1)
+	(or (players-building-type-count any-enemy town-center > 0) ;only if we know where the enemy actually is; pointless otherwise
+		(players-building-type-count any-enemy house > 0))
+	(military-population > 2)
+	(military-population < 20)
+	(current-age == feudal-age)
+	(timer-triggered one-minute-timer)
+	(strategic-number sn-military-level > 5)
+	(gold-amount < 2000)
+	(goal am-under-attack 0)
+	(goal allowed-to-attack 1)
+=>
+	(chat-local-to-self "Small flush raid.")
+	(attack-now)
+)
+
+(defrule
+	(goal strategy-crush 1)
+	(or (players-building-type-count any-enemy town-center > 0) ;only if we know where the enemy actually is; pointless otherwise
+		(players-building-type-count any-enemy house > 0))
+	(military-population > 4)
+	(military-population < 40)
+	(current-age == castle-age)
+	(timer-triggered one-minute-timer)
+	(strategic-number sn-military-level > 4)
+	(strategic-number sn-military-level < 8)
+	(gold-amount < 2000)
+	(goal am-under-attack 0)
+	(goal allowed-to-attack 1)
+=>
+	(chat-local-to-self "Crush raid.")
+	(attack-now)
+)
+
+(defrule
+	(unit-type-count bombard-cannon < 1)
+	(unit-type-count trebuchet-set < 1)
+	(players-unit-type-count target-player villager < 1)
+	(players-building-type-count target-player lumber-camp > 0)
+	(players-unit-type-count target-player villager < 1)
+=>
+	(set-strategic-number sn-special-attack-type2 lumber-camp)
+)
+
+(defrule
+	(unit-type-count bombard-cannon < 1)
+	(unit-type-count trebuchet-set < 1)
+	(players-building-type-count target-player lumber-camp < 1)
+	(players-building-type-count target-player mining-camp > 0)
+	(players-unit-type-count target-player villager < 1)
+=>
+	(set-strategic-number sn-special-attack-type2 mining-camp)
+)
+
+(defrule
+	(unit-type-count bombard-cannon < 1)
+	(unit-type-count trebuchet-set < 1)
+	(players-building-type-count target-player lumber-camp < 1)
+	(players-building-type-count target-player mining-camp < 1)
+	(players-unit-type-count target-player villager < 1)
+=>
+	(set-strategic-number sn-special-attack-type2 town-center)
+)
+
+;
+(defrule
+	(unit-type-count bombard-cannon < 1)
+	(unit-type-count trebuchet-set < 1)
+	(players-unit-type-count target-player villager > 0)
+=>
+	(set-strategic-number sn-special-attack-type2 villager);this one line makes more difference than you would ever dream, early on.
+)
+
+(defrule
+	(or (unit-type-count bombard-cannon > 0)
+		(unit-type-count trebuchet-set > 0))
+=>
+	(set-strategic-number sn-special-attack-type2 town-center)
+)
+
+(defrule
+	(or (players-building-type-count any-enemy town-center > 0) ;only if we know where the enemy actually is; pointless otherwise
+		(players-building-type-count any-enemy house > 0))
+	(goal gathering-stuff 1);have not attacked yet
+	(nand (nand (current-age == feudal-age)
+		(goal strategy-flush 1))
+		(strategic-number sn-military-level < 6))
+	(or (or (and (current-age == feudal-age)
+			(military-population > 30))
+		(and (current-age == castle-age)
+			(military-population > 60)))
+		(and (current-age == imperial-age)
+			(military-population > 90)))
+	(strategic-number sn-military-level > 4)
+	(gold-amount < 2000)
+	(not (goal gathering-stuff 2))
+=>
+	(set-goal can-first-attack 1)
+)
+
+(defrule
+	(or (players-building-type-count any-enemy town-center > 0) ;only if we know where the enemy actually is; pointless otherwise
+		(players-building-type-count any-enemy house > 0))
+	(goal strategy-flush 1)
+	(strategic-number sn-military-level > 7)
+	(current-age == feudal-age)
+	(military-population > 10)
+	(not (goal gathering-stuff 2))
+=>
+	(set-goal can-first-attack 1)
+)
+
+;FIRST ATTACK
+
+(defrule
+	(goal am-under-attack 0)
+	(goal can-first-attack 1)
+	(goal allowed-to-attack 1)
+	(not (goal gathering-stuff 2))
+=>
+	(set-goal attack-stage 1);retreating units
+	(set-goal first-attack 1)
+	(set-goal gathering-stuff 2)
+	(disable-self)
+)
+
+
+;SKIPPING FIRST ATTACK
+
+(defrule
+	(not (goal gathering-stuff 2))
+	(or (and (goal am-under-attack 1)
+			(goal can-first-attack 1))
+		(game-time > 1800))
+=>
+	(enable-timer attack-timer 600)
+	(enable-timer quarter-attack-timer 300)
+	(set-goal asked-for-help 0)
+	(chat-local-to-self "skipping first attack")
+	(set-goal gathering-stuff 2)
+	(set-goal first-attack 2)
+	(disable-self)
+)
+
+;basically only death match
+(defrule
+	(goal gathering-stuff 1)
+	(game-time < 900)
+	(military-population > 100)
+	(goal am-under-attack 0)
+	(stone-amount > 1000)
+	(gold-amount > 2000)
+	(food-amount > 4000)
+	(wood-amount > 4000)
+	(strategic-number sn-military-level > 3)
+	(goal allowed-to-attack 1)
+=>
+	(set-goal attack-stage 1)
+	(set-goal first-attack 3)
+	(chat-to-allies "31");alert allies - this syncs all their timers to the leader
+	(chat-to-allies "Care to join me for a sneak attack?");make sure they know what's going on if they're human players
+	(disable-self)
+)
+
+;no death match raid because outmatched
+(defrule
+	(goal gathering-stuff 1)
+	(game-time > 900)
+	(stone-amount > 1000)
+	(gold-amount > 2000)
+	(food-amount > 4000)
+	(wood-amount > 4000)
+	(strategic-number sn-military-level < 4)
+	(up-compare-goal first-attack > 1)
+=>
+	(set-goal asked-for-help 0)
+	(enable-timer attack-timer 600)
+	(enable-timer quarter-attack-timer 300)
+	(chat-to-allies "I suggest we turtle.")
+	(set-goal gathering-stuff 2)
+	(disable-self)
+)
+
+;time to mass-attack, but am currently retreating, or retreated from the last battle
+(defrule
+	(and (goal am-retreating 1)
+		(or (strategic-number sn-military-level < 5)
+			(goal am-under-attack 1)))
+	(not (goal attack-stage 2))
+	(timer-triggered attack-timer)
+=>
+	(set-goal asked-for-help 0)
+	(chat-local-to-self "Am retreating; cannot attack this round")
+	(enable-timer half-attack-timer 600)
+	(enable-timer quarter-attack-timer 300)
+	(set-goal am-retreating 0)
+	(disable-timer attack-timer)
+)
+
+;TIME TO MASS-ATTACK AND WE'VE BUILT UP OUR ARMIES FOR A WHILE
+
+(defrule
+	(or (goal am-retreating 0)
+		(goal am-under-attack 0))
+	(or (strategic-number sn-military-level > 4)
+		(unit-type-count villager > 125))
+	(not (goal attack-stage 2))
+	(timer-triggered attack-timer)
+	(military-population > 24)
+	(goal allowed-to-attack 1)
+=>
+	(disable-timer attack-timer)
+	(chat-local-to-self "Sending out a large attack!")
+	(chat-to-allies "I'm attacking with full force!")
+	(set-goal attack-stage 1)
+)
+
+;THINGS ARE REALLY WINDING DOWN, SO IT'S ABOUT TIME TO SMASH THEM TO DEATH
+
+(defrule
+	(or (goal am-retreating 0)
+		(goal am-under-attack 0))
+	(strategic-number sn-military-level > 8)
+	(not (goal attack-stage 2))
+	
+	(timer-triggered quarter-attack-timer)
+	(goal allowed-to-attack 1)
+	(players-military-population target-player < 80)
+=>
+	(disable-timer quarter-attack-timer)
+	(chat-local-to-self "Sending a rapid smash-attack to wipe them out.")
+	(set-goal attack-stage 1)
+)
+
+;JUST IN CASE WE DIDN'T ATTACK ON THE 5-MIN MARK, ATTACK ANYWAY
+
+(defrule
+	(timer-triggered quarter-attack-timer)
+=>
+	(disable-timer quarter-attack-timer)
+)
+
+;TIME TO MASS-ATTACK, NOT RETREATING, BUT OUR MILITARY IS OUTMATCHED BY OUR CURRENT TARGET
+
+(defrule
+	(goal am-retreating 0)
+	(not (goal attack-stage 2))
+	(timer-triggered attack-timer)
+	(strategic-number sn-military-level < 4)
+=>
+	(set-goal asked-for-help 0)
+	(disable-timer attack-timer)
+	(set-goal attack-cycle 1)
+	(chat-local-to-self "Staying this round. Waiting until I have enough units to really shine.")
+	(enable-timer half-attack-timer 600)
+	(enable-timer quarter-attack-timer 300)
+)
+
+;WE ENABLE THE MASS-TRAINING TIMER AND DO NOTHING
+;TIME TO MASS ATTACK, BUT WE HAVE HARDLY ANY MILITARY FOR SOME REASON
+
+(defrule
+	(goal am-retreating 0)
+	(not (goal attack-stage 2))
+	(timer-triggered attack-timer)
+	(military-population < 24)
+=>
+	(set-goal asked-for-help 0)
+	(disable-timer attack-timer)
+	(set-goal attack-cycle 1)
+	(chat-local-to-self "Cannot attack.")
+	(enable-timer half-attack-timer 600)
+	(enable-timer quarter-attack-timer 300)
+)
+
+;WE ENABLE THE MASS-TRAINING TIMER AND DO NOTHING
+;HALFWAY THROUGH OUR MASS-TRAINING, BUT WE'RE RETREATING
+
+(defrule
+	(and (goal am-retreating 1)
+		(or (strategic-number sn-military-level < 5)
+			(goal am-under-attack 1)))
+	(goal am-retreating 1)
+	(timer-triggered half-attack-timer)
+=>
+	(disable-timer half-attack-timer)
+	(enable-timer half-attack-timer 600)
+	(enable-timer quarter-attack-timer 300)
+	(set-goal attack-cycle 1)
+	(chat-local-to-self "Cannot attack right now; am retreating.")
+	(set-goal am-retreating 0)
+)
+
+;WE TRAIN LONGER THAN USUAL
+;HALFWAY THROUGH OUR MASS-TRAINING, WE'RE NOT RETREATING, NOBODY'S ASKED FOR HELP, AND THE ENEMY STILL HAS A MILITARY
+
+(defrule
+	(or (goal am-retreating 0)
+		(and (strategic-number sn-military-level > 4)
+			(goal am-under-attack 0)))
+	(timer-triggered half-attack-timer)
+	(goal asked-for-help 0)
+	(players-military-population any-enemy > 24)
+=>
+	(disable-timer half-attack-timer)
+	(enable-timer attack-timer 600)
+	(enable-timer quarter-attack-timer 300)
+	(set-goal attack-cycle 2)
+)
+
+;HALFWAY THROUGH OUR MASS-TRAINING, WE'RE NOT RETREATING, WE HAVE A MILITARY, AND EITHER: A. AN ALLY HAS ASKED FOR HELP, OR B. THE ENEMY IS PATHETIC.
+
+(defrule
+	(goal am-retreating 0)
+	(timer-triggered half-attack-timer)
+	(or (or (goal asked-for-help 1)
+		(players-military-population every-enemy < 25))
+			(unit-type-count villager > 120))
+	(military-population >= 24)
+	(goal allowed-to-attack 1)
+=>	
+	(chat-local-to-self "Sending a quick attack")
+	(disable-timer half-attack-timer)
+	(set-goal attack-stage 1)
+)
+
+;WE ATTACK.
+;HALFWAY THROUGH OUR MASS-TRAINING, WE'RE NOT RETREATING, SOMEONE'S ASKED FOR HELP, BUT OUR MILITARY SUCKS
+
+(defrule
+	(goal am-retreating 0)
+	(timer-triggered half-attack-timer)
+	(goal asked-for-help 1)
+	(military-population < 24)
+=>
+	(chat-to-allies "I'm gathering my strength still.")
+	(disable-timer half-attack-timer)
+	(enable-timer half-attack-timer 600)
+	(enable-timer quarter-attack-timer 300)
+	(set-goal asked-for-help 0)
+	(set-goal attack-cycle 2)
+)
+
+;AN ALLY HAS ASKED FOR HELP. OUR TOWN IS NOT UNDER ATTACK.
+
+(defrule
+	(taunt-detected any-ally 18)
+	(goal asked-for-help 0)
+	(goal am-under-attack 0)
+=>
+	(set-goal targeting-method 2)
+)
+
+;SET TARGETING-METHOD TO TARGET WHICHEVER ENEMY OUR ALLY WANTS US TO.
+;AN ALLY HAS ASKED FOR HELP.
+
+(defrule
+	(taunt-detected any-ally 18)
+	(goal asked-for-help 0)
+=>
+	(set-goal asked-for-help 1)
+	(acknowledge-taunt this-any-ally 18)
+	(chat-local-to-self "Shortening attack timer to provide reinforcements.")
+)
+
+;SHORTEN THE ATTACK TIMER; I.E., ATTACK BEFORE WE FINISH MASSING UNITS. ATTACK IN A TEN-MINUTE CYCLE INSTEAD OF A TWENTY-MINUTE CYCLE.
+
+(defrule
+	(true)
+=>
+	(set-goal retreat-timed-out 1)
+	(set-goal initialized-attack 0)
+	(set-goal am-retreating 0)
+	(disable-self)
+)
+
+; ---------------------------
+; CHECK TO SEE IF WE HAVE A REASON TO RETREAT
+; ---------------------------
+
+(defrule
+	(true)
+=>
+	(set-goal try-to-retreat 0)
+)
+(defrule
+	(strategic-number sn-military-level < 3)
+=>
+	(set-goal retreat-reason 0)
+	(set-goal try-to-retreat 1)
+)
+(defrule
+	(goal am-under-attack 1)
+	(or (players-unit-type-count any-enemy battering-ram > 1)
+		(players-unit-type-count any-enemy trebuchet > 1))
+	(goal retreat-timed-out 1)
+=>
+	(set-goal retreat-reason 1)
+	(set-goal try-to-retreat 1)
+)
+(defrule
+	(current-age > feudal-age)
+	(unit-type-count trebuchet <= 1)
+	(unit-type-count battering-ram-line <= 1)
+	(unit-type-count bombard-cannon <= 1)
+	(players-building-type-count any-enemy castle > 0)
+	(strategic-number sn-military-level < 4)
+=>
+	(set-goal retreat-reason 2)
+	(set-goal try-to-retreat 1)
+)
+(defrule
+	(game-time > 600)
+	(or (current-age == feudal-age)
+		(players-building-type-count any-enemy castle > 0))
+	(unit-type-count trebuchet <= 0)
+	(unit-type-count battering-ram-line <= 0)
+	(unit-type-count bombard-cannon <= 0)
+	(strategic-number sn-military-level < 4)
+=>
+	(set-goal retreat-reason 3)
+	(set-goal try-to-retreat 1)
+)
+(defrule
+	(current-age == castle-age)
+	(unit-type-count battering-ram-line <= 2)
+	(strategic-number sn-military-level < 4)
+=>
+	(set-goal retreat-reason 4)
+	(set-goal try-to-retreat 1)
+)
+(defrule
+	(current-age == castle-age)
+	(strategic-number sn-military-level < 4)
+=>
+	(set-goal retreat-reason 5)
+	(set-goal try-to-retreat 1)
+)
+(defrule
+	(current-age == imperial-age)
+	(unit-type-count trebuchet <= 2)
+	(unit-type-count battering-ram-line <= 2)
+	(unit-type-count bombard-cannon <= 4)
+	(military-population < 80)
+	(strategic-number sn-military-level < 4)
+=>
+	(set-goal retreat-reason 6)
+	(set-goal try-to-retreat 1)
+)
+(defrule
+	(current-age == imperial-age)
+	(strategic-number sn-military-level < 4)
+=>
+	(set-goal retreat-reason 7)
+	(set-goal try-to-retreat 1)
+)
+
+; ---------------------------
+; ATTACKING
+; ---------------------------
+
+;IF WE WANT TO ATTACK, BUT THE SIGNS POINT TO A REASON TO RETREAT
+
+(defrule
+	(goal attack-stage 1)
+	(goal try-to-retreat 1)
+=>
+	(enable-timer half-attack-timer 600)
+	(set-goal attack-cycle 1)
+	(set-goal attack-stage 3)
+	(set-goal asked-for-help 0)
+	(chat-local-to-self "Would like to attack, but have reasons not to")
+	(up-chat-data-to-self "Reason for not attacking: %d." g: retreat-reason)
+	(chat-to-allies "Although I'd like to attack, that seems a bad idea.")
+)
+
+
+(defrule
+	(goal attack-stage 1);retreating units to get them all in one place
+	(goal try-to-retreat 0)
+=>
+	(up-chat-data-to-self "Targeting player %d" s: sn-target-player-number)
+	(up-chat-data-to-self "Military level: %d." s: sn-military-level)
+	(up-chat-data-to-self "Targeting method: %d." g: targeting-method)
+	(up-reset-unit c: -1)
+	;(set-strategic-number sn-number-attack-groups 0)
+	;(up-retreat-now) ;disabling for a moment;nevermind, disabling permanently. for some silly resaon it ruins attacks.
+	(enable-timer attack-timer 5);was at 30; thirty isn't quite enough to make sure the enemy will be crushed - so I set to sixty, but retreating seems potentially bugged
+	(set-goal attack-stage 2);(set-goal attack-stage 4)
+	(set-strategic-number sn-task-ungrouped-soldiers 0)
+	(set-strategic-number sn-ignore-attack-group-under-attack 1)
+)
+(defrule
+	(goal attack-stage 2)
+	(timer-triggered attack-timer)
+	(goal first-attack 3);sending a rapid attack to wipe out the enemy early in death match
+=>
+	(disable-timer attack-timer)
+	(set-goal attack-stage 3)
+	(set-goal attack-cycle 1)
+	(set-goal asked-for-help 0)
+	(set-goal spam-attack 1)
+	(attack-now)
+	(enable-timer attack-timer 600);send another attack in ten minutes if possible
+	(set-goal gathering-stuff 2);mark us as having attacked
+	(chat-local-to-self "Sending a sneak attack.")
+	(chat-to-allies "Sending a sneak attack.")
+	(disable-self);never use this again
+)
+
+(defrule
+	(goal attack-stage 2)
+	(timer-triggered attack-timer)
+	(up-compare-goal first-attack > 1)
+=>
+	(disable-timer attack-timer)
+	(set-goal attack-stage 3)
+	(set-goal asked-for-help 0)
+	(set-goal spam-attack 1)
+	(set-goal attack-cycle 1)
+	(attack-now)
+	(enable-timer half-attack-timer 600)
+	;(set-strategic-number sn-number-forward-builders 2) This just don't work.
+	(delete-building stone-wall-line)
+	(chat-local-to-self "Sending the attack.")
+)
+
+(defrule
+	(goal first-attack 1)
+	(goal attack-stage 2)
+	(timer-triggered attack-timer)
+=>
+	(set-goal first-attack 2)
+	(disable-timer attack-timer)
+	(attack-now)
+	(set-goal spam-attack 1)
+	(enable-timer attack-timer 600)
+	(set-goal asked-for-help 0)
+	(chat-local-to-self "first attack")
+	(chat-to-allies "First official attack.")
+	(set-goal gathering-stuff 2)
+	(chat-to-allies "31")
+	(disable-self)
+)
+
+; ---------------------------
+; SPAM ATTACK
+; BUT ONLY BRIEFLY, TO MAKE SURE LOTS OF UNITS ARE ACTUALLY ATTACKING
+; NOT LONG ENOUGH TO CONFUSE OUR UNITS
+; ---------------------------
+
+(defrule
+	(goal spam-attack 1)
+=>
+	(set-goal spam-attack 2)
+	(enable-timer 3 2)
+	(enable-timer 4 20)
+)
+(defrule
+	(goal spam-attack 2)
+	(timer-triggered 3)
+=>
+	(attack-now)
+	(disable-timer 3)
+	(enable-timer 3 2)
+)
+(defrule
+	(goal spam-attack 2)
+	(timer-triggered 4)
+=>
+	(disable-timer 4)
+	(disable-timer 3)
+	(set-goal spam-attack 0)
+	(set-goal initialized-attack 1)
+	(set-strategic-number sn-task-ungrouped-soldiers 1)
+)
+
+; ---------------------------
+; ASKING FOR HELP
+; ---------------------------
+
+(defrule
+	(goal warn-allies 1)
+	(goal threat-player 1)
+=>
+	(chat-to-allies "201")
+	(chat-to-allies "The blue player is attacking me.")
+	(set-goal warn-allies 0)
+)
+(defrule
+	(goal warn-allies 1)
+	(goal threat-player 2)
+=>
+	(chat-to-allies "202")
+	(chat-to-allies "The red player is attacking me.")
+	(set-goal warn-allies 0)
+)
+(defrule
+	(goal warn-allies 1)
+	(goal threat-player 3)
+=>
+	(chat-to-allies "203")
+	(chat-to-allies "The green player is attacking me.")
+	(set-goal warn-allies 0)
+)
+(defrule
+	(goal warn-allies 1)
+	(goal threat-player 4)
+=>
+	(chat-to-allies "204")
+	(chat-to-allies "The yellow player is attacking me.")
+	(set-goal warn-allies 0)
+)
+(defrule
+	(goal warn-allies 1)
+	(goal threat-player 5)
+=>
+	(chat-to-allies "205")
+	(chat-to-allies "The cyan player is attacking me.")
+	(set-goal warn-allies 0)
+)
+(defrule
+	(goal warn-allies 1)
+	(goal threat-player 6)
+=>
+	(chat-to-allies "206")
+	(chat-to-allies "The magenta player is attacking me.")
+	(set-goal warn-allies 0)
+)
+(defrule
+	(goal warn-allies 1)
+	(goal threat-player 7)
+=>
+	(chat-to-allies "207")
+	(chat-to-allies "The gray player is attacking me.")
+	(set-goal warn-allies 0)
+)
+(defrule
+	(goal warn-allies 1)
+	(goal threat-player 8)
+=>
+	(chat-to-allies "208")
+	(chat-to-allies "The orange player is attacking me.")
+	(set-goal warn-allies 0)
+)
+
+(defrule
+	(goal am-under-attack 1)
+	(goal asked-for-help 0)
+=>
+	(up-get-threat-data threat-time threat-player threat-source threat-target)
+	(set-goal warn-allies 1)
+)
+
+
+(defrule
+	(goal am-under-attack 1)
+	(goal asked-for-help 0)
+=>
+	(set-goal asked-for-help 1)
+	(chat-to-allies "18")
+	(chat-to-allies "I'm in trouble!")
+	(set-goal targeting-method 1)
+)
+
+; ---------------------------
+; ACTUALLY RETREATING
+; ---------------------------
+
+(defrule
+	(up-compare-goal first-attack > 1);without this line they have the possibilty of "retreating" before they even attack
+	(goal initialized-attack 1)
+	(goal retreat-timed-out 1)
+	(goal try-to-retreat 1)
+	(nor (map-type islands)
+		(map-type team-islands))
+=>
+	(up-reset-unit c: -1)
+	(set-strategic-number sn-number-attack-groups 0)
+	(up-retreat-now)
+	(enable-timer retreat-timer 300)
+	(set-goal retreat-timed-out 0)
+	(set-goal am-retreating 1)
+	(set-goal initialized-attack 0)
+	(set-goal spam-retreat 1)
+	(chat-local-to-self "I am retreating from the enemy.")
+	(up-chat-data-to-self "Retreat reason %d." g: retreat-reason)
+)
+
+(defrule
+	(timer-triggered retreat-timer)
+=>
+	(disable-timer retreat-timer)
+	(set-goal retreat-timed-out 1)
+)
+
+; ---------------------------
+; SPAM RETREAT
+; BUT ONLY BRIEFLY, TO MAKE SURE LOTS OF UNITS ARE ACTUALLY RETREATING
+; NOT LONG ENOUGH TO CONFUSE OUR UNITS FOREVER
+; ---------------------------
+
+(defrule
+	(goal spam-retreat 1)
+=>
+	(set-goal spam-retreat 2)
+	(enable-timer 3 2)
+	(enable-timer 4 20)
+)
+(defrule
+	(goal spam-retreat 2)
+	(timer-triggered 3)
+=>
+	(up-retreat-now)
+	(disable-timer 3)
+	(enable-timer 3 2)
+)
+(defrule
+	(goal spam-retreat 2)
+	(timer-triggered 4)
+=>
+	(disable-timer 4)
+	(disable-timer 3)
+	(set-goal spam-retreat 0)
+	(up-reset-unit c: -1)
+	(set-strategic-number sn-number-attack-groups 0)
+)
+
+; ---------------------------
+; OFFENSIVE BUILDINGS
+; I find these buildings very offensive.
+; ---------------------------
+
+(defrule
+	(goal am-under-attack 1)
+	(building-type-count castle > 0)
+	(can-build bombard-tower)
+	(players-unit-type-count any-enemy trebuchet < 4)
+	(players-unit-type-count any-enemy battering-ram-line < 4)
+	(up-pending-objects c: bombard-tower < 1)
+=>
+	(build bombard-tower)
+)
+(defrule
+	(goal settled-down 2)
+	(goal am-under-attack 1)
+	(building-type-count castle > 0)
+	(can-build watch-tower-line)
+	(players-unit-type-count any-enemy trebuchet < 4)
+	(players-unit-type-count any-enemy battering-ram-line < 4)
+=>
+	(build watch-tower-line)
+)
+
+(defrule
+	(goal initialized-attack 1)
+	(goal am-under-attack 0)
+	(military-population > 75)
+	(can-build bombard-tower)
+=>
+	(build-forward bombard-tower)
+)
+
+(defrule
+	(goal initialized-attack 1)
+	(goal am-under-attack 0)
+	(military-population > 100)
+	(can-build watch-tower-line)
+=>
+	(build-forward watch-tower-line)
+)
+
+
+; ---------------------------
+; ADVANCING IN AGE
+; ---------------------------
+
+
+; Dark to Feudal
+
+(defrule
+	(current-age == dark-age)
+=>
+	(set-goal age-advancement 96)
+	(disable-self)
+)
+(defrule
+	(goal am-under-attack 1)
+	(current-age == castle-age)
+=>
+	(release-escrow food)
+	(release-escrow wood)
+	(release-escrow gold)
+	(release-escrow stone)
+)
+(defrule
+	(can-research-with-escrow feudal-age)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research feudal-age)
+	(chat-local-to-self "rising to feudal")
+	(set-goal age-advancement 0)
+)
+(defrule
+	(can-research feudal-age)
+=>
+	(research feudal-age)
+	(chat-local-to-self "rising to feudal")
+	(set-goal age-advancement 0)
+)
+(defrule
+	(not (and (up-pending-objects c: villager > 0)
+		(goal single-villager-training 1)))
+	(goal disable-villager-training 0)
+	(current-age == dark-age)
+	(can-train villager)
+	(population < 50)
+	(food-amount < 10000)
+=>
+	(train villager)
+)
+
+
+; Feudal to Castle
+
+(defrule
+	(current-age == feudal-age)
+=>
+	(set-goal age-advancement 98)
+	(disable-self)
+)
+
+(defrule
+(goal age-advancement 98)
+	(wood-amount greater-than 600)
+	(gold-amount < 200)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity wood)
+=>
+	(chat-local-to-self "selling wood for castle gold")
+	(sell-commodity wood)
+)
+
+(defrule
+	(or (goal strategy-heavy-castling 0)
+		(current-age > castle-age))
+	(goal strategy-boom 0)
+(goal age-advancement 98)
+	(stone-amount greater-than 99)
+	(gold-amount < 300)
+	(commodity-selling-price stone greater-than 50)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity stone)
+=>
+	(chat-local-to-self "selling stone for castle gold")
+	(sell-commodity stone)
+)
+
+(defrule
+(goal age-advancement 98)
+	(food-amount greater-or-equal 1100)
+	(gold-amount < 200)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity food)
+=>
+	(chat-local-to-self "selling food for castle gold")
+	(sell-commodity food)
+)
+
+(defrule
+	(escrow-amount gold > 50)
+	(goal age-advancement 98)
+=>
+	(release-escrow gold)
+)
+
+;GETTING NEEDED FOOD
+
+(defrule
+	(goal age-advancement 98)
+	(gold-amount greater-or-equal 330)
+	(food-amount < 800)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity food)
+=>
+	(chat-local-to-self "buying castle food")
+	(buy-commodity food)
+)
+
+; ADVANCE TO CASTLE AGE IF POSSIBLE.
+
+(defrule
+	(can-research-with-escrow castle-age)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research castle-age)
+	(chat-local-to-self "rising to castle")
+	(set-goal age-advancement 0)
+)
+(defrule
+	(can-research castle-age)
+=>
+	(research castle-age)
+	(chat-local-to-self "rising to castle")
+	(set-goal age-advancement 0)
+)
+; Castle to Imperial
+
+(defrule
+	(current-age == castle-age)
+=>
+	(set-goal age-advancement 99)
+	(disable-self)
+)
+
+(defrule
+	(goal age-advancement 99)
+	(wood-amount greater-than 500)
+	(gold-amount < 800)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity wood)
+=>
+	(chat-local-to-self "selling wood for imperial gold")
+	(sell-commodity wood)
+)
+(defrule
+	(goal age-advancement 99)
+	(gold-amount greater-than 900)
+	(food-amount < 1000)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity food)
+=>
+	(chat-local-to-self "buying food for imperial ... food")
+	(buy-commodity food)
+)
+(defrule
+	(or (goal strategy-heavy-castling 0)
+		(current-age > castle-age))
+(goal age-advancement 99)
+	(building-type-count castle > 0)
+	(stone-amount greater-than 300)
+	(commodity-selling-price stone greater-than 30)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity stone)
+=>
+	(chat-local-to-self "selling stone for imperial gold")
+	(sell-commodity stone)
+)
+(defrule
+	(or (goal strategy-heavy-castling 0)
+		(current-age > castle-age))
+(goal age-advancement 99)
+	(building-type-count castle > 0)
+	(stone-amount greater-than 850)
+	(commodity-selling-price stone greater-than 30)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity stone)
+=>
+	(chat-local-to-self "selling stone for imperial gold")
+	(sell-commodity stone)
+)
+(defrule
+(goal age-advancement 99)
+	(food-amount greater-or-equal 1200)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity food)
+	(gold-amount < 800)
+=>
+	(chat-local-to-self "selling food for imperial gold")
+	(sell-commodity food)
+)
+
+;GETTING NEEDED FOOD
+
+(defrule
+(goal age-advancement 99)
+	(gold-amount greater-or-equal 1000)
+	(food-amount < 1000)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity food)
+=>
+	(chat-local-to-self "buying imperial food")
+	(buy-commodity food)
+)
+
+; ADVANCE TO IMPERIAL AGE IF POSSIBLE.
+
+(defrule
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-research-with-escrow imperial-age)
+	(nand (building-type-count-total town-center < 2)
+		(goal strategy-boom 1))
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research imperial-age)
+	(chat-local-to-self "rising to imperial")
+	(set-goal age-advancement 0)
+	(set-escrow-percentage wood 15)
+	(set-escrow-percentage food 45)
+	(set-escrow-percentage gold 45)
+	(set-escrow-percentage stone 15)
+)
+(defrule
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-research imperial-age)
+=>
+	(chat-local-to-self "rising to imperial")
+	(set-goal age-advancement 0)
+	(set-escrow-percentage wood 15)
+	(set-escrow-percentage food 45)
+	(set-escrow-percentage gold 45)
+	(set-escrow-percentage stone 15)
+)
+
+
+;GETTING NEEDED FOOD
+
+(defrule
+	(goal strategy-boom 1)
+	(food-amount < 800)
+	(gold-amount > 400)
+=>
+	(buy-commodity food)
+)
+
+;TRY TO GET THREE TOWN CENTERS IF WE HAVE A LOT OF GOLD
+
+(defrule
+	(current-age > feudal-age)
+	(gold-amount > 800)
+	(building-type-count-total town-center < 3)
+	(stone-amount < 200)
+=>
+	(buy-commodity stone)
+)
+
+
+; ---------------------------
+; BUILD LISTS
+; ---------------------------
+
+(defrule
+	(building-type-count town-center < 1)
+=>
+	(build town-center)
+)
+(defrule
+	(or	(map-type islands)
+		(map-type team-islands))
+=>
+	(set-strategic-number sn-garrison-rams 0)
+	(set-strategic-number sn-group-form-distance 40)
+    (set-strategic-number sn-maximum-attack-group-size 40)
+	(disable-self)
+)
+#load-if-defined NOMAD-MAP
+(defrule
+	(game-time < 60)
+	(military-population < 6)
+	(building-type-count town-center < 1)
+=>
+	(set-strategic-number sn-percent-civilian-explorers 100)
+	(set-strategic-number sn-percent-civilian-builders 0)
+	(set-strategic-number sn-percent-civilian-gatherers 0)
+	(set-strategic-number sn-cap-civilian-explorers 100)
+	(set-strategic-number sn-cap-civilian-gatherers 0)
+	(chat-local-to-self "Explore")
+	(disable-self)
+)
+(defrule
+	(resource-found gold)
+	(resource-found food)
+	(resource-found wood)
+	(resource-found stone)
+	(building-type-count town-center < 1)
+	(civilian-population > 2)
+=>
+	(build town-center)
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-gatherers 200)
+	(chat-local-to-self "Settling down")
+	(disable-self)
+)
+(defrule
+	(game-time greater-than 150)
+	(building-type-count town-center less-than 1)
+=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-gatherers 200)
+	(build town-center)
+	(chat-local-to-self "Settling down now...")
+)
+#end-if
+
+
+; ---------------------------
+; CHECK FOR IDLE VILLAGERS AND SEE IF THE TOWN NEEDS EXPANDED
+; IF THE POPULATION LIMIT IS LOW, TRY TO BUILD A HOUSE IF POSSIBLE
+; IF BUILDING A HOUSE SHOULD BE POSSIBLE, BUT A HOUSE CANNOT BE PLACED, EXPAND THE TOWN SIZE SLIGHTLY
+; WORKAROUND FOR NOT BEING ABLE TO DETECT WHETHER THE TOWN SIZE LIMIT IS REACHED
+;
+; EDIT: THIS CODE DOESN'T ACTUALLY WORK, AT ALL. UP-PENDING-OBJECTS DOESN'T JUST COUNT PLACED FOUNDATIONS LIKE I THOUGHT IT DID.
+; IT COUNTS OBJECTS THAT THE AI WANTS TO PLACE AS WELL.
+; (CAN-BUILD HOUSE) WILL TRY TO BUILD A HOUSE REGARDLESS OF WHETHER OR NOT THERE'S ACTUALLY A SPOT TO PUT IT DOWN.
+; FINALLY, THERE'S NO WAY TO COUNT THE NUMBER OF BUILDINGS THAT HAVE BEEN DESTROYED, AND (AS FAR AS I KNOW) NO WAY TO SUBTRACT TWO GOALS OR TWO SNS.
+; THE COMBINATION OF THESE FACTORS LEADS ME TO BELIEVE THERE IS NO WAY I CAN PROPERLY DEAL WITH HOUSING AND TOWN SIZE EXPANSION FOR TIGHT MAPS... SAD, BUT THERE'S NO WAY AROUND IT.
+; I'LL JUST HAVE TO HOPE MY AI NEVER GETS PLACED ON THE EDGE OF THE MAP. THAT KILLS PROMISORY, AND IT'LL LIKELY KILL ElonUncle TOO...
+; BUT THERE'S JUST NO WAY AROUND IT THAT I CAN SEE.
+; ---------------------------
+
+(defrule
+	(true)
+=>
+	(set-goal want-to-house 0)
+	(set-goal villager-not-building 0)
+	(set-goal am-trying-to-build-houses 0)
+	(set-goal disable-dark-building 0)
+)
+
+(defrule
+	(current-age == dark-age)
+	(building-type-count house > 2)
+	(building-type-count lumber-camp < 1)
+	(wood-amount < 500)
+=>
+	(set-goal disable-dark-building 1)
+)
+
+;MAINTAIN HOUSING
+
+(defrule
+	(housing-headroom less-than 6)
+	(goal house-expansion 0)
+	(wood-amount > 0)
+=>
+	(set-goal want-to-house 1)
+)
+
+;SUPERHOUSING FOR RAPID EXPANSION
+
+(defrule
+	(goal house-expansion 0)
+	(goal am-trying-to-build-houses 0)
+	(goal settled-down 2)
+	(wood-amount > 1000)
+	(population-headroom greater-than 0)
+	(housing-headroom < 15)
+=>
+	(set-goal want-to-house 1)
+)
+(defrule
+	(goal house-expansion 0)
+	(goal am-trying-to-build-houses 0)
+	(wood-amount > 30)
+	(goal settled-down 2)
+	(housing-headroom less-than 16)
+	(up-pending-objects c: house < 1)
+	(population > 50)
+=>
+	(set-goal want-to-house 1)
+)
+
+;CHECK FOR VILLAGERS THAT ARE LUMBERJACKING; IF ALL VILLAGERS ARE ALREADY WORKING, NO TOWN SIZE EXPANSION IS NECESSARY
+(defrule
+	(or (unit-type-count 123 > 0)
+		(unit-type-count 218 > 0))
+=>
+	(set-goal villager-not-building 1)
+)
+
+(defrule
+	(goal want-to-house 1)
+	;(strategic-number sn-maximum-town-size < 40)
+	;(goal house-expansion 0)
+	(can-build house)
+	(goal disable-dark-building 0)
+=>
+	(build house)
+	;(up-modify-sn sn-houses-built c:+ 1)
+	;(set-goal am-trying-to-build-houses 1)
+	;(chat-local-to-self "House, please")
+	;(enable-timer house-timer 60)
+	;(goal house-expansion 1)
+)
+
+;(defrule
+;	(timer-triggered house-timer)
+;	(building-type-count house s:= sn-houses-built)
+;
+;(defrule
+;	(timer-triggered house-timer)
+;	(building-type-count house s:< sn-houses-built)
+;	(goal house-expansion 1)
+;=>
+;	(goal house-expansion 1)
+;	(chat-local-to-self "Potential problem with house placement.")
+;)
+;
+;(defrule
+;	(goal house-expansion 1)
+;	(goal want-to-house 1)
+;=>
+;	(enable-timer house-timer 60)
+;	(set-goal house-expansion 2)
+;	(chat-local-to-self "Could not house; enabling house timer")
+;)
+
+;(defrule
+;	(goal house-expansion 2)
+;	(can-build house)
+;=>
+;	(build house)
+;)
+
+;(defrule
+;	(goal house-expansion 2)
+;	(up-pending-objects c: house > 0)
+;=>
+;	(set-goal house-expansion 0)
+;	(chat-local-to-self "Started that house, boi")
+;	(disable-timer house-timer)
+;	(enable-timer house-timer 9001)
+;)
+
+;(defrule
+;	(timer-triggered house-timer)
+;	(strategic-number sn-maximum-town-size >= 40)
+;=>
+;	(disable-timer house-timer)
+;	(chat-local-to-self "Our town has reached its maximum size. Disabling town expansion.")
+;)
+
+;(defrule
+;	(timer-triggered house-timer)
+;=>
+;	(disable-timer house-timer)
+;	(enable-timer house-timer 60)
+;	(set-goal house-expansion 3)
+;)
+
+;if it should be possible to build a house, but no house is being built, expand the town.
+;I use houses to check because they tend to take up the most space of anything, and they're always small enough to fit
+;(defrule
+;	(goal house-expansion 3)
+;	(can-build house)
+;=>
+;	(set-goal house-expansion 2)
+;	(up-modify-sn sn-maximum-town-size c:+ 2)
+;	(up-modify-goal current-town-size c:+ 2)
+;	(chat-local-to-self "Trouble building; town size expanded")
+;	(up-retask-gatherers wood c: 1)
+;	(build house)	
+;)
+
+
+
+#load-if-not-defined ALL-TECHS-ENABLED
+(load "ElonUncle/civ_research")
+#end-if
+
+(load "ElonUncle/research")
+
+
+; ---------------------------
+; DEATH MATCH VILLAGERS
+; DOUBLES AS VILLAGERS FOR BOOMING CIVS
+; CHINESE IN PARTICULAR, SO FAR, HAVEN'T TRIED WITH ANYHING ELSE YET
+; ---------------------------
+
+(defrule
+	(not (and (up-pending-objects c: villager > 0)
+		(goal single-villager-training 1)))
+	(goal disable-villager-training 0)
+	(or (and (current-age > feudal-age)
+		(goal strategy-save-escrow 1)) 
+		(death-match-game))
+	(unit-type-count villager < 200)
+	(can-train villager)
+=>
+	(train villager)
+)
+(defrule
+	(not (and (up-pending-objects c: villager > 0)
+		(goal single-villager-training 1)))
+	(goal disable-villager-training 0)
+	(or (and (current-age > feudal-age)
+		(goal strategy-save-escrow 1)) 
+		(death-match-game))
+	(unit-type-count villager < 200)
+	(can-train villager)
+=>
+	(train villager)
+)
+(defrule
+	(not (and (up-pending-objects c: villager > 0)
+		(goal single-villager-training 1)))
+	(goal disable-villager-training 0)
+	(or (and (current-age > feudal-age)
+		(goal strategy-save-escrow 1)) 
+		(death-match-game))
+	(unit-type-count villager < 200)
+	(can-train villager)
+=>
+	(train villager)
+)
+(defrule
+	(or (and (current-age > feudal-age)
+		(goal strategy-save-escrow 1)) 
+		(death-match-game))
+	(unit-type-count villager < 150)
+	(can-build town-center)
+	(goal am-under-attack 0)
+	(nand (current-age == castle)
+		(building-type-count town-center > 2))
+	(and (nand (goal strategy-heavy-castling 1)
+		(building-type-count castle < 1))
+		(nand (goal strategy-heavy-castling 2)
+		(building-type-count castle < 2)))
+=>
+	(build town-center)
+)
+
+(defrule
+	(goal strategy-boom 1)
+	(can-build-with-escrow town-center)
+	(goal am-under-attack 0)
+	(building-type-count-total town-center < 3)
+	(and (nand (goal strategy-heavy-castling 1)
+		(building-type-count castle < 1))
+		(nand (goal strategy-heavy-castling 2)
+		(building-type-count castle < 2)))
+=>
+	(release-escrow wood)
+	(release-escrow stone)
+	(build town-center)
+)
+
+; ---------------------------
+; VILLAGERS AND BUILDING AND STUFF; THE ESSENTIALS
+; ---------------------------
+
+;(defrule
+;	(up-research-status c: castle-age >= research-pending)
+;	(strategic-number sn-camp-max-distance < 30)
+;=>
+;	(set-strategic-number sn-camp-max-distance 30)
+;	(disable-self)
+;)
+
+; KILL OFF VILLAGERS IF WE'VE REACHED THE POPULATION LIMIT
+
+(defrule
+	(not (and (up-pending-objects c: villager > 0)
+		(goal single-villager-training 1)))
+	(unit-type-count villager greater-than 15)
+	(housing-headroom < 10)
+	(population-headroom less-than 1)
+=>
+	(delete-unit villager)
+)
+(defrule
+	(not (and (up-pending-objects c: villager > 0)
+		(goal single-villager-training 1)))
+	(goal disable-villager-training 0)
+	(not (current-age == dark-age))
+	(unit-type-count villager < 30)
+	(population < 175)
+	(can-train villager)
+=>
+	(train villager)
+)
+(defrule
+	(not (and (up-pending-objects c: villager > 0)
+		(goal single-villager-training 1)))
+	(goal disable-villager-training 0)
+	(not (current-age == dark-age))
+	(goal am-under-attack 0)
+	(unit-type-count villager > 30)
+	(unit-type-count villager less-than 80)
+	(population < 175)
+	(can-train villager)
+=>
+	(train villager)
+)
+
+(defrule
+	(strategic-number sn-enable-training-queue == 1)
+	(can-train villager)
+=>
+	(train villager)
+)
+
+;DESPERATE FOR GOLD
+(defrule
+	(unit-type-count trade-cart > 5)
+	(can-research-with-escrow ri-caravan)
+=>
+    (research ri-caravan)
+)
+(defrule
+	(or (or (or (wood-amount > 400)
+				(food-amount > 400))
+			(wood-amount > 600))
+		(food-amount > 600))
+	(population > 100)
+	(gold-amount < 200)
+	(unit-type-count trade-cart < 50)
+	(can-train-with-escrow trade-cart)
+	(players-building-type-count any-ally market > 0)
+=>
+	(release-escrow gold)
+	(train trade-cart);Builds infinite trade carts until there are plenty
+)
+(defrule
+	(wood-amount > 5000)
+	(gold-amount < 10000)
+	(unit-type-count trade-cart < 50)
+	(can-train trade-cart)
+	(players-building-type-count any-ally market > 0)
+=>
+	(train trade-cart);Mostly for death match maps
+)
+(defrule
+	(goal warship-training-disabled 0)
+	(wood-amount >= 200)
+	(food-amount < 200)
+	(unit-type-count fishing-ship < 20)
+	(can-train fishing-ship)
+	(up-compare-goal dock-train-count < 3) 
+	(food-amount < 5000)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fishing-ship);
+)
+
+	
+(defrule
+	(unit-type-count villager greater-than 15)
+	(housing-headroom < 10)
+	(population-headroom less-than 1)
+=>
+	(delete-unit villager)
+)
+;maintain a town center 
+(defrule
+	(game-time greater-than 150)
+	(building-type-count town-center less-than 1)
+	(can-build town-center)
+=>
+	(build town-center)
+)
+
+; ---------------------------
+; CIVILIZATION BUILDERS
+; ---------------------------
+
+(load "ElonUncle/special_buildings")
+
+; ---------------------------
+; OTHER BUILDINGS
+; ---------------------------
+
+(defrule
+	(goal strategy-heavy-castling 0)
+	(building-type-count castle < 1)
+	(stone-amount > 500)
+	(building-type-count town-center > 0)
+	(strategic-number sn-maximum-town-size < 30)
+=>
+	(up-modify-sn sn-maximum-town-size c:+ 15)
+	(up-modify-goal current-town-size c:+ 15)
+	(disable-self)
+)
+(defrule
+	(nand (goal strategy-boom 1)
+		(goal am-under-attack 0))
+	(building-type-count castle < 1)
+	(can-build-with-escrow castle)
+	(building-type-count town-center > 0)
+=>
+	(release-escrow stone)
+	(build castle)
+	(chat-local-to-self "Time to build a castle.")
+)
+
+;pester them and get a good look at their troop size and composition
+(defrule
+	(goal strategy-save-escrow 0)
+	(goal strategy-boom 0)
+	(current-age == feudal-age)
+	(building-type-count archery-range > 0)
+	(building-type-count watch-tower-line < 1)
+	(can-build watch-tower-line)
+=>
+	(build-forward watch-tower-line)
+	(disable-self)
+)
+
+(defrule
+	(building-type-count market less-than 1)
+	(or (or (or (or (building-type-count archery-range > 0)
+		(and (stone-amount > 600)
+			(gold-amount < 100)))
+		(and (gold-amount > 600)
+			(wood-amount < 100)))
+		(and (gold-amount > 600)
+			(food-amount < 100)))
+		(game-time >= 1200))
+	(can-build market)
+	(not (current-age == imperial-age))
+=>
+	(build market)
+)
+(defrule
+	(building-type-count market less-than 1)
+	(can-build-with-escrow market)
+	(game-time >= 1200)
+	(not (current-age == imperial-age))
+=>
+	(release-escrow wood)
+	(build market)
+)
+(defrule
+	(building-type-count archery-range less-than 1)
+	(current-age == castle-age)
+	(can-build-with-escrow archery-range)
+	(housing-headroom > 4)
+=>
+	(release-escrow wood)
+	(build archery-range)
+	(disable-self)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(building-type-count dock < 1)
+	(can-build dock)
+	(wood-amount > 300)
+	(food-amount > 300)
+=>
+	(build dock)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-dark-building 0)
+	(building-type-count barracks < 1)
+	(or (or (or (current-age > dark-age)
+		(game-time > 900))
+		(goal am-under-attack 1))
+		(wood-amount > 300))
+	(can-build barracks)
+	(housing-headroom > 4)
+=>
+	(build barracks)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(building-type-count archery-range less-than 1)
+	(building-type-count barracks > 0)
+	(can-build-with-escrow archery-range)
+	(housing-headroom > 4)
+=>
+	(release-escrow wood)
+	(build archery-range)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(or
+		(game-time > 900)
+		(or
+			(building-type-count barracks > 0)
+			(wood-amount > 1000)
+		)
+	)
+	(building-type-count archery-range less-than 1)
+	(can-build archery-range)
+	(housing-headroom > 4)
+=>
+	(build archery-range)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(building-type-count dock < 1)
+	(can-build dock)
+	(or
+		(building-type-count barracks > 0)
+		(wood-amount > 500)
+	)
+	(housing-headroom > 4)
+=>
+	(build dock)
+)
+;maintain 3 town centers
+(defrule
+	(current-age == castle-age)
+	(building-type-count town-center less-than 3)
+	(can-build-with-escrow town-center)
+	(and (nand (goal strategy-heavy-castling 1)
+		(building-type-count castle < 1))
+		(nand (goal strategy-heavy-castling 2)
+		(building-type-count castle < 2)))
+=>
+	(release-escrow stone)
+	(release-escrow wood)
+	(build town-center)
+)
+;maintain 3 town centers
+(defrule
+	(game-time greater-than 45)
+	(food-amount > 400)
+	(building-type-count town-center less-than 3)
+	(can-build town-center)
+	(and (nand (goal strategy-heavy-castling 1)
+		(building-type-count castle < 1))
+		(nand (goal strategy-heavy-castling 2)
+		(building-type-count castle < 2)))
+=>
+	(build town-center)
+)
+;alternate lumber camp
+(defrule
+	(building-type-count lumber-camp < 2)
+	(game-time > 1200)
+	(can-build lumber-camp)
+	(not (and (wood-amount > 10000)
+		(current-age == imperial-age)))
+=>
+	(build lumber-camp)
+)
+(defrule
+	(stone-amount > 500)
+	(game-time > 300)
+	(building-type-count castle > 0)
+	(and (nand (goal strategy-heavy-castling 1)
+		(building-type-count castle < 1))
+		(nand (goal strategy-heavy-castling 2)
+		(building-type-count castle < 2)))
+=>
+	(build-wall 2 stone-wall-line)
+	(build-gate 2)
+)
+
+(defrule
+	(goal strategy-fast-walls 1)
+=>
+	(enable-wall-placement 1)
+	(disable-self)
+)
+
+(defrule
+	(goal strategy-fast-walls 1)
+	(can-build-wall 1 stone-wall-line)
+	;(nand (goal strategy-heavy-castling 1) ;if we need walls fast, nothing's going to stop us
+	;	(building-type-count castle < 2))
+=>
+	(build-wall 2 stone-wall-line)
+	(build-gate 2)
+)
+(defrule;drush protection
+	(current-age == dark-age)
+	(or (players-building-type-count any-enemy barracks > 0)
+		(players-unit-type-count any-enemy militiaman-line > 0))
+	(can-build-wall 1 palisade-wall)
+	(military-population > 7)
+=>
+	(set-goal build-palisade 10)
+)
+(defrule
+	(current-age == feudal-age)
+	(strategic-number sn-military-level == 0)
+	(goal strategy-boom 1)
+	(can-build-wall 1 palisade-wall)
+	(military-population > 7)
+=>
+	(set-goal build-palisade 10)
+)
+
+(defrule
+	(goal build-palisade 10)
+=>	
+	(build-wall 1 palisade-wall)
+	(build-gate 1)
+)
+(defrule
+	(true)
+=>
+	(build-gate 2)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(current-age > dark-age)
+	(building-type-count barracks less-than 1)
+	(can-build barracks)
+	(housing-headroom > 4)
+=>
+	(build barracks)
+)
+
+;(defrule;Moved in imperial Random
+;	(building-type-count archery-range less-than 1)
+;	(can-build archery-range)
+;=>
+;	(build archery-range)
+;)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-melee-training 0)
+	(building-type-count stable less-than 1)
+	(or
+		(game-time > 900)
+		(or
+			(building-type-count barracks > 0)
+			(wood-amount > 1000)
+		)
+	)
+	(can-build stable)
+	(housing-headroom > 4)
+=>
+	(build stable)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(building-type-count monastery less-than 1)
+	(can-build monastery)
+	(housing-headroom > 4)
+=>
+	(build monastery)
+)
+
+; ---------------------------
+; SIEGE WORKSHOP; WE MUST HAVE ONE BY 30 MINUTES IN IF IN THE CASTLE AGE
+; ---------------------------
+
+(defrule
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(unit-type-count villager > 50)
+	(game-time > 1800)
+	(goal have-built-siege-workshop 0)
+	(building-type-count siege-workshop == 0)
+	(current-age >= castle-age)
+=>
+	(set-goal saving-for-siege-workshop 1)
+	(set-escrow-percentage wood 100)
+)
+
+(defrule
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(goal save-for-town-center 0)
+	(goal saving-for-siege-workshop 1)
+	(goal have-built-siege-workshop 1)
+	(up-pending-objects c: siege-workshop > 0)
+	(unit-type-count villager > 80)
+=>
+	(set-goal saving-for-siege-workshop 0)
+	(set-goal have-built-siege-workshop 1)
+	(set-escrow-percentage wood 15)
+)
+
+(defrule
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(goal save-for-town-center 0)
+	(goal saving-for-siege-workshop 1)
+	(goal have-built-siege-workshop 1)
+	(up-pending-objects c: siege-workshop > 0)
+	(unit-type-count villager < 81)
+=>
+	(set-goal saving-for-siege-workshop 0)
+	(set-goal have-built-siege-workshop 1)
+	(set-escrow-percentage wood 5)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(building-type-count siege-workshop less-than 1)
+	(can-build-with-escrow siege-workshop)
+	(housing-headroom > 4)
+=>
+	(release-escrow wood)
+	(build siege-workshop)
+	(set-goal have-built-siege-workshop 1)
+)
+
+; ---------------------------
+; OTHER BUILDINGS
+; ---------------------------
+
+(defrule;Lower Priority
+	(building-type-count market less-than 1)
+	(can-build market)
+	(or
+		(and (and (building-type-count archery-range > 0)
+				(building-type-count stable > 0))
+			(building-type-count barracks > 0))
+		(game-time > 1200))
+=>
+	(build market)
+)
+
+(defrule
+	(nand (goal strategy-boom 1)
+		(goal am-under-attack 0))
+	(building-type-count castle < 4)
+	(can-build-with-escrow castle)
+	(building-type-count town-center > 0)
+=>
+	(release-escrow stone)
+	(build castle)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(or (wood-amount > 1000)
+		(current-age > castle-age))
+	(building-type-count archery-range less-than 3)
+	(can-build archery-range)
+	(housing-headroom > 4)
+=>
+	(build archery-range)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(or (wood-amount > 1000)
+		(current-age > castle-age))
+	(building-type-count barracks less-than 3)
+	(can-build barracks)
+	(housing-headroom > 4)
+=>
+	(build barracks)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-melee-training 0)
+	(or (wood-amount > 1000)
+		(current-age > castle-age))
+	(building-type-count stable less-than 3)
+	(can-build stable)
+=>
+	(build stable)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(wood-amount > 750)
+	(current-age > castle-age)
+	(building-type-count monastery less-than 3)
+	(can-build monastery)
+	(housing-headroom > 4)
+=>
+	(build monastery)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(building-type-count dock < 4)
+	(building-type-count market > 0)
+	(can-build dock)
+	(housing-headroom > 4)
+	(goal warship-training-disabled 0);disable multiple dock building if we can't find enemy boats
+=>
+	(build dock)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(current-age != post-imperial-age)
+	(building-type-count blacksmith less-than 1)
+	(current-age == feudal-age)
+	(building-type-count market > 0)
+	(building-type-count stable > 0)
+	(building-type-count archery-range > 0)
+	(can-build-with-escrow blacksmith)
+	(unit-type-count villager > 10)
+=>
+	(release-escrow wood)
+	(build blacksmith)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(current-age != post-imperial-age)
+	(building-type-count blacksmith less-than 1)
+	(or
+		(current-age == feudal-age)
+		(building-type-count barracks > 0)
+	)
+	(can-build blacksmith)
+	(or
+		(not (building-available market))
+		(building-type-count market > 0)
+	)
+	(unit-type-count villager > 10)
+=>
+	(build blacksmith)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(current-age != post-imperial-age)
+	(building-type-count university less-than 1)
+	(can-build university)
+	(wood-amount greater-than 250)
+	(unit-type-count villager > 10)
+=>
+	(build university)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(building-type-count monastery less-than 1)
+	(can-build monastery)
+=>
+	(build monastery)
+)
+
+; ---------------------------
+; INTELLIGENT FARMS
+; FARMS THAT ADJUST BASED ON HOW MANY WE HAVE AND HOW MANY WE NEED.
+; THERE'S A SURPRISING AMOUNT OF CODE HERE BECAUSE AOE II AI SUCKS AT SCALING.
+; IT WORKS QUITE WELL OVERALL, THOUGH.
+; ---------------------------
+
+(defrule
+	(building-type-count farm < 9)
+=>
+	(up-assign-builders c: farm c: 1)
+)
+
+(defrule
+	(building-type-count farm >= 9)
+	(building-type-count farm < 18)
+=>
+	(up-assign-builders c: farm c: 2)
+)
+(defrule
+	(building-type-count farm >= 18)
+	(building-type-count farm < 27)
+=>
+	(up-assign-builders c: farm c: 3)
+)
+(defrule
+	(building-type-count farm >= 27)
+	(building-type-count farm < 36)
+=>
+	(up-assign-builders c: farm c: 4)
+)
+(defrule
+	(building-type-count farm >= 36)
+	(building-type-count farm < 45)
+=>
+	(up-assign-builders c: farm c: 5)
+)
+(defrule
+	(building-type-count farm >= 45)
+	(building-type-count farm < 54)
+=>
+	(up-assign-builders c: farm c: 6)
+)
+(defrule
+	(building-type-count farm >= 54)
+	(building-type-count farm < 63)
+=>
+	(up-assign-builders c: farm c: 7)
+)
+(defrule
+	(building-type-count farm >= 63)
+=>
+	(up-assign-builders c: farm c: 8)
+)
+
+
+(defrule
+	(building-type-count lumber-camp > 0)
+	(building-type-count farm less-than 4)
+	(wood-amount > 250)
+	(building-type-count archery-range > 0)
+	(can-build farm)
+	(food-amount < 10000)
+=>
+	(build farm)
+)
+
+; FORCE FAST FARMS TO REPLACE FORAGERS; FORAGERS ARE SLOW
+; 120 IS THE UNITID FOR A MALE FORAGER, AND 354 IS A FEMALE FORAGER
+; FORCE-BUILD FARMS IN LEVELS BASED ON VILLAGER COUNT
+; NO MORE THAN 15 FORCE-BUILT FARMS EARLY GAME
+
+(defrule
+	(true)
+=>
+	(set-goal forager-level 0)
+	(disable-self)
+)
+(defrule
+	(unit-type-count villager < 25)
+	(up-compare-goal forager-level < 1)
+	(or (or (and (unit-type-count 120 > 2)
+		(unit-type-count 354 > 2))
+		(unit-type-count 120 > 3))
+		(unit-type-count 354 > 3))
+=>
+	(set-goal forager-level 1)
+)
+
+(defrule
+	(unit-type-count villager < 25)
+	(up-compare-goal forager-level < 2)
+	(or (or (and (unit-type-count 120 > 4)
+		(unit-type-count 354 > 4))
+		(unit-type-count 120 > 6))
+		(unit-type-count 354 > 6))
+=>
+	(set-goal forager-level 2)
+)
+
+(defrule
+	(unit-type-count villager < 25)
+	(up-compare-goal forager-level < 3)
+	(or (or (and (unit-type-count 120 > 6)
+		(unit-type-count 354 > 6))
+		(unit-type-count 120 > 10))
+		(unit-type-count 354 > 10))
+=>
+	(set-goal forager-level 3)
+)
+
+(defrule
+	(current-age == castle-age)
+=>
+	(set-goal forager-level 0)
+	(disable-self)
+)
+
+(defrule;always have farms in the early ages
+	(building-type-count lumber-camp > 0)
+	(or
+		(current-age == feudal-age)
+		(current-age == dark-age)
+	)
+	(or (or (or (idle-farm-count < 1)
+			(and (and (goal forager-level 1)
+					(building-type-count farm < 5))
+				(idle-farm-count < 2)))
+			(and (and (goal forager-level 2)
+					(building-type-count farm < 10))
+				(idle-farm-count < 3)))
+			(and (and (goal forager-level 3)
+					(building-type-count farm < 15))
+				(idle-farm-count < 4)))
+	(can-build farm)
+	(food-amount < 10000)
+=>
+	(build farm)
+)
+
+(defrule
+	(building-type-count lumber-camp > 0)
+	(wood-amount greater-than 160) 
+	(idle-farm-count < 1)
+	(can-build farm)
+	(food-amount < 10000)
+=>
+	(build farm)
+)
+
+
+(defrule
+	(building-type-count lumber-camp > 0)
+	(building-type-count farm >= 9)
+	(wood-amount greater-than 160) 
+	(idle-farm-count < 2)
+	(can-build farm)
+	(food-amount < 10000)
+=>
+	(build farm)
+)
+(defrule
+	(building-type-count lumber-camp > 0)
+	(building-type-count farm >= 18)
+	(wood-amount greater-than 160) 
+	(idle-farm-count < 3)
+	(can-build farm)
+	(food-amount < 10000)
+=>
+	(build farm)
+)
+(defrule
+	(building-type-count lumber-camp > 0)
+	(building-type-count farm >= 27)
+	(wood-amount greater-than 160) 
+	(idle-farm-count < 4)
+	(can-build farm)
+	(food-amount < 10000)
+=>
+	(build farm)
+)
+(defrule
+	(building-type-count lumber-camp > 0)
+	(building-type-count farm >= 36)
+	(wood-amount greater-than 160) 
+	(idle-farm-count < 5)
+	(can-build farm)
+	(food-amount < 10000)
+=>
+	(build farm)
+)
+(defrule
+	(building-type-count lumber-camp > 0)
+	(building-type-count farm >= 45)
+	(wood-amount greater-than 160) 
+	(idle-farm-count < 6)
+	(can-build farm)
+	(food-amount < 10000)
+=>
+	(build farm)
+)
+(defrule
+	(building-type-count lumber-camp > 0)
+	(building-type-count farm >= 54)
+	(wood-amount greater-than 160) 
+	(idle-farm-count < 7)
+	(can-build farm)
+	(food-amount < 10000)
+=>
+	(build farm)
+)
+(defrule
+	(building-type-count lumber-camp > 0)
+	(building-type-count farm >= 63)
+	(wood-amount greater-than 160) 
+	(idle-farm-count < 8)
+	(can-build farm)
+	(food-amount < 10000)
+=>
+	(build farm)
+)
+
+;DON'T LET IDIOTS TRY TO HUNT WHILE THE TOWN IS UNDER ATTACK.
+
+(defrule
+	(building-type-count lumber-camp > 0)
+	(goal am-under-attack 1)
+	(or (or (or (unit-type-count 122 > 0)
+		(unit-type-count 216 > 0))
+		(unit-type-count 56 > 0))
+		(unit-type-count 57 > 0))
+	(can-build farm)
+	(idle-farm-count < 5)
+=>
+	(build farm)
+)
+
+; ---------------------------
+; CAMPS
+; ---------------------------
+
+(defrule
+	(building-type-count town-center >= 1)
+	(game-time > 15)
+	(or (and (unit-type-count 594 < 2);no sheep
+			(unit-type-count 833 < 2));no turkeys
+		(unit-type-count villager > 14)); if halfway to pop goal, go ahead and build a mill, those farms are important
+	(resource-found food)
+	(building-type-count mill less-than 1)
+	(not (food-amount > 10000))
+	(can-build mill)
+=>
+	(build mill)
+)
+
+(load "ElonUncle/camps")
+
+(defrule
+	(goal strategy-fast-imperial 1)
+	(unit-type-count villager > 33)
+	(up-research-status c: imperial-age < research-pending)
+	(current-age == castle-age)
+	(building-type-count town-center > 2)
+	(goal am-under-attack 0)
+=>
+	(up-jump-rule 1000)
+)
+
+; ---------------------------
+; MORE BUILDINGS
+; ---------------------------
+
+#load-if-defined VICTORY-STANDARD
+(defrule
+	(goal save-for-town-center 0)
+	(can-build wonder)
+	(game-time > 1200)
+	(building-type-count wonder < 1)
+	(goal am-under-attack 0)
+	(players-building-type-count every-ally wonder < 1)
+=>
+	(build wonder)
+)
+#end-if
+(defrule
+	(building-type-count bombard-tower < 5)
+	(can-build bombard-tower)
+=>
+	(build bombard-tower)
+)
+(defrule
+	(game-time > 300)
+	(building-type-count castle > 3)
+	(stone-amount > 750)
+	(can-build bombard-tower)
+=>
+	(build bombard-tower)
+)
+(defrule
+	(nand (goal strategy-boom 1)
+		(goal am-under-attack 0))
+	(game-time > 600)
+	(stone-amount > 1500)
+	(can-build-with-escrow castle)
+=>
+	(release-escrow stone)
+	(build castle)
+)
+(defrule
+  	(players-civ any-enemy korean) 
+	(goal enemy-dock-sighted 1)
+	(building-type-count bombard-tower < 5)
+	(stone-amount > 750)
+	(can-build bombard-tower)
+=>
+	(build bombard-tower)
+)
+
+
+(defrule
+	(game-time > 300)
+	(building-type-count castle > 4)
+	(stone-amount > 750)
+	(can-build watch-tower-line)
+=>
+	(build watch-tower-line)
+)
+
+; ---------------------------
+; SUPERBUILDING
+; ---------------------------
+;CHECK AGAIN FOR IDLE VILLAGERS
+
+(defrule
+	(goal am-superbuilding 1)
+	(or (or (or (or (or (or (or (unit-type-count 592 > 0)
+		(unit-type-count 590 > 0))
+		(unit-type-count 120 > 0))
+		(unit-type-count 354 > 0))
+		(unit-type-count 122 > 0))
+		(unit-type-count 216 > 0))
+		(unit-type-count 56 > 0))
+		(unit-type-count 57 > 0))
+=>
+	(set-goal could-superbuild 1)
+)
+
+(defrule
+	(goal am-superbuilding 1)
+	(or (or (or (or (or (or (or (or (unit-type-count 259 > 0)
+		(unit-type-count 214 > 0))
+		(unit-type-count 123 > 0))
+		(unit-type-count 218 > 0))
+		(unit-type-count 579 > 0))
+		(unit-type-count 581 > 0))
+		(unit-type-count 124 > 0))
+		(unit-type-count 220 > 0))
+		(unit-type-count 57 > 0))
+=>
+	(set-goal could-superbuild 1)
+)
+
+;TO MAKE THE AI ONLY BUILD UNTIL LOW ON RESOURCES IN DEATHMATCH. GIVES THEM AN EDGE. 
+
+(defrule
+	(game-time > 15)
+	(gold-amount > 2500)
+	(game-time < 1200)
+	(goal am-superbuilding 0)
+=>
+	(set-goal am-superbuilding 1)
+	(set-strategic-number sn-percent-civilian-builders 100)
+	(set-strategic-number sn-percent-civilian-gatherers 0)
+	(set-strategic-number sn-cap-civilian-builders 200)
+	(set-strategic-number sn-cap-civilian-gatherers 0)
+	(chat-local-to-self "Commencing superbuild strategy")
+	(disable-self)
+)
+(defrule
+	(gold-amount < 2500)
+	(goal am-superbuilding 1)
+=>
+	(set-goal am-superbuilding 0)
+	(set-goal could-superbuild 0)
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-percent-civilian-builders 15)
+	(set-strategic-number sn-percent-civilian-gatherers 85)
+	(set-strategic-number sn-cap-civilian-gatherers 300)
+	(chat-local-to-self "Disabling superbuild strategy")
+	(disable-self)
+)
+
+;WAS COMMENTED AT ONE TIME, TO AVOID PROBLEMS WITH TOWN SIZE EXPANSION
+
+(defrule
+	(goal am-superbuilding 1)
+	(goal could-superbuild 1)
+	(can-build house)
+	(goal want-to-house 0)
+=>
+	(build house)
+	(set-goal could-superbuild 0)
+	(chat-local-to-self "Superbuilding house!")
+)
+(defrule
+	(goal am-superbuilding 1)
+	(goal could-superbuild 1)
+	(can-build barracks)
+=>
+	(build barracks)
+	(set-goal could-superbuild 0)
+	(chat-local-to-self "Superbuilding barracks!")
+)
+(defrule
+	(goal am-superbuilding 1)
+	(goal could-superbuild 1)
+	(can-build archery-range)
+=>
+	(build archery-range)
+	(set-goal could-superbuild 0)
+	(chat-local-to-self "Superbuilding archery range!")
+)
+(defrule
+	(goal disable-melee-training 0)
+	(goal am-superbuilding 1)
+	(goal could-superbuild 1)
+	(can-build stable)
+=>
+	(build stable)
+	(set-goal could-superbuild 0)
+	(chat-local-to-self "Superbuilding stable!")
+)
+(defrule
+	(goal am-superbuilding 1)
+	(goal could-superbuild 1)
+	(can-build dock)
+=>
+	(build dock)
+	(set-goal could-superbuild 0)
+	(chat-local-to-self "Superbuilding dock!")
+)
+(defrule
+	(goal am-superbuilding 1)
+	(goal could-superbuild 1)
+	(can-build town-center)
+=>
+	(build town-center)
+	(set-goal could-superbuild 0)
+	(chat-local-to-self "Superbuilding town center!")
+)
+(defrule
+	(goal am-superbuilding 1)
+	(goal could-superbuild 1)
+	(can-build castle)
+=>
+	(build castle)
+	(set-goal could-superbuild 0)
+	(chat-local-to-self "Superbuilding castle!")
+)
+
+; ---------------------------
+; TRANSPORT SHIPS IF NECESSARY AND TOWN NOT UNDER ATTACK
+; USES GALLEYS TO DETERMINE WHETHER THERE MIGHT BE A REASON TO USE TRANSPORT SHIPS IN THE FIRST PLACE
+; TRANSPORT SHIPS ARE TOP PRIORITY IF IT'S A WATER MAP
+; ---------------------------
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(goal should-train-transports 1)
+	(military-population > 0)
+	(unit-type-count transport-ship < 2)
+	(up-compare-goal dock-train-count < 5)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train transport-ship)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(goal should-train-transports 1)
+	(military-population > 40)
+	(unit-type-count transport-ship < 4)
+	(up-compare-goal dock-train-count < 5)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train transport-ship)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(goal should-train-transports 1)
+	(military-population > 80)
+	(unit-type-count transport-ship < 6)
+	(up-compare-goal dock-train-count < 5)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train transport-ship)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(goal should-train-transports 1)
+	(military-population > 120)
+	(unit-type-count transport-ship < 8)
+	(up-compare-goal dock-train-count < 5)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train transport-ship)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(goal should-train-transports 1)
+	(military-population > 160)
+	(unit-type-count transport-ship < 10)
+	(up-compare-goal dock-train-count < 5)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train transport-ship)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(goal should-train-transports 1)
+	(military-population > 200)
+	(unit-type-count transport-ship < 12)
+	(up-compare-goal dock-train-count < 5)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train transport-ship)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(goal should-train-transports 1)
+	(military-population > 240)
+	(unit-type-count transport-ship < 14)
+	(up-compare-goal dock-train-count < 5)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train transport-ship)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(goal should-train-transports 1)
+	(military-population > 280)
+	(unit-type-count transport-ship < 16)
+	(up-compare-goal dock-train-count < 5)
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train transport-ship)
+)
+
+
+; ---------------------------
+; ANTI-COUNTER
+; ---------------------------
+; ------------- RETAIN MEMORIES OF OLD ENCOUNTERS FOR UP TO TWENTY MINUTES DEPENDING ON SIZE
+
+(defrule
+	(true)
+=>
+	;(chat-local-to-self "This is a test")
+	(enable-timer enemy-check 1)
+	(set-goal enemies-sighted 1)
+	(set-goal recompare-enemy-count 1)
+	(set-goal have-enemy 1)
+	(disable-self)
+)
+
+(defrule
+	(true)
+=>
+	(set-goal enemies-in-view 0)
+	(set-goal have-archery-counter 1)
+	(set-goal have-barracks-counter 1)
+	(set-goal have-stable-counter 1)
+	(set-goal have-siege-counter 1)
+	(set-goal have-castle-counter 1)
+	(set-goal have-dock-counter 1)
+	(set-goal recompare-enemy-count 1)
+)
+
+(defrule
+	(or (or (or (or (or (or (or (players-unit-type-count target-player camel-line > 3)
+	(players-unit-type-count target-player knight-line > 3))
+	(players-unit-type-count target-player scorpion-line > 3))
+	(players-unit-type-count target-player battering-ram-line > 3))
+	(players-unit-type-count target-player mangonel-line > 3))
+	(players-unit-type-count target-player bombard-cannon > 3))
+	(players-unit-type-count target-player petard > 3))
+	(players-unit-type-count target-player trebuchet-set > 3))
+=>
+	(set-goal enemies-in-view 1)
+)
+(defrule
+	(or (or (or (or (or (or (or (or (players-unit-type-count target-player spearman-line > 3)
+	(players-unit-type-count target-player militiaman-line > 3))
+	(players-unit-type-count target-player eagle-warrior-line > 3))
+	(players-unit-type-count target-player skirmisher-line > 3))
+	(players-unit-type-count target-player archer-line > 3))
+	(players-unit-type-count target-player hand-cannoneer > 3))
+	(players-unit-type-count target-player cavalry-archer-line > 3))
+	(players-unit-type-count target-player monk > 3))
+	(players-unit-type-count target-player scout-cavalry-line > 3))
+=>
+	(set-goal enemies-in-view 1)
+)
+
+
+(defrule
+	(or (or (or (or (or (or (or (players-unit-type-count target-player camel-line > 7)
+	(players-unit-type-count target-player knight-line > 7))
+	(players-unit-type-count target-player scorpion-line > 7))
+	(players-unit-type-count target-player battering-ram-line > 7))
+	(players-unit-type-count target-player mangonel-line > 7))
+	(players-unit-type-count target-player bombard-cannon > 7))
+	(players-unit-type-count target-player petard > 7))
+	(players-unit-type-count target-player trebuchet-set > 7))
+=>
+	(set-goal enemies-in-view 2)
+)
+(defrule
+	(or (or (or (or (or (or (or (or (players-unit-type-count target-player spearman-line > 7)
+	(players-unit-type-count target-player militiaman-line > 7))
+	(players-unit-type-count target-player eagle-warrior-line > 7))
+	(players-unit-type-count target-player skirmisher-line > 7))
+	(players-unit-type-count target-player archer-line > 7))
+	(players-unit-type-count target-player hand-cannoneer > 7))
+	(players-unit-type-count target-player cavalry-archer-line > 7))
+	(players-unit-type-count target-player monk > 7))
+	(players-unit-type-count target-player scout-cavalry-line > 7))
+=>
+	(set-goal enemies-in-view 2)
+)
+
+
+(defrule
+	(or (or (or (or (or (or (or (players-unit-type-count target-player camel-line > 13)
+	(players-unit-type-count target-player knight-line > 13))
+	(players-unit-type-count target-player scorpion-line > 13))
+	(players-unit-type-count target-player battering-ram-line > 13))
+	(players-unit-type-count target-player mangonel-line > 13))
+	(players-unit-type-count target-player bombard-cannon > 13))
+	(players-unit-type-count target-player petard > 13))
+	(players-unit-type-count target-player trebuchet-set > 13))
+=>
+	(set-goal enemies-in-view 3)
+)
+(defrule
+	(or (or (or (or (or (or (or (or (players-unit-type-count target-player spearman-line > 13)
+	(players-unit-type-count target-player militiaman-line > 13))
+	(players-unit-type-count target-player eagle-warrior-line > 13))
+	(players-unit-type-count target-player skirmisher-line > 13))
+	(players-unit-type-count target-player archer-line > 13))
+	(players-unit-type-count target-player hand-cannoneer > 13))
+	(players-unit-type-count target-player cavalry-archer-line > 13))
+	(players-unit-type-count target-player monk > 13))
+	(players-unit-type-count target-player scout-cavalry-line > 13))
+=>
+	(set-goal enemies-in-view 3)
+)
+
+
+(defrule
+	(or (or (or (or (or (or (or (players-unit-type-count target-player camel-line > 27)
+	(players-unit-type-count target-player knight-line > 27))
+	(players-unit-type-count target-player scorpion-line > 27))
+	(players-unit-type-count target-player battering-ram-line > 27))
+	(players-unit-type-count target-player mangonel-line > 27))
+	(players-unit-type-count target-player bombard-cannon > 27))
+	(players-unit-type-count target-player petard > 27))
+	(players-unit-type-count target-player trebuchet-set > 27))
+=>
+	(set-goal enemies-in-view 4)
+)
+(defrule
+	(or (or (or (or (or (or (or (or (players-unit-type-count target-player spearman-line > 27)
+	(players-unit-type-count target-player militiaman-line > 27))
+	(players-unit-type-count target-player eagle-warrior-line > 27))
+	(players-unit-type-count target-player skirmisher-line > 27))
+	(players-unit-type-count target-player archer-line > 27))
+	(players-unit-type-count target-player hand-cannoneer > 27))
+	(players-unit-type-count target-player cavalry-archer-line > 27))
+	(players-unit-type-count target-player monk > 27))
+	(players-unit-type-count target-player scout-cavalry-line > 27))
+=>
+	(set-goal enemies-in-view 4)
+)
+
+
+(defrule
+	(timer-triggered enemy-check)
+=>
+	(disable-timer enemy-check)
+	(enable-timer enemy-check 9000)
+	(disable-self)
+)
+
+(defrule
+	(up-compare-goal enemies-sighted < 15)
+	(goal enemies-in-view 1)
+=>
+	(set-goal enemies-sighted 10)
+	(set-goal recompare-enemy-count 2)
+	(set-goal have-enemy 2)
+	(disable-timer enemy-check)
+	(enable-timer enemy-check 200)	
+)
+
+(defrule
+	(up-compare-goal enemies-sighted < 35)
+	(goal enemies-in-view 2)
+=>
+	(set-goal enemies-sighted 20)
+	(set-goal recompare-enemy-count 2)
+	(disable-timer enemy-check)
+	(enable-timer enemy-check 200)
+)
+(defrule
+	(up-compare-goal enemies-sighted < 75)
+	(goal enemies-in-view 3)
+=>
+	(set-goal enemies-sighted 40)
+	(set-goal recompare-enemy-count 2)
+	(disable-timer enemy-check)
+	(enable-timer enemy-check 200)
+)
+(defrule
+	(goal enemies-in-view 4)
+=>
+	(set-goal enemies-sighted 80)
+	(set-goal recompare-enemy-count 2)
+	(disable-timer enemy-check)
+	(enable-timer enemy-check 200)
+)
+
+(defrule
+	(goal enemies-sighted 10)
+=>
+	(chat-local-to-self "enemy level 1")	
+	(disable-self)
+)
+(defrule
+	(goal enemies-sighted 20)
+=>
+	(chat-local-to-self "enemy level 2")	
+	(disable-self)
+)
+(defrule
+	(goal enemies-sighted 40)
+=>
+	(chat-local-to-self "enemy level 3")	
+	(disable-self)
+)
+(defrule
+	(goal enemies-sighted 80)
+=>
+	(chat-local-to-self "enemy level 4")	
+	(disable-self)
+)
+
+(defrule
+	(true)
+=>
+	(set-goal cnt-military-pop 9)
+)
+
+(defrule
+	(goal have-enemy 2)
+	(timer-triggered enemy-check)
+	(goal enemies-sighted 80)
+	(goal enemies-in-view 3)
+=>
+	(set-goal enemies-sighted 40)
+	(disable-timer enemy-check)
+	(enable-timer enemy-check 200)
+	(chat-local-to-self "downgrading enemy threat to level 3")
+	(set-goal cnt-military-pop 5)
+)
+
+(defrule
+	(goal have-enemy 2)
+	(timer-triggered enemy-check)
+	(goal enemies-sighted 40)
+	(goal enemies-in-view 2)
+=>
+	(set-goal enemies-sighted 20)
+	(disable-timer enemy-check)
+	(enable-timer enemy-check 200)
+	(chat-local-to-self "downgrading enemy threat to level 2")
+	(set-goal cnt-military-pop 5)
+)
+
+(defrule
+	(goal have-enemy 2)
+	(timer-triggered enemy-check)
+	(goal enemies-sighted 20)
+	(goal enemies-in-view 1)
+=>
+	(set-goal enemies-sighted 10)
+	(disable-timer enemy-check)
+	(enable-timer enemy-check 200)
+	(chat-local-to-self "downgrading enemy threat to level 1")
+	(set-goal cnt-military-pop 5)
+)
+
+(defrule
+	(goal have-enemy 2)
+	(timer-triggered enemy-check)
+	(goal enemies-sighted 10)
+	(goal enemies-in-view 0)
+=>
+	(set-goal enemies-sighted 1)
+	(disable-timer enemy-check)
+	(enable-timer enemy-check 30000)
+	(chat-local-to-self "downgrading enemy threat to level 0")
+	(set-goal cnt-military-pop 5)
+)
+
+(defrule
+	(goal cnt-military-pop 5)
+=>
+	(up-modify-goal enemies-sighted c:- 10)
+	(up-modify-goal not-countered-spearman c:- 1)
+	(up-modify-goal not-countered-militiaman c:- 1)
+	(up-modify-goal not-countered-eagle-warrior c:- 1)
+	(up-modify-goal not-countered-skirmisher c:- 1)
+	(up-modify-goal not-countered-archer c:- 1)
+	(up-modify-goal not-countered-hand-cannoneer c:- 1)
+	(up-modify-goal not-countered-cavalry-archer c:- 1)
+	(up-modify-goal not-countered-monk c:- 1)
+	(up-modify-goal not-countered-scout-cavalry c:- 1)
+	(up-modify-goal not-countered-camel c:- 1)
+	(up-modify-goal not-countered-knight c:- 1)
+	(up-modify-goal not-countered-scorpion c:- 1)
+	(up-modify-goal not-countered-battering-ram c:- 1)
+	(up-modify-goal not-countered-mangonel c:- 1)
+	(up-modify-goal not-countered-bombard-cannon c:- 1)
+	(up-modify-goal not-countered-petard c:- 1)
+	(up-modify-goal not-countered-trebuchet c:- 1)
+	(up-modify-goal can-spearman-counter c:- 1)
+)
+(defrule
+	(goal cnt-military-pop 5)
+=>
+	(up-modify-goal can-militiaman-counter c:- 1)
+	(up-modify-goal can-eagle-warrior-counter c:- 1)
+	(up-modify-goal can-skirmisher-counter c:- 1)
+	(up-modify-goal can-archer-counter c:- 1)
+	(up-modify-goal can-hand-cannoneer-counter c:- 1)
+	(up-modify-goal can-cavalry-archer-counter c:- 1)
+	(up-modify-goal can-monk-counter c:- 1)
+	(up-modify-goal can-scout-cavalry-counter c:- 1)
+	(up-modify-goal can-camel-counter c:- 1)
+	(up-modify-goal can-knight-counter c:- 1)
+	(up-modify-goal can-scorpion-counter c:- 1)
+	(up-modify-goal can-battering-ram-counter c:- 1)
+	(up-modify-goal can-mangonel-counter c:- 1)
+	(up-modify-goal can-bombard-cannon-counter c:- 1)
+	(up-modify-goal can-petard-counter c:- 1)
+	(up-modify-goal can-trebuchet-counter c:- 1)
+	(up-modify-goal can-galley-counter c:- 1)
+	(up-modify-goal can-cannon-galleon-counter c:- 1)
+	(up-modify-goal can-fire-ship-counter c:- 1)
+	(up-modify-goal can-demolition-ship-counter c:- 1)
+)
+
+;(defrule
+;	(goal recompare-enemy-count 2)
+;=>
+	;(chat-local-to-self "part 1 works")
+	;(disable-self)
+;)
+;(defrule
+	;(up-compare-goal enemies-sighted > 5)
+;=>
+	;(chat-local-to-self "part 2 works")
+	;(disable-self)
+;)
+;
+;(defrule
+	;(players-military-population any-enemy > 9)
+;=>
+	;(chat-local-to-self "part 3 works")
+	;(disable-self)
+;)
+(defrule
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 1)
+=>
+	(set-goal not-countered-spearman 1)
+	(set-goal not-countered-militiaman 1)
+	(set-goal not-countered-eagle-warrior 1)
+	(set-goal not-countered-skirmisher 1)
+	(set-goal not-countered-archer 1)
+	(set-goal not-countered-hand-cannoneer 1)
+	(set-goal not-countered-cavalry-archer 1)
+	(set-goal not-countered-monk 1)
+	(set-goal not-countered-scout-cavalry 1)
+	(set-goal not-countered-camel 1)
+	(set-goal not-countered-knight 1)
+	(set-goal not-countered-scorpion 1)
+	(set-goal not-countered-battering-ram 1)
+	(set-goal not-countered-mangonel 1)
+	(set-goal not-countered-bombard-cannon 1)
+	(set-goal not-countered-petard 1)
+	(set-goal not-countered-trebuchet 1)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+=>
+	(set-goal can-spearman-counter 1)
+	(set-goal can-militiaman-counter 1)
+	(set-goal can-eagle-warrior-counter 1)
+	(set-goal can-skirmisher-counter 1)
+	(set-goal can-archer-counter 1)
+	(set-goal can-hand-cannoneer-counter 1)
+	(set-goal can-cavalry-archer-counter 1)
+	(set-goal can-monk-counter 1)
+	(set-goal can-scout-cavalry-counter 1)
+	(set-goal can-camel-counter 1)
+	(set-goal can-knight-counter 1)
+	(set-goal can-scorpion-counter 1)
+	(set-goal can-battering-ram-counter 1)
+	(set-goal can-mangonel-counter 1)
+	(set-goal can-bombard-cannon-counter 1)
+	(set-goal can-petard-counter 1)
+	(set-goal can-trebuchet-counter 1)
+	(set-goal can-galley-counter 1)
+	(set-goal can-cannon-galleon-counter 1)
+	(set-goal can-fire-ship-counter 1)
+	(set-goal can-demolition-ship-counter 1)
+)
+#load-if-not-defined ALL-TECHS-ENABLED
+(load "ElonUncle/civ_counters")
+#end-if
+
+(load "ElonUncle/counters")
+
+
+; ---------------------------
+; CIV-SPECIFIC UNITS
+; ---------------------------
+
+#load-if-not-defined ALL-TECHS-ENABLED
+(load "ElonUncle/civ_units")
+#end-if
+
+; ---------------------------
+; MILITARY UNITS, NORMAL
+; ---------------------------
+
+(defrule
+	(true)
+=>
+	(set-goal disable-all-training 0)
+)
+
+(defrule
+	(goal strategy-fast-castle 1)
+	(current-age < castle)
+=>
+	(set-goal disable-all-training 1)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-all-training 0)
+	(goal am-under-attack 0)
+	(military-population > 15)
+	(unit-type-count battering-ram-line < 1)
+	(can-train-with-escrow battering-ram-line)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(release-escrow wood)
+	(release-escrow gold)
+	(train battering-ram-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-all-training 0)
+	(unit-type-count trade-cart < 10)
+	(wood-amount > 500)
+	(gold-amount < 500)
+	(unit-type-count villager < 10)
+	(can-train trade-cart)
+=>
+	(train trade-cart)
+)
+(defrule
+	(goal disable-all-training 0)
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(unit-type-count eagle-warrior-line < 10)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(can-train eagle-warrior-line)
+	(goal have-barracks-counter 1)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train eagle-warrior-line)
+)
+(defrule
+	(goal disable-all-training 0)
+	(goal disable-gold-training 0)
+	(unit-type-count missionary < 10)
+	(gold-amount > 200)
+	(can-train missionary)
+	(up-compare-goal church-train-count < 3) 
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train missionary)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-all-training 0)
+	(unit-type-count longboat-line < 10)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(can-train longboat-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train longboat-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-all-training 0)
+	(unit-type-count turtle-ship-line < 10)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(can-train turtle-ship-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train turtle-ship-line)
+)
+(defrule
+	(goal disable-all-training 0)
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(unit-type-count knight-line < 12)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(can-train knight-line)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-all-training 0)
+	(goal disable-gold-training 0)
+	(not (and (current-age == feudal-age)
+		(gold-amount < 150)))
+	(unit-type-count villager > 25)
+	(not (current-age == imperial-age))
+	(unit-type-count archer-line < 15)
+	(can-train archer-line)
+	(or (goal am-under-attack 1)
+		(wood-amount > 75))
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-all-training 0)
+	(not (and (current-age == feudal-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(not (current-age == dark-age))
+	(not (current-age == imperial-age))
+	(unit-type-count skirmisher-line < 15)
+	(can-train skirmisher-line)
+	(up-compare-goal archery-train-count < 3) 
+	(or (goal am-under-attack 1)
+		(food-amount > 50))
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+)
+(defrule
+	(goal disable-all-training 0)
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(not (and (current-age == feudal-age)
+		(food-amount < 150)))
+	(unit-type-count villager > 25)
+	(not (current-age == dark-age))
+	(not (current-age == imperial-age))
+	(unit-type-count militiaman-line < 15)
+	(can-train militiaman-line)
+	(up-compare-goal barracks-train-count < 3) 
+	(or (goal am-under-attack 1)
+		(food-amount > 50))
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-all-training 0)
+	(not (current-age == dark-age))
+	(unit-type-count spearman-line < 7)
+	(can-train spearman-line)
+	(or (goal am-under-attack 1)
+		(food-amount > 50))
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+(defrule
+	(goal disable-all-training 0)
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(not (current-age == dark-age))
+	(unit-type-count militiaman-line < 5)
+	(can-train militiaman-line)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(unit-type-count spearman-line < 15)
+	(can-train spearman-line)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+(defrule
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(unit-type-count militiaman-line < 10)
+	(can-train militiaman-line)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-all-training 0)
+	(not (current-age == dark-age))
+	(unit-type-count skirmisher-line < 7)
+	(can-train skirmisher-line)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+)
+(defrule
+	(goal disable-all-training 0)
+	(unit-type-count scout-cavalry-line < 1)
+	(can-train scout-cavalry-line)
+	(food-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-all-training 0)
+	(goal disable-gold-training 0)
+	(not (current-age == dark-age))
+	(unit-type-count archer-line < 7)
+	(can-train archer-line)
+	(gold-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-gold-training 0)
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(unit-type-count archer-line < 15)
+	(can-train archer-line)
+	(gold-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(unit-type-count skirmisher-line < 15)
+	(can-train skirmisher-line)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+)
+
+(defrule
+	(unit-type-count my-unique-unit-line < 8)
+	(can-train my-unique-unit-line)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(goal am-under-attack 0)
+	(unit-type-count my-unique-unit-line < 64)
+	(goal have-castle-counter 1)
+	(not (civ-selected persian))
+	(can-train my-unique-unit-line)
+	(food-amount > 4000)
+	(gold-amount > 2000)
+	(building-type-count castle > 3)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(goal am-under-attack 0)
+	(unit-type-count my-unique-unit-line < 32)
+	(goal have-castle-counter 1)
+	(civ-selected persian)
+	(can-train my-unique-unit-line)
+	(food-amount > 4000)
+	(gold-amount > 2000)
+	(building-type-count castle > 3)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(unit-type-count trebuchet < 3)
+	(can-train trebuchet)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train trebuchet)
+)
+
+(defrule
+	(goal disable-gold-training 0)
+	(unit-type-count monk < 6)
+	(can-train monk)
+	(gold-amount > 200)
+	(up-compare-goal church-train-count < 3) 
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(unit-type-count battering-ram-line < 4)
+	(can-train battering-ram-line)
+	(gold-amount > 200)
+	(wood-amount > 200)
+	(game-time > 300)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train battering-ram-line)
+)
+(defrule
+	(unit-type-count mangonel-line < 1)
+	(can-train mangonel-line)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count demolition-ship-line < 10)
+	(wood-amount > 150)
+	(gold-amount > 2000)
+	(wood-amount > 4000)
+	(can-train demolition-ship-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train demolition-ship-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count fishing-ship < 5)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(food-amount < 5000)
+	(can-train fishing-ship)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fishing-ship)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count fire-ship-line < 8)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(can-train fire-ship-line)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count galley-line < 6)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(can-train galley-line)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count cannon-galleon-line < 4)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(can-train cannon-galleon-line)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count fire-ship-line < 16)
+	(wood-amount > 400)
+	(gold-amount > 400)
+	(can-train fire-ship-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count galley-line < 12)
+	(wood-amount > 400)
+	(gold-amount > 400)
+	(can-train galley-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count cannon-galleon-line < 8)
+	(wood-amount > 400)
+	(gold-amount > 400)
+	(can-train cannon-galleon-line)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+)
+
+;SECOND RUNTHROUGH
+
+(defrule
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(unit-type-count knight-line < 24)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(can-train knight-line)
+	(goal have-stable-counter 1)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+)
+
+(defrule
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(not (current-age == castle-age))
+	(unit-type-count militiaman-line < 20)
+	(can-train militiaman-line)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(goal have-barracks-counter 1)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+
+(defrule
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(unit-type-count scout-cavalry-line < 2)
+	(can-train scout-cavalry-line)
+	(food-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal disable-gold-training 0)
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(not (current-age == castle-age))
+	(unit-type-count archer-line < 30)
+	(can-train archer-line)
+	(gold-amount > 200)
+	(wood-amount > 200)
+	(goal have-archery-counter 1)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+(defrule
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(not (current-age == castle-age))
+	(unit-type-count spearman-line < 30)
+	(can-train spearman-line)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(goal have-barracks-counter 1)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(not (current-age == castle-age))
+	(unit-type-count skirmisher-line < 30)
+	(can-train skirmisher-line)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(goal have-archery-counter 1)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+)
+(defrule
+	(unit-type-count my-unique-unit-line < 16)
+	(can-train my-unique-unit-line)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count trebuchet < 6)
+	(can-train trebuchet)
+	(goal have-castle-counter 1)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train trebuchet)
+)
+
+(defrule
+	(goal disable-gold-training 0)
+	(unit-type-count monk < 15)
+	(can-train monk)
+	(gold-amount > 400)
+	(up-compare-goal church-train-count < 3) 
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+(defrule
+	(goal disable-gold-training 0)
+	(unit-type-count missionary < 20)
+	(gold-amount > 400)
+	(can-train missionary)
+	(up-compare-goal church-train-count < 3) 
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train missionary)
+)
+(defrule
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(unit-type-count eagle-warrior-line < 20)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(can-train eagle-warrior-line)
+	(goal have-barracks-counter 1)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train eagle-warrior-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count longboat-line < 20)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(goal have-dock-counter 1)
+	(can-train longboat-line)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train longboat-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count turtle-ship-line < 20)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(goal have-dock-counter 1)
+	(can-train turtle-ship-line)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train turtle-ship-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(unit-type-count scorpion-line < 8)
+	(can-train scorpion-line)
+	(gold-amount > 200)
+	(wood-amount > 200)
+	(goal have-siege-counter 1)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count fire-ship-line < 12)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(can-train fire-ship-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count galley-line < 12)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(can-train galley-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count cannon-galleon-line < 12)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(can-train cannon-galleon-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count fire-ship-line < 16)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(can-train fire-ship-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count galley-line < 16)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(can-train galley-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count cannon-galleon-line < 16)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(can-train cannon-galleon-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+)
+
+; ---------------------------
+; ADDED SUPERPOP BUILD LISTS
+; FOR IF 200 POP JUST ISN'T ENOUGH
+; ---------------------------
+
+(defrule
+	(not (and (up-pending-objects c: villager > 0)
+		(goal single-villager-training 1)))
+	(goal disable-villager-training 0)
+	(unit-type-count villager less-than 200)
+	(population < 438)
+	(food-amount > 1000)
+	(can-train villager)
+=>
+	(train villager)
+)
+(defrule
+	(not (and (up-pending-objects c: villager > 0)
+		(goal single-villager-training 1)))
+	(goal disable-villager-training 0)
+	(unit-type-count villager less-than 200)
+	(population < 438)
+	(food-amount > 100)
+	(can-train villager)
+	(military-population >= 35)
+=>
+	(train villager)
+)
+
+;UPGRADE TO 6 TOWN CENTERS IF POSSIBLE FOR SUPER VILLAGER SPAM
+
+(defrule
+	(game-time greater-than 45)
+	(food-amount > 1000)
+	(military-population >= 70)
+	(unit-type-count villager less-than 40)
+	(building-type-count town-center less-than 6)
+	(can-build town-center)
+	(and (nand (goal strategy-heavy-castling 1)
+		(building-type-count castle < 1))
+		(nand (goal strategy-heavy-castling 2)
+		(building-type-count castle < 2)))
+=>
+	(build town-center)
+)
+
+(defrule
+	(wood-amount > 1000)
+	(building-type-count siege-workshop less-than 2)
+	(can-build siege-workshop)
+	(or (housing-headroom > 9)
+		(up-pending-objects c: house > 0))
+	(or (game-time > 300)
+		(building-type-count castle > 0))
+=>
+	(build siege-workshop)
+	(set-goal have-built-siege-workshop 1)
+)
+
+(defrule
+	(wood-amount > 1000)
+	(building-type-count archery-range > 2)
+	(building-type-count archery-range less-than 6)
+	(can-build archery-range)
+	(or (housing-headroom > 9)
+		(up-pending-objects c: house > 0))
+=>
+	(build archery-range)
+)
+(defrule
+	(wood-amount > 1000)
+	(building-type-count barracks less-than 6)
+	(building-type-count barracks > 2)
+	(can-build barracks)
+	(or (housing-headroom > 9)
+		(up-pending-objects c: house > 0))
+=>
+	(build barracks)
+)
+(defrule
+	(goal disable-melee-training 0)
+	(wood-amount > 1000)
+	(building-type-count stable > 2)
+	(building-type-count stable less-than 6)
+	(can-build stable)
+	(or (housing-headroom > 9)
+		(up-pending-objects c: house > 0))
+=>
+	(build stable)
+)
+
+(defrule
+  	(players-civ any-enemy korean) 
+	(goal enemy-dock-sighted 1)
+	(building-type-count bombard-tower < 10)
+	(stone-amount > 750)
+	(can-build bombard-tower)
+=>
+	(build bombard-tower)
+)
+
+
+; ---------------------------
+; ULTRABUILD LIST
+; FOR IF WE'RE SUPER LATEGAME
+; INSPIRED BY A MATCH BETWEEN DAUT AND NICOV
+; ---------------------------
+
+(defrule
+	(game-time > 3600)
+	(wood-amount > 4800)
+	(can-build archery-range)
+=>
+	(build archery-range)
+)
+
+(defrule
+	(game-time > 3600)
+	(wood-amount > 4800)
+	(can-build barracks)
+=>
+	(build barracks)
+)
+
+(defrule
+	(game-time > 3600)
+	(wood-amount > 4800)
+	(can-build stable)
+=>
+	(build stable)
+)
+
+; ---------------------------
+; MILITARY UNITS
+; ---------------------------
+
+(defrule
+	(unit-type-count trade-cart < 25)
+	(wood-amount > 1250)
+	(gold-amount < 1250)
+	(unit-type-count villager < 10)
+	(can-train trade-cart)
+=>
+	(train trade-cart)
+)
+(defrule
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(unit-type-count eagle-warrior-line < 25)
+	(food-amount > 500)
+	(gold-amount > 500)
+	(can-train eagle-warrior-line)
+	(goal have-barracks-counter 1)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train eagle-warrior-line)
+)
+(defrule
+	(goal disable-gold-training 0)
+	(unit-type-count missionary < 25)
+	(gold-amount > 500)
+	(can-train missionary)
+	(up-compare-goal church-train-count < 3) 
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train missionary)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count longboat-line < 25)
+	(food-amount > 500)
+	(gold-amount > 500)
+	(can-train longboat-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train longboat-line)
+)
+(defrule
+	(goal am-under-attack 0)
+	(unit-type-count my-unique-unit-line < 160)
+	(not (civ-selected persian))
+	(can-train my-unique-unit-line)
+	(food-amount > 4000)
+	(gold-amount > 2000)
+	(building-type-count castle > 3)
+	(goal have-castle-counter 1)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(goal am-under-attack 0)
+	(unit-type-count my-unique-unit-line < 80)
+	(civ-selected persian)
+	(can-train my-unique-unit-line)
+	(food-amount > 4000)
+	(gold-amount > 2000)
+	(building-type-count castle > 3)
+	(goal have-castle-counter 1)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(goal am-under-attack 0)
+	(unit-type-count battering-ram-line < 10)
+	(can-train battering-ram-line)
+	(gold-amount > 500)
+	(wood-amount > 500)
+	(goal have-siege-counter 1)
+	(game-time > 900)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train battering-ram-line)
+)
+(defrule
+	(unit-type-count mangonel-line < 3)
+	(can-train mangonel-line)
+	(wood-amount > 500)
+	(gold-amount > 500)
+	(goal have-siege-counter 1)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+(defrule
+	(goal save-for-town-center 0)
+	(unit-type-count demolition-ship-line < 10)
+	(wood-amount > 375)
+	(gold-amount > 2000)
+	(wood-amount > 8000)
+	(can-train demolition-ship-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train demolition-ship-line)
+)
+(defrule
+	(goal warship-training-disabled 0)
+	(unit-type-count fishing-ship < 13)
+	(wood-amount > 500)
+	(gold-amount > 500)
+	(can-train fishing-ship)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(food-amount < 5000)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fishing-ship)
+)
+
+;SECOND RUNTHROUGH
+
+(defrule
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(unit-type-count knight-line < 60)
+	(food-amount > 500)
+	(gold-amount > 500)
+	(can-train knight-line)
+	(goal have-stable-counter 1)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+)
+
+(defrule
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(not (current-age == castle-age))
+	(unit-type-count militiaman-line < 50)
+	(can-train militiaman-line)
+	(food-amount > 500)
+	(gold-amount > 500)
+	(goal have-barracks-counter 1)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+)
+
+(defrule
+	(goal disable-melee-training 0)
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(unit-type-count scout-cavalry-line < 5)
+	(can-train scout-cavalry-line)
+	(food-amount > 500)
+	(goal have-stable-counter 1)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+)
+(defrule
+	(goal disable-gold-training 0)
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(not (current-age == castle-age))
+	(unit-type-count archer-line < 75)
+	(goal have-archery-counter 1)
+	(can-train archer-line)
+	(gold-amount > 500)
+	(wood-amount > 500)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+)
+(defrule
+	(goal disable-melee-training 0)
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(not (current-age == castle-age))
+	(unit-type-count spearman-line < 75)
+	(goal have-barracks-counter 1)
+	(can-train spearman-line)
+	(food-amount > 500)
+	(wood-amount > 500)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+)
+(defrule
+	(not (current-age == dark-age))
+	(not (current-age == feudal-age))
+	(not (current-age == castle-age))
+	(unit-type-count skirmisher-line < 75)
+	(goal have-archery-counter 1)
+	(can-train skirmisher-line)
+	(food-amount > 500)
+	(wood-amount > 500)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+)
+(defrule
+	(unit-type-count my-unique-unit-line < 40)
+	(can-train my-unique-unit-line)
+	(goal have-castle-counter 1)
+	(food-amount > 500)
+	(gold-amount > 500)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train my-unique-unit-line)
+)
+
+(defrule
+	(unit-type-count trebuchet < 15)
+	(can-train trebuchet)
+	(goal have-castle-counter 1)
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train trebuchet)
+)
+
+(defrule
+	(goal disable-gold-training 0)
+	(unit-type-count monk < 38)
+	(can-train monk)
+	(gold-amount > 500)
+	(up-compare-goal church-train-count < 3) 
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+(defrule
+	(goal disable-gold-training 0)
+	(unit-type-count missionary < 50)
+	(gold-amount > 500)
+	(can-train missionary)
+	(up-compare-goal church-train-count < 3) 
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train missionary)
+)
+(defrule
+	(goal disable-gold-training 0)
+	(goal disable-melee-training 0)
+	(unit-type-count eagle-warrior-line < 50)
+	(food-amount > 500)
+	(gold-amount > 500)
+	(can-train eagle-warrior-line)
+	(goal have-barracks-counter 1)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train eagle-warrior-line)
+)
+(defrule
+	(unit-type-count longboat-line < 50)
+	(food-amount > 500)
+	(gold-amount > 500)
+	(can-train longboat-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train longboat-line)
+)
+(defrule
+	(unit-type-count turtle-ship-line < 50)
+	(food-amount > 500)
+	(gold-amount > 500)
+	(can-train turtle-ship-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train turtle-ship-line)
+)
+(defrule
+	(goal disable-gold-training 0)
+	(goal am-under-attack 0)
+	(unit-type-count scorpion-line < 20)
+	(can-train scorpion-line)
+	(gold-amount > 500)
+	(wood-amount > 500)
+	(goal have-siege-counter 1)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+)
+
+
+(defrule
+	(unit-type-count fire-ship-line < 40)
+	(wood-amount > 500)
+	(gold-amount > 500)
+	(can-train fire-ship-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+)
+(defrule
+	(unit-type-count galley-line < 40)
+	(wood-amount > 500)
+	(gold-amount > 500)
+	(can-train galley-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+)
+(defrule
+	(unit-type-count cannon-galleon-line < 40)
+	(wood-amount > 500)
+	(gold-amount > 500)
+	(can-train cannon-galleon-line)
+	(goal have-dock-counter 1)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+)
+
+; ---------------------------
+; ESCROW STUFF
+; ---------------------------
+; PROBLEM WITH ESCROW - GIVE UP
+
+(defrule
+	(escrow-amount wood > 1500)
+=>
+	(release-escrow wood)
+)
+(defrule
+	(escrow-amount stone > 1500)
+=>
+	(release-escrow stone)
+)
+(defrule
+	(escrow-amount food > 1500)
+=>
+	(release-escrow food)
+)
+(defrule
+	(escrow-amount gold > 1500)
+=>
+	(release-escrow gold)
+)
+
+; ---------------------------
+; SETTING ESCROW FOR CIV-SPECIFIC UNITS
+; ---------------------------
+;THIS WALL OF CODE FORCES THE AI TO GRAB THE IMPORTANT UPGRADES ASAP BY SAVING UP FOR THEM.
+;CAN BE OVERRIDDEN IF WE HAVE OTHER STRATEGIES ENABLED.
+;MAY BE OVERRIDDEN BY TOWN CENTER OR CASTLE CREATION.
+
+(defrule
+	(true)
+=>
+	(set-goal normalize-food-escrow 0)
+	(set-goal normalize-wood-escrow 0)
+	(set-goal normalize-gold-escrow 0)
+	(set-goal normalize-stone-escrow 0)
+)
+
+(defrule
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 1)
+	(food-amount < r1-food)
+=>
+	(set-escrow-percentage food 100)
+)
+(defrule
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 1)
+	(food-amount > r1-food)
+=>
+	(set-goal normalize-food-escrow 1)
+)
+(defrule
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 1)
+	(wood-amount < r1-wood)
+=>
+	(set-escrow-percentage wood 100)
+)
+(defrule
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 1)
+	(wood-amount > r1-wood)
+=>
+	(set-goal normalize-wood-escrow 1)
+)
+(defrule
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 1)
+	(gold-amount < r1-gold)
+=>
+	(set-escrow-percentage gold 100)
+)
+(defrule
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 1)
+	(gold-amount > r1-gold)
+=>
+	(set-goal normalize-gold-escrow 1)
+)
+(defrule
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 1)
+	(stone-amount < r1-stone)
+=>
+	(set-escrow-percentage stone 100)
+)
+(defrule
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 1)
+	(stone-amount > r1-stone)
+=>
+	(set-goal normalize-stone-escrow 1)
+)
+(defrule
+	(goal finished-imperial-unique 0)
+	(goal imperial-unique-goal 1)
+	(food-amount < r2-food)
+=>
+	(set-escrow-percentage food 100)
+)
+(defrule
+	(goal finished-imperial-unique 0)
+	(goal imperial-unique-goal 1)
+	(food-amount > r2-food)
+=>
+	(set-goal normalize-food-escrow 1)
+)
+(defrule
+	(goal finished-imperial-unique 0)
+	(goal imperial-unique-goal 1)
+	(wood-amount < r2-wood)
+=>
+	(set-escrow-percentage wood 100)
+)
+(defrule
+	(goal finished-imperial-unique 0)
+	(goal imperial-unique-goal 1)
+	(wood-amount > r2-wood)
+=>
+	(set-goal normalize-wood-escrow 1)
+)
+(defrule
+	(goal finished-imperial-unique 0)
+	(goal imperial-unique-goal 1)
+	(gold-amount < r2-gold)
+=>
+	(set-escrow-percentage gold 100)
+)
+(defrule
+	(goal finished-imperial-unique 0)
+	(goal imperial-unique-goal 1)
+	(gold-amount > r2-gold)
+=>
+	(set-goal normalize-gold-escrow 1)
+)
+(defrule
+	(goal finished-imperial-unique 0)
+	(goal imperial-unique-goal 1)
+	(stone-amount < r2-stone)
+=>
+	(set-escrow-percentage stone 100)
+)
+(defrule
+	(goal finished-imperial-unique 0)
+	(goal imperial-unique-goal 1)
+	(stone-amount > r2-stone)
+=>
+	(set-goal normalize-stone-escrow 1)
+)
+
+; ---------------------------
+; ESCROW NORMALIZATION, FOR IF WE'VE FINISHED SAVING UP
+; ---------------------------
+
+(defrule
+	(goal normalize-food-escrow 1)
+	(current-age == castle-age)
+=>
+	(set-escrow-percentage food 48)
+)
+(defrule
+	(goal normalize-wood-escrow 1)
+	(current-age == castle-age)
+=>
+	(set-escrow-percentage wood 18)
+)
+(defrule
+	(goal normalize-gold-escrow 1)
+	(current-age == castle-age)
+=>
+	(set-escrow-percentage gold 58)
+)
+(defrule
+	(goal normalize-stone-escrow 1)
+	(current-age == castle-age)
+=>
+	(set-escrow-percentage stone 14)
+)
+(defrule
+	(goal normalize-food-escrow 1)
+	(current-age == imperial-age)
+=>
+	(set-escrow-percentage food 45)
+)
+(defrule
+	(goal normalize-wood-escrow 1)
+	(current-age == imperial-age)
+=>
+	(set-escrow-percentage wood 15)
+)
+(defrule
+	(goal normalize-gold-escrow 1)
+	(current-age == imperial-age)
+=>
+	(set-escrow-percentage gold 45)
+)
+(defrule
+	(goal normalize-stone-escrow 1)
+	(current-age == imperial-age)
+=>
+	(set-escrow-percentage stone 15)
+)
+
+; ---------------------------
+; GENERAL ESCROW
+; ---------------------------
+
+(defrule
+	(current-age == dark-age)
+	(unit-type-count villager < 30)
+=>
+	(set-escrow-percentage wood 0)
+	(set-escrow-percentage food 0)
+	(set-escrow-percentage gold 0)
+	(set-escrow-percentage stone 0)
+)
+(defrule
+	(current-age == dark-age)
+	(unit-type-count villager > 30)
+=>
+	(set-escrow-percentage wood 20)
+	(set-escrow-percentage food 80)
+	(set-escrow-percentage gold 80)
+	(set-escrow-percentage stone 10)
+)
+(defrule
+	(current-age < castle-age)
+	(up-research-status c: feudal-age >= research-pending)
+	(unit-type-count villager < 60)
+	(or (building-type-count market > 0)
+		(game-time < 1200))
+=>
+	(set-escrow-percentage wood 5)
+	(set-escrow-percentage food 15)
+	(set-escrow-percentage gold 50)
+	(set-escrow-percentage stone 25)
+)
+(defrule
+	(current-age < castle-age)
+	(up-research-status c: feudal-age >= research-pending)
+	(unit-type-count villager < 60)
+	(or (building-type-count market < 1)
+		(game-time > 1200))
+=>
+	(set-escrow-percentage wood 80)
+	(set-escrow-percentage food 15)
+	(set-escrow-percentage gold 50)
+	(set-escrow-percentage stone 25)
+)
+(defrule
+	(current-age < castle-age)
+	(up-research-status c: feudal-age >= research-pending)
+	(or (unit-type-count villager > 60)
+		(and (players-current-age any-enemy > feudal-age)
+			(strategic-number sn-military-level < 4)))
+=>
+	(set-escrow-percentage wood 25)
+	(set-escrow-percentage food 85)
+	(set-escrow-percentage gold 85)
+	(set-escrow-percentage stone 12)
+)
+(defrule
+	(up-research-status c: castle-age < research-pending)
+	(up-research-status c: feudal-age >= research-pending)
+	(and (players-current-age any-enemy > feudal-age)
+		(strategic-number sn-military-level < 4))
+=>
+	(chat-local-to-self "Forcing a fast upgrade to castle")
+	(disable-self)
+)
+(defrule
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(current-age < imperial-age)
+	(up-research-status c: castle-age >= research-pending)
+	(unit-type-count villager < 80)
+=>
+	(set-escrow-percentage wood 5)
+	(set-escrow-percentage food 5)
+	(set-escrow-percentage gold 25)
+	(set-escrow-percentage stone 12)
+)
+(defrule
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(up-research-status c: imperial-age < research-pending)
+	(or	(and (up-research-status c: castle-age >= research-pending)
+			(unit-type-count villager > 120))
+		(and (current-age == feudal-age) 
+			(players-building-type-count any-enemy castle > 0)))
+=>
+	(set-escrow-percentage wood 30)
+	(set-escrow-percentage food 90)
+	(set-escrow-percentage gold 90)
+	(set-escrow-percentage stone 15)
+)
+(defrule
+	(goal strategy-improved-imperial 1)
+	(building-type-count-total town-center == 2)
+	(current-age < imperial-age)
+	(up-research-status c: castle-age >= research-pending)
+	(unit-type-count villager < 80)
+=>
+	(set-escrow-percentage food 33)
+	(set-escrow-percentage gold 47)
+)
+(defrule
+	(goal strategy-improved-imperial 1)
+	(building-type-count-total town-center == 3)
+	(current-age < imperial-age)
+	(up-research-status c: castle-age >= research-pending)
+	(unit-type-count villager < 80)
+=>
+	(set-escrow-percentage food 53)
+	(set-escrow-percentage gold 63)
+)
+(defrule
+	(goal strategy-improved-imperial 1)
+	(current-age < imperial-age)
+	(or	(and (up-research-status c: castle-age >= research-pending)
+			(unit-type-count villager > 120))
+		(and (current-age == feudal-age) 
+			(players-building-type-count any-enemy castle > 0)))
+=>
+	(set-escrow-percentage food 100)
+	(set-escrow-percentage gold 100)
+)
+(defrule
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(up-research-status c: imperial-age >= research-pending)
+	(not (research-completed my-unique-unit-upgrade))
+=>
+	(set-escrow-percentage wood 20)
+	(set-escrow-percentage food 56)
+	(set-escrow-percentage gold 56)
+	(set-escrow-percentage stone 10)
+)
+
+
+(defrule
+	(goal strategy-boom 1)
+	(current-age == castle-age)
+	(building-type-count-total town-center < 3)
+=>
+	(set-escrow-percentage wood 33)
+	(set-escrow-percentage stone 33)
+)
+
+; WHERE (RESEARCH USED TO BE
+; ---------------------------
+; MARKET STUFF
+; ---------------------------
+; FEUDAL
+
+(defrule
+	(current-age == feudal-age)
+	(gold-amount >= 500)
+	(wood-amount <= 100)
+	(commodity-buying-price wood <= 100)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity wood)
+=>
+	(chat-local-to-self "Wood panic")
+	(buy-commodity wood)
+)
+
+(defrule
+	(current-age == feudal-age)
+	(gold-amount >= 500)
+	(food-amount <= 100)
+	(commodity-buying-price food <= 100)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity food)
+=>
+	(chat-local-to-self "Food panic")
+	(buy-commodity food)
+)
+
+(defrule
+	(current-age == feudal-age)
+	(gold-amount >= 400)
+	(food-amount <= 800)
+	(commodity-buying-price food <= 125)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity food)
+=>
+	(chat-local-to-self "buying food for castle age")
+	(buy-commodity food)
+)
+
+(defrule
+	(current-age == feudal-age)
+	(gold-amount >= 300)
+	(food-amount <= 800)
+	(food-amount > 300)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity food)
+	(players-current-age any == castle-age)
+=>
+	(chat-local-to-self "Need to rise; getting food")
+	(buy-commodity food)
+)
+
+
+(defrule
+	(current-age == feudal-age)
+	(gold-amount >= 600)
+	(stone-amount <= 100)
+	(commodity-buying-price stone <= 200)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity stone)
+=>
+	(chat-local-to-self "need stone")
+	(buy-commodity stone)
+)
+
+(defrule
+	(current-age == feudal-age)
+	(wood-amount >= 500)
+	(or
+		(gold-amount < 100)
+		(food-amount < 100)
+	)
+	(commodity-selling-price wood >= 50)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity wood)
+=>
+	(chat-local-to-self "Gold panic; sell wood")
+	(sell-commodity wood)
+)
+
+
+
+(defrule
+	(current-age == feudal-age)
+	(food-amount >= 1000)
+	(or
+		(gold-amount < 100)
+		(wood-amount < 100)
+	)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity food)
+=>
+	(chat-local-to-self "excess food")
+	(sell-commodity food)
+)
+
+(defrule
+	(or (or (or (goal strategy-heavy-castling 0)
+		(current-age > castle-age))
+		(stone-amount >= 1600))
+		(building-type-count castle > 1))
+	(current-age == feudal-age)
+	(stone-amount >= 1000)
+	(or
+		(gold-amount < 100)
+		(wood-amount < 100)
+	)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity stone)
+=>
+	(chat-local-to-self "excess stone")
+	(sell-commodity stone)
+)
+
+; ---------------------------
+; CASTLE AGE
+; ---------------------------
+
+(defrule
+	(not (goal age-advancement 99))
+	(current-age == castle-age)
+	(gold-amount >= 1000)
+	(wood-amount <= 200)
+	(commodity-buying-price wood <= 100)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity wood)
+=>
+	(chat-local-to-self "Wood panic")
+	(buy-commodity wood)
+)
+
+(defrule
+	(not (goal age-advancement 99))
+	(current-age == castle-age)
+	(gold-amount >= 500)
+	(wood-amount <= 100)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity wood)
+=>
+	(chat-local-to-self "Wood panic")
+	(buy-commodity wood)
+)
+
+(defrule
+	(current-age == castle-age)
+	(gold-amount >= 1000)
+	(food-amount <= 200)
+	(commodity-buying-price food <= 100)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity food)
+=>
+	(chat-local-to-self "Food panic")
+	(buy-commodity food)
+)
+
+(defrule
+	(current-age == castle-age)
+	(gold-amount >= 500)
+	(food-amount <= 100)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity food)
+=>
+	(chat-local-to-self "Food panic")
+	(buy-commodity food)
+)
+
+(defrule
+	(current-age == castle-age)
+	(gold-amount >= 1200)
+	(stone-amount <= 200)
+	(commodity-buying-price stone <= 200)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity stone)
+=>
+	(chat-local-to-self "need stone")
+	(buy-commodity stone)
+)
+
+(defrule
+	(current-age == castle-age)
+	(wood-amount >= 1000)
+	(or
+		(gold-amount < 200)
+		(food-amount < 200)
+	)
+	(commodity-selling-price wood >= 25)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity wood)
+=>
+	(chat-local-to-self "Gold panic; sell wood")
+	(sell-commodity wood)
+)
+
+(defrule
+	(current-age == castle-age)
+	(food-amount >= 1200)
+	(or
+		(gold-amount < 200)
+		(wood-amount < 200)
+	)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity food)
+=>
+	(chat-local-to-self "excess food")
+	(sell-commodity food)
+)
+
+(defrule
+	(or (or (or (goal strategy-heavy-castling 0)
+		(current-age > castle-age))
+		(stone-amount >= 1600))
+		(building-type-count castle > 1))
+	(current-age == castle-age)
+	(stone-amount >= 1000)
+	(or
+		(gold-amount < 200)
+		(wood-amount < 200)
+	)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity stone)
+=>
+	(chat-local-to-self "excess stone")
+	(sell-commodity stone)
+)
+
+; ---------------------------
+; IMPERIAL AGE
+; ---------------------------
+
+(defrule
+	(gold-amount >= 1500)
+	(wood-amount <= 200)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity wood)
+=>
+	(chat-local-to-self "Wood panic")
+	(buy-commodity wood)
+)
+(defrule
+	(gold-amount >= 750)
+	(wood-amount <= 100)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity wood)
+=>
+	(chat-local-to-self "NO WOOD! ")
+	(buy-commodity wood)
+)
+(defrule
+	(gold-amount >= 1500)
+	(food-amount <= 200)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity food)
+=>
+	(chat-local-to-self "Food panic")
+	(buy-commodity food)
+)
+
+(defrule
+	(gold-amount >= 1500)
+	(stone-amount <= 200)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-buy-commodity stone)
+=>
+	(chat-local-to-self "need stone")
+	(buy-commodity stone)
+)
+
+(defrule
+	(wood-amount >= 1500)
+	(or
+		(gold-amount < 200)
+		(food-amount < 200)
+	)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity wood)
+	(or (or (goal am-under-attack 1)
+		(commodity-selling-price wood >= 20));why waste good resources?
+		(current-age != imperial-age))
+=>
+	(chat-local-to-self "Gold panic; sell wood")
+	(sell-commodity wood)
+)
+
+(defrule
+	(food-amount >= 1500)
+	(or
+		(gold-amount < 200)
+		(wood-amount < 200)
+	)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity food)
+	(or (or (goal am-under-attack 1)
+		(commodity-selling-price food >= 20));why waste good resources?
+		(current-age != imperial-age))
+=>
+	(chat-local-to-self "excess food")
+	(sell-commodity food)
+)
+
+(defrule
+	(or (or (or (goal strategy-heavy-castling 0)
+		(current-age > castle-age))
+		(stone-amount >= 1600))
+		(building-type-count castle > 1))
+	(stone-amount >= 1500)
+	(or
+		(or
+			(gold-amount < 200)
+			(wood-amount < 200)
+		)
+		(food-amount < 200)
+	)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity stone)
+=>
+	(chat-local-to-self "excess stone")
+	(sell-commodity stone)
+)
+
+(defrule
+	(or (or (or (goal strategy-heavy-castling 0)
+		(current-age > castle-age))
+		(stone-amount >= 1600))
+		(building-type-count castle > 1))
+	(stone-amount > 1000)
+	(gold-amount < 1000)
+	(commodity-selling-price stone >= 75)
+=>
+	(sell-commodity stone)
+)
+
+(defrule
+	(wood-amount > 1000)
+	(gold-amount < 1000)
+	(commodity-selling-price wood >= 75)
+=>
+	(sell-commodity wood)
+)
+(defrule
+	(food-amount > 1500)
+	(gold-amount < 1000)
+	(commodity-selling-price food >= 75)
+=>
+	(sell-commodity food)
+)
+(defrule
+	(gold-amount > 1000)
+	(food-amount < 1000)
+	(commodity-buying-price food <= 125)
+=>
+	(buy-commodity food)
+)
+(defrule
+	(gold-amount > 1000)
+	(wood-amount < 1000)
+	(commodity-buying-price wood <= 125)
+=>
+	(buy-commodity wood)
+)
+(defrule
+	(gold-amount > 1000)
+	(stone-amount < 1000)
+	(commodity-buying-price stone <= 125)
+=>
+	(buy-commodity stone)
+)
+(defrule
+	(current-age == imperial-age)
+	(research-completed my-unique-unit-upgrade)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+)
+
+(defrule
+	(game-time > 3600)
+	(wood-amount > 6000)
+	(gold-amount < 1000)
+=>
+	(sell-commodity wood)
+)
+
+(defrule
+	(game-time > 3600)
+	(food-amount > 6000)
+	(gold-amount < 1000)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity food)
+=>
+	(sell-commodity food)
+)
+
+(defrule
+	(or (or (or (goal strategy-heavy-castling 0)
+		(current-age > castle-age))
+		(stone-amount >= 1600))
+		(building-type-count castle > 1))
+	(goal strategy-stone-for-gold 1)
+	(or (current-age == feudal-age)
+		(or (and (current-age == castle-age)
+				(building-type-count castle >= 1))
+			(and (current-age == castle-age)
+				(strategic-number sn-military-level < 5))))
+	(stone-amount > 150)
+	(gold-amount < 800)
+	(commodity-selling-price stone >= 75)
+	(goal castle-unique-goal 0)
+	(goal imperial-unique-goal 0)
+	(can-sell-commodity stone)
+=>
+	(sell-commodity stone)
+	(chat-local-to-self "Transmuting gold, the Saracen way.")
+)
+
+;TOWN UNDER ATTACK
+
+(defrule
+	(goal am-under-attack 0)
+	(players-military-population any-enemy > 1)
+	(town-under-attack)
+=>
+	(set-goal am-under-attack 2)
+	(enable-timer under-attack-timer 30)
+)
+
+(defrule
+	(timer-triggered under-attack-timer)
+	(up-compare-goal am-under-attack != 0)
+	(town-under-attack)
+=>
+	(set-goal am-under-attack 1)
+	(disable-timer under-attack-timer)
+	(enable-timer under-attack-timer 30)
+)
+
+(defrule
+	(timer-triggered under-attack-timer)
+	(up-compare-goal am-under-attack != 0)
+	(not (town-under-attack))
+=>
+	(set-goal am-under-attack 0)
+	(disable-timer under-attack-timer)
+)
+
+(defrule
+	(goal am-under-attack 1)
+	(game-time > 450)
+=>
+	(set-strategic-number sn-defer-dropsite-update 1)
+	(set-strategic-number sn-task-ungrouped-soldiers 1)
+	(set-strategic-number sn-maximum-hunt-drop-distance 0);stop hunting - farm instead
+	(set-goal attack-cycle 2);Normal Explorers
+	(set-goal 2 7);Town has been attacked
+	(set-goal 8 1);Enable Vengance Request
+)
+
+(defrule
+	(goal am-under-attack 1)
+	(food-amount < 50)
+=>
+	(release-escrow food)
+)
+
+(defrule
+	(goal am-under-attack 1)
+	(wood-amount < 50)
+=>
+	(release-escrow wood)
+)
+
+(defrule
+	(goal am-under-attack 1)
+	(gold-amount < 50)
+=>
+	(release-escrow gold)
+)
+
+(defrule
+	(goal am-under-attack 0)
+	(game-time > 450)
+	(timer-triggered one-minute-timer)
+	(strategic-number sn-maximum-hunt-drop-distance < 10)
+=>
+	(set-strategic-number sn-maximum-hunt-drop-distance 30);decide that hunting is okay again
+)
+
+;(defrule
+;	(or
+;		(and
+;			(game-time > 1000)
+;			(food-amount > 1000)
+;		)
+;		(and
+;			(game-time > 2000)
+;			(food-amount < 1000)
+;		))
+;	(up-compare-goal current-town-size < 50)
+;=>
+;	(set-strategic-number sn-maximum-town-size 50)
+;	(set-goal current-town-size 50)
+;	(disable-self)
+;)
+;(defrule
+;	(or
+;		(and
+;			(game-time > 2000)
+;			(food-amount > 1000)
+;		)
+;		(and
+;			(game-time > 4000)
+;			(food-amount < 1000)
+;		))
+;	(up-compare-goal current-town-size < 80)
+;=>
+;	(set-strategic-number sn-maximum-town-size 80)
+;	(set-goal current-town-size 80)
+;	(disable-self)
+;)
+;removed for test
+
+(defrule
+	(goal 8 1);Town was under attack
+	(goal am-under-attack 0)
+        	(players-military-population any-ally > 24)
+	
+=>
+	(set-strategic-number sn-defer-dropsite-update 0)
+	(set-goal 8 2);Disable Vengance Request
+)
+
+;;;Scenario added
+
+(defrule
+	(or
+		(military-population >= 24)
+		(game-time >= 600)
+	)
+	(up-compare-goal current-town-size < 30)
+=>
+	(up-modify-sn sn-maximum-town-size c:+ 5)
+	(up-modify-goal current-town-size c:+ 5)
+	(disable-self)
+)
+(defrule
+	(or
+		(military-population >= 48)
+		(game-time >= 1200)
+	)
+	(up-compare-goal current-town-size < 35)
+=>
+	(up-modify-sn sn-maximum-town-size c:+ 5)
+	(up-modify-goal current-town-size c:+ 5)
+	(disable-self)
+)
+(defrule
+	(or
+		(military-population >= 72)
+		(game-time >= 1800)
+	)
+	(up-compare-goal current-town-size < 40)
+=>
+	(up-modify-sn sn-maximum-town-size c:+ 5)
+	(up-modify-goal current-town-size c:+ 5)
+	(disable-self)
+)
+(defrule
+	(or
+		(military-population >= 96)
+		(game-time >= 2400)
+	)
+	(up-compare-goal current-town-size < 45)
+=>
+	(up-modify-sn sn-maximum-town-size c:+ 5)
+	(up-modify-goal current-town-size c:+ 5)
+	(disable-self)
+)
+(defrule
+	(or
+		(military-population >= 120)
+		(game-time >= 2800)
+	)
+	(up-compare-goal current-town-size < 50)
+=>
+	(up-modify-sn sn-maximum-town-size c:+ 5)
+	(up-modify-goal current-town-size c:+ 5)
+	(disable-self)
+)
+(defrule
+	(military-population >= 140)
+	(up-compare-goal current-town-size < 55)
+=>
+	(up-modify-sn sn-maximum-town-size c:+ 5)
+	(up-modify-goal current-town-size c:+ 5)
+	(disable-self)
+)
+(defrule
+	(military-population >= 160)
+	(up-compare-goal current-town-size < 60)
+=>
+	(up-modify-sn sn-maximum-town-size c:+ 5)
+	(up-modify-goal current-town-size c:+ 5)
+	(disable-self)
+)
+(defrule
+	(military-population >= 180)
+	(up-compare-goal current-town-size < 65)
+=>
+	(up-modify-sn sn-maximum-town-size c:+ 5)
+	(up-modify-goal current-town-size c:+ 5)
+	(disable-self)
+)
+(defrule
+	(military-population >= 200)
+	(up-compare-goal current-town-size < 70)
+=>
+	(up-modify-sn sn-maximum-town-size c:+ 5)
+	(up-modify-goal current-town-size c:+ 5)
+	(disable-self)
+)
+
+; ---------------------------
+; STANCES
+; ---------------------------
+
+(defrule;e to n
+	(players-stance any-enemy neutral)
+=>
+	(chat-to-player this-any-enemy "This will benefit both of us.")
+	(set-stance this-any-enemy neutral)
+)
+(defrule
+	(players-stance any-neutral ally)
+=>
+	(chat-to-player this-any-neutral "You will not regret your decision.")
+	(set-stance this-any-neutral ally)
+)
+(defrule
+	(players-stance any-neutral enemy)
+=>
+	(chat-to-player this-any-neutral "I regret that it must be this way.")
+	(set-stance this-any-neutral enemy)
+	(chat-to-allies "31")
+	(chat-to-allies "Time to even the odds.")
+	(set-goal attack-stage 1)
+	(set-goal first-attack 2)
+)
+(defrule
+	(players-stance any-ally enemy)
+=>
+	(chat-to-player this-any-ally "Traitor! Prepare to regret your decision.")
+	(set-stance this-any-ally enemy)
+	(chat-to-allies "31")
+	(chat-to-allies "Friends! Destroy the traitors among us.")
+	(set-goal attack-stage 1)
+	(set-goal first-attack 2)
+)
+(defrule
+	(taunt-detected any-ally 31)
+	(goal gathering-stuff 1)
+=>
+	(set-goal gathering-stuff 2)
+	(enable-timer attack-timer 300)
+)	
+(defrule
+	(taunt-detected any-ally 31)
+	(goal am-under-attack 0)
+	(military-population > 12)
+=>
+	(acknowledge-taunt this-any-ally 31)
+	(set-goal attack-stage 1)
+	(set-goal first-attack 2)
+	(chat-to-player this-any-ally "Behold the power of ElonUncle!")
+)
+(defrule
+	(taunt-detected any-ally 31)
+	(military-population < 24)
+	(goal am-under-attack 1)
+=>
+	(acknowledge-taunt this-any-ally 31)
+	(chat-to-player this-any-ally "I've got my own problems to worry about.")
+)
+(defrule
+	(taunt-detected any-ally 31)
+	(goal am-under-attack 1)
+	(military-population > 24)
+=>
+	(acknowledge-taunt this-any-ally 31)
+	(chat-to-player this-any-ally "I can't! I'm under attack!")
+)
+(defrule
+	(taunt-detected any-ally 31)
+	(military-population < 13)
+	(goal am-under-attack 0)
+=>
+	(acknowledge-taunt this-any-ally 31)
+	(chat-to-player this-any-ally "I'll come as soon as I can.")
+)
+(defrule
+	(players-stance any-ally neutral)
+=>
+	(chat-to-player this-any-ally "You are making a foolish decision.")
+	(set-stance this-any-ally enemy)
+	(chat-to-allies "Help! My allies are plotting against me!")
+	(chat-to-allies "31")
+	(set-goal attack-stage 1)
+	(set-goal first-attack 2)
+)
+
+; ---------------------------
+; MIGRATION
+; ---------------------------
+
+(defrule
+	(population > 25)
+	(unit-type-count transport-ship > 0)
+	(unit-type-count fishing-ship > 0)
+	(building-type-count town-center < 3)
+	(can-build town-center)
+=>
+	(build-forward town-center)
+)
+(defrule
+	(population > 25)
+	(building-type-count castle < 7)
+	(building-type-count castle > 3)
+	(can-build-with-escrow castle)
+=>
+	(release-escrow stone)
+	(build-forward castle)
+)
+
+; ---------------------------
+; TRIBUTE
+; ---------------------------
+
+(defrule
+	(timer-triggered 5)
+	(food-amount > 1000)
+        	(players-population any-ally > 10)
+=>
+	(tribute-to-player every-ally food 100)
+	(chat-to-allies "Here is some food.")
+)
+(defrule
+	(timer-triggered 5)
+	(wood-amount > 1000)
+        	(players-population any-ally > 10)
+=>
+	(tribute-to-player every-ally wood 100)
+	(chat-to-allies "Here is some wood.")
+)
+(defrule
+	(timer-triggered 5)
+	(gold-amount > 1000)
+        	(players-population any-ally > 10)
+=>
+	(tribute-to-player every-ally gold 100)
+	(chat-to-allies "Here is some gold.")
+)	
+(defrule
+	(timer-triggered 5)
+	(stone-amount > 1000)
+        	(players-population any-ally > 10)
+=>
+	(tribute-to-player every-ally stone 100)
+	(chat-to-allies "Here is some stone.")
+)	
+(defrule
+	(timer-triggered 5)
+=>
+	(disable-timer 5)
+	(enable-timer 5 300)
+)
+(defrule
+	(game-time > 7200)
+	(military-population > 75)
+        	(players-population every-enemy < 25)
+=>
+	(chat-to-enemies "You play two hours to die like this?")
+	(chat-to-allies "Let's finish this.")
+	(chat-to-allies "31")
+	(set-goal attack-stage 1)
+	(set-goal first-attack 2)
+	(disable-self)
+)
+(defrule
+	(wall-completed-percentage 2 > 66)
+=>
+	(enable-wall-placement 2)
+	(disable-self)
+)
+(defrule
+	(or (goal strategy-boom 1)
+		(wall-completed-percentage 1 > 66))
+=>
+	(enable-wall-placement 1)
+	(disable-self)
+)
+
+; ---------------------------
+; TRIBUTE REQUESTS
+; ---------------------------
+
+(defrule
+	(taunt-detected any-ally 3)
+	(food-amount > 200)
+	(building-type-count market > 0)
+	(players-tribute my-player-number food < 2500)
+=>
+	(acknowledge-taunt this-any-ally 3)
+	(tribute-to-player this-any-ally food 200)
+	(chat-to-player this-any-ally "Now go build an army.")
+)
+(defrule
+	(taunt-detected any-ally 3)
+	(food-amount > 200)
+	(building-type-count market > 0)
+	(players-tribute my-player-number food >= 2500)
+	(players-tribute my-player-number food < 5000)
+=>
+	(acknowledge-taunt this-any-ally 3)
+	(tribute-to-player this-any-ally food 100)
+	(chat-to-player this-any-ally "You SHOULD have enough food already.")
+)
+(defrule
+	(taunt-detected any-ally 3)
+	(building-type-count market > 0)
+	(players-tribute my-player-number food >= 5000)
+=>
+	(acknowledge-taunt this-any-ally 3)
+	(chat-to-player this-any-ally "I've given you enough food.")
+)
+(defrule
+	(taunt-detected any-ally 3)
+	(or
+		(food-amount < 200)
+		(building-type-count market > 0)
+	)
+=>
+	(acknowledge-taunt this-any-ally 3)
+	(chat-to-player this-any-ally "I apologize. I am low on food.")
+)
+
+(defrule
+	(taunt-detected any-ally 4)
+	(wood-amount > 200)
+	(building-type-count market > 0)
+	(players-tribute my-player-number wood < 2500)
+=>
+	(acknowledge-taunt this-any-ally 4)
+	(tribute-to-player this-any-ally wood 200)
+	(chat-to-player this-any-ally "Now go build a city.")
+)
+(defrule
+	(taunt-detected any-ally 4)
+	(wood-amount > 200)
+	(building-type-count market > 0)
+	(players-tribute my-player-number wood >= 2500)
+	(players-tribute my-player-number wood < 5000)
+=>
+	(acknowledge-taunt this-any-ally 4)
+	(tribute-to-player this-any-ally wood 100)
+	(chat-to-player this-any-ally "You SHOULD have enough wood already.")
+)
+(defrule
+	(taunt-detected any-ally 4)
+	(building-type-count market > 0)
+	(players-tribute my-player-number wood >= 5000)
+=>
+	(acknowledge-taunt this-any-ally 4)
+	(chat-to-player this-any-ally "I've given you enough wood.")
+)
+(defrule
+	(taunt-detected any-ally 4)
+	(or
+		(wood-amount < 200)
+		(building-type-count market > 0)
+	)
+=>
+	(acknowledge-taunt this-any-ally 4)
+	(chat-to-player this-any-ally "I apologize. I am low on wood.")
+)
+
+(defrule
+	(taunt-detected any-ally 5)
+	(gold-amount > 400)
+	(building-type-count market > 0)
+	(players-tribute my-player-number gold < 2500)
+=>
+	(acknowledge-taunt this-any-ally 5)
+	(tribute-to-player this-any-ally gold 200)
+	(chat-to-player this-any-ally "Don't spend it all in one place.")
+)
+(defrule
+	(taunt-detected any-ally 5)
+	(gold-amount > 400)
+	(building-type-count market > 0)
+	(players-tribute my-player-number gold >= 2500)
+	(players-tribute my-player-number gold < 5000)
+=>
+	(acknowledge-taunt this-any-ally 5)
+	(tribute-to-player this-any-ally gold 100)
+	(chat-to-player this-any-ally "You SHOULD have enough gold already.")
+)
+(defrule
+	(taunt-detected any-ally 5)
+	(building-type-count market > 0)
+	(players-tribute my-player-number food >= 5000)
+=>
+	(acknowledge-taunt this-any-ally 5)
+	(chat-to-player this-any-ally "I've given you enough gold.")
+)
+(defrule
+	(taunt-detected any-ally 5)
+	(or
+		(gold-amount < 400)
+		(building-type-count market > 0)
+	)
+=>
+	(acknowledge-taunt this-any-ally 5)
+	(chat-to-player this-any-ally "I apologize. I am low on gold.")
+)
+
+(defrule
+	(taunt-detected any-ally 6)
+	(stone-amount > 800)
+	(building-type-count market > 0)
+	(players-tribute my-player-number stone < 2500) 
+=>
+	(acknowledge-taunt this-any-ally 6)
+	(tribute-to-player this-any-ally stone 200)
+	(chat-to-player this-any-ally "Now go build a castle.")
+)
+(defrule
+	(taunt-detected any-ally 6)
+	(stone-amount > 800)
+	(building-type-count market > 0)
+	(players-tribute my-player-number stone >= 2500)
+	(players-tribute my-player-number stone < 5000)
+=>
+	(acknowledge-taunt this-any-ally 6)
+	(tribute-to-player this-any-ally stone 100)
+	(chat-to-player this-any-ally "You SHOULD have enough stone already.")
+)
+(defrule
+	(taunt-detected any-ally 6)
+	(players-tribute my-player-number stone >= 5000)
+	(building-type-count market > 0)
+=>
+	(acknowledge-taunt this-any-ally 6)
+	(chat-to-player this-any-ally "I've given you enough stone.")
+)
+(defrule
+	(taunt-detected any-ally 6)
+	(or
+		(stone-amount < 800)
+		(building-type-count market > 0)
+	)
+=>
+	(acknowledge-taunt this-any-ally 6)
+	(chat-to-player this-any-ally "I apologize. I am low on stone.")
+)
+;
+
+; ---------------------------
+; Gather tweaks
+; ---------------------------
+
+(load "ElonUncle/gather_tweaks")
+
+(defrule
+	(timer-triggered one-minute-timer)
+=>
+	(disable-timer one-minute-timer)
+	(enable-timer one-minute-timer 60)
+)

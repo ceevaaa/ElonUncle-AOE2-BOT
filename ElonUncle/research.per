@@ -1,0 +1,2229 @@
+
+(defrule
+	(current-age > imperial-age)
+=>
+	(set-goal age-advancement 0)
+)
+
+;murder holes is fucking important if we're under attack
+(defrule
+	(goal am-under-attack 1)
+	(up-research-status c: ri-murder-holes < research-pending)
+	(food-amount < 200)
+	(gold-amount > 200)
+	(stone-amount > 100)
+=>
+	(buy-commodity food)
+	(research ri-murder-holes)
+)
+
+(defrule
+	(goal am-under-attack 1)
+	(up-research-status c: ri-murder-holes < research-pending)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(stone-amount < 100)
+=>
+	(buy-commodity stone)
+	(research ri-murder-holes)
+)
+
+(defrule
+	(goal am-under-attack 1)
+	(up-research-status c: ri-murder-holes < research-pending)
+	(food-amount < 200)
+	(gold-amount > 300)
+	(stone-amount < 100)
+=>
+	(buy-commodity food)
+	(buy-commodity stone)
+	(research ri-murder-holes)
+)
+
+;UNIT UPGRADES
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or (unit-type-count villager > 5)
+		(housing-headroom == 0))
+	(can-research ri-loom)
+=>
+	(research ri-loom)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-hand-cart)
+=>
+	(research ri-hand-cart)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-wheel-barrow)
+=>
+	(research ri-wheel-barrow)
+)
+
+
+(defrule	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-cartography)
+=>
+    	(research ri-cartography)
+	(chat-local-to-self "I can see it now...")
+	(chat-to-allies "Researching Cartography.")
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(building-type-count castle > 0)
+		(building-type-count watch-tower-line > 2)
+	)
+	(can-research ri-murder-holes)
+=>
+	(research ri-murder-holes)
+)
+(defrule	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-town-patrol)
+=>
+    	(research ri-town-patrol)
+)
+(defrule	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-town-watch)
+=>
+    	(research ri-town-watch)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research my-unique-unit-upgrade)
+=>
+	(research my-unique-unit-upgrade)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count militiaman > 2)
+	(can-research ri-man-at-arms)
+=>
+	(research ri-man-at-arms)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count man-at-arms > 2)
+	(can-research ri-long-swordsman)
+=>
+     	 (research ri-long-swordsman)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count long-swordsman > 3)
+	(can-research ri-two-handed-swordsman)
+=>
+      (research ri-two-handed-swordsman)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count two-handed-swordsman > 3)
+	(can-research ri-champion)
+=>
+      (research ri-champion)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count spearman > 3)
+	(can-research ri-pikeman)
+=>
+      (research ri-pikeman)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count spearman-line > 3)
+	(can-research ri-halberdier)
+=>
+      (research ri-halberdier)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count scout-cavalry > 4)
+	(can-research ri-light-cavalry)
+=>
+	(research ri-light-cavalry)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count camel > 4)
+	(can-research ri-heavy-camel)
+=>
+      (research ri-heavy-camel)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+      (unit-type-count knight > 4)
+	(can-research ri-cavalier)
+=>
+      (research ri-cavalier)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+      (unit-type-count cavalier > 4)
+	(can-research ri-paladin)
+=>
+    (research ri-paladin)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-thumb-ring)
+=>
+    (research ri-thumb-ring)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count archer > 2)
+	(can-research ri-crossbow)
+=>
+    (research ri-crossbow)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count crossbowman > 2)
+	(can-research ri-arbalest)
+=>
+    (research ri-arbalest)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count cavalry-archer > 2)
+	(can-research ri-heavy-cavalry-archer)
+=>
+    (research ri-heavy-cavalry-archer)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count skirmisher > 2)
+	(can-research ri-elite-skirmisher)
+=>
+    (research ri-elite-skirmisher)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count skirmisher > 2)
+	(can-research ri-imperial-skirmisher)
+=>
+    (research ri-imperial-skirmisher)
+)
+
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count scorpion > 2)
+	(can-research ri-heavy-scorpion)
+=>
+    (research ri-heavy-scorpion)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+      (unit-type-count battering-ram > 2)
+	(can-research ri-capped-ram)
+=>
+    (research ri-capped-ram)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+      (unit-type-count capped-ram > 2)
+	(can-research ri-siege-ram)
+=>
+    (research ri-siege-ram)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count mangonel-line > 1)
+	(can-research ri-onager)
+=>
+      (research ri-onager)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+      (unit-type-count onager > 1)
+	(can-research ri-siege-onager)
+=>
+    (research ri-siege-onager)
+)
+
+;DOCK UNITS
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count galley > 2)
+	(can-research ri-war-galley)
+=>
+    (research ri-war-galley)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count war-galley > 2)
+	(can-research ri-galleon)
+=>
+    (research ri-galleon)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count galleon > 2)
+		(unit-type-count war-galley > 2)
+	)
+	(can-research ri-cannon-galleon)
+=>
+      (research ri-cannon-galleon)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count fire-ship > 1)
+	(can-research ri-fast-fire-ship)
+=>
+    (research ri-fast-fire-ship)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count demolition-ship > 2)
+	(can-research ri-heavy-demolition-ship)
+=>
+    (research ri-heavy-demolition-ship)
+)
+
+; ======= WEAPONS =======
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or (or (or (unit-type-count militiaman-line > 5)
+		(unit-type-count spearman-line > 5))
+		(unit-type-count scout-cavalry-line > 5))
+		(unit-type-count knight-line > 5))
+	(can-research ri-forging)
+=>
+     (research ri-forging)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or (or (or (unit-type-count militiaman-line > 5)
+		(unit-type-count spearman-line > 5))
+		(unit-type-count scout-cavalry-line > 5))
+		(unit-type-count knight-line > 5))
+	(can-research ri-iron-casting)
+=>
+	(research ri-iron-casting)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or (or (or (unit-type-count militiaman-line > 5)
+		(unit-type-count spearman-line > 5))
+		(unit-type-count scout-cavalry-line > 5))
+		(unit-type-count knight-line > 5))
+	(can-research ri-blast-furnace)
+=>
+	(research ri-blast-furnace)
+)
+
+;======= ARCHER UPGRADES =======
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or (or (unit-type-count archer-line > 5)
+		(unit-type-count skirmisher-line > 5))
+		(unit-type-count cavalry-archer-line > 5))
+	(can-research ri-fletching)
+=>
+	(research ri-fletching)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or (or (unit-type-count archer-line > 5)
+		(unit-type-count skirmisher-line > 5))
+		(unit-type-count cavalry-archer-line > 5))
+	(can-research ri-bodkin-arrow)
+=>
+	(research ri-bodkin-arrow)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or (or (unit-type-count archer-line > 5)
+		(unit-type-count skirmisher-line > 5))
+		(unit-type-count cavalry-archer-line > 5))
+	(can-research ri-bracer)
+=>
+	(research ri-bracer)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count archer-line > 3)
+		(or
+			(unit-type-count skirmisher-line > 3)
+			(unit-type-count cavalry-archer-line > 3)
+		)
+	)
+	(can-research ri-padded-archer-armor)
+=>
+	(research ri-padded-archer-armor)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count archer-line > 3)
+		(or
+			(unit-type-count skirmisher-line > 3)
+			(unit-type-count cavalry-archer-line > 3)
+		)
+	)
+	(can-research ri-leather-archer-armor)
+=>
+	(research ri-leather-archer-armor)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count archer-line > 3)
+		(or
+			(unit-type-count skirmisher-line > 3)
+			(unit-type-count cavalry-archer-line > 3)
+		)
+	)
+	(can-research ri-ring-archer-armor)
+=>
+	(research ri-ring-archer-armor)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count militiaman-line > 3)
+		(unit-type-count spearman-line > 3)
+	)
+	(can-research ri-scale-mail)
+=>
+	(research ri-scale-mail)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or	(unit-type-count militiaman-line > 3)
+		(unit-type-count spearman-line > 3)
+	)
+	(can-research ri-chain-mail)
+=>
+	(research ri-chain-mail)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count militiaman-line > 3)
+		(unit-type-count spearman-line > 3)
+	)
+	(can-research ri-plate-mail)
+=>
+	(research ri-plate-mail)
+)
+
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count militiaman-line > 3)
+		(unit-type-count spearman-line > 3)
+	)
+	(can-research ri-tracking)
+=>
+	(research ri-tracking)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count militiaman-line > 3)
+		(unit-type-count spearman-line > 3)
+	)
+	(can-research ri-squires)
+=>
+	(research ri-squires)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count knight-line > 3)
+		(unit-type-count scout-cavalry-line > 3)
+	)
+	(can-research ri-scale-barding)
+=>
+	(research ri-scale-barding)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count knight-line > 3)
+		(unit-type-count scout-cavalry-line > 3)
+	)
+	(can-research ri-chain-barding)
+=>
+	(research ri-chain-barding)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count knight-line > 3)
+		(unit-type-count scout-cavalry-line > 3)
+	)
+	(can-research ri-plate-barding)
+=>
+	(research ri-plate-barding)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count cavalry-archer-line > 3)
+		(or
+			(unit-type-count knight-line > 3)
+			(unit-type-count scout-cavalry-line > 3)
+		)
+	)
+	(can-research ri-husbandry)
+=>
+	(research ri-husbandry)
+)
+
+; ======= SIEGE RESEARCH ITEMS =======
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-siege-engineers)
+=>
+	(research ri-siege-engineers)
+)
+
+;======= FORTRESS UPGRADES ======= 
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-hoardings)
+=>
+	(research ri-hoardings)
+)
+
+;======= SHIPS =======
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count cannon-galleon > 2)
+	(can-research ri-deck-guns)
+=>
+	(research ri-deck-guns)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count transport-ship > 0)
+		(unit-type-count galley-line > 2)
+	)
+	(can-research ri-careening)
+=>
+	(research ri-careening)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count transport-ship > 0)
+		(unit-type-count galley-line > 2)
+	)
+	(can-research ri-dry-dock)
+=>
+	(research ri-dry-dock)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count galley-line > 2)
+		(or
+			(unit-type-count cannon-galleon-line > 1)
+			(unit-type-count fire-ship-line > 1)
+		)
+	)
+	(can-research ri-shipwright)
+=>
+	(research ri-shipwright)
+)
+
+;======= OTHER RESEARCH ITEMS =======
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-ballistics)
+=>
+	(research ri-ballistics)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-chemistry)
+=>
+	(research ri-chemistry)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-parthian-tactics)
+=>
+	(research ri-parthian-tactics)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-conscription)
+=>
+	(research ri-conscription)
+)
+
+
+
+; ======= ECONOMIC =======
+
+;mining-camp items
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-gold-mining)
+=>
+	(research ri-gold-mining)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-bloodlines)
+    (or (unit-type-count-total knight-line > 2)
+		(unit-type-count-total scout-cavalry-line > 2))
+=>
+	(research ri-bloodlines)
+)
+
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-gold-shaft-mining)
+=>
+	(research ri-gold-shaft-mining)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(current-age > feudal-age)
+	(building-type-count mining-camp > 1)
+	(can-research ri-stone-mining)
+=>
+	(research ri-stone-mining)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count mining-camp > 1)
+	(can-research ri-stone-shaft-mining)
+=>
+	(research ri-stone-shaft-mining)
+)
+
+; ======= MILL ITEMS =======
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-horse-collar)
+=>
+	(research ri-horse-collar)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-heavy-plow)
+=>
+	(research ri-heavy-plow)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	
+	(can-research ri-crop-rotation)
+=>
+	(research ri-crop-rotation)
+)
+
+; ======= SAW MILL =======
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-double-bit-axe)
+=>
+	(research ri-double-bit-axe)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-bow-saw)
+=>
+	(research ri-bow-saw)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-two-man-saw)
+=>
+	(research ri-two-man-saw)
+)
+
+; ======= UNIVERSITY STUFF =======
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-masonry)
+=>
+	(research ri-masonry)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-arson)
+=>
+	(research ri-arson)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-architecture)
+=>
+	(research ri-architecture)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-stonecutting)
+=>
+	(research ri-stonecutting)
+)
+
+; ======= MARKET & TOWN CENTER =======
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-guilds)
+=>
+	(research ri-guilds)
+)
+
+
+
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(players-stance any-computer ally)
+		(players-stance any-human ally)
+	)
+	(can-research ri-coinage)
+=>
+	(research ri-coinage)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(players-stance any-computer ally)
+		(players-stance any-human ally)
+	)
+	(can-research ri-banking)
+=>
+	(research ri-banking)
+)
+
+; ======= MONK =======
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(players-unit-type-count any-enemy monk > 1)
+                (unit-type-count war-elephant-line > 2)
+	)
+	(can-research ri-faith)
+=>
+	(research ri-faith)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+        (players-unit-type-count any-enemy monk > 2)
+	(can-research ri-atonement)
+=>
+	(research ri-atonement)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count monk > 2)
+	(can-research ri-block-printing)
+=>
+	(research ri-block-printing)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count monk > 2)
+	(can-research ri-illumination)
+=>
+	(research ri-illumination)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count monk > 2)
+	(can-research ri-fervor)
+=>
+	(research ri-fervor)
+)
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count monk > 2)
+	(can-research 441);herbal medicine, took me a while to find this one
+=>
+	(research 441)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count monk > 2)
+	(can-research ri-redemption)
+=>
+	(research ri-redemption)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count monk > 2)
+	(can-research ri-sanctity)
+=>
+	(research ri-sanctity)
+)
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count monk > 2)
+	(can-research ri-theocracy)
+=>
+	(research ri-theocracy)
+)
+
+; ======= TOWERS =======
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count watch-tower > 1)
+	(can-research ri-guard-tower)
+=>
+    (research ri-guard-tower)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count guard-tower > 1)
+	(can-research ri-keep)
+=>
+    (research ri-keep)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count university > 0)
+	(building-type-count watch-tower-line > 3)
+	(research-available ri-bombard-tower)
+=>
+     (research ri-bombard-tower)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count watch-tower-line > 3)
+	(can-research ri-heated-shot)
+=>
+     (research ri-heated-shot)
+)
+
+; ======= FINDING THIS TOOK SOME DOING =======
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count watch-tower-line > 3)
+	(can-research 608)
+=>
+    (research 608)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(building-type-count castle > 0)
+		(building-type-count watch-tower-line > 2)
+	)
+	(can-research ri-murder-holes)
+=>
+	(research ri-murder-holes)
+)
+
+(defrule
+	
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+(or
+		(building-type-count castle > 0)
+		(building-type-count watch-tower-line > 2)
+	)
+	(can-research ri-fortified-wall)
+=>
+	(research ri-fortified-wall)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-elite-boyar)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow stone)
+	(release-escrow gold)
+	(research ri-elite-boyar)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-imperial-camel)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow stone)
+	(release-escrow gold)
+	(research ri-imperial-camel)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-revetments)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow stone)
+	(release-escrow gold)
+	(research ri-revetments)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-eagle-warrior)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow stone)
+	(release-escrow gold)
+	(research ri-eagle-warrior)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-gillnets)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow stone)
+	(release-escrow gold)
+	(research ri-gillnets)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-hunting-dogs)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow stone)
+	(release-escrow gold)
+	(research ri-hunting-dogs)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow 445)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow stone)
+	(release-escrow gold)
+	(research 445);shinkichon
+)
+; ======= IMPERIAL RESEARCH =======
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow my-unique-unit-upgrade)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research my-unique-unit-upgrade)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count militiaman > 4)
+	(can-research-with-escrow ri-man-at-arms)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-man-at-arms)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count man-at-arms > 6)
+	(can-research-with-escrow ri-long-swordsman)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+      (research ri-long-swordsman)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count long-swordsman > 6)
+	(can-research-with-escrow ri-two-handed-swordsman)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+      (research ri-two-handed-swordsman)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count two-handed-swordsman > 6)
+	(can-research-with-escrow ri-champion)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+      (research ri-champion)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count-total spearman > 2)
+	(can-research-with-escrow ri-pikeman)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+      (research ri-pikeman)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count-total scout-cavalry > 2)
+	(can-research-with-escrow ri-light-cavalry)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-light-cavalry)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count-total camel > 2)
+	(can-research-with-escrow ri-heavy-camel)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+      (research ri-heavy-camel)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+      (unit-type-count-total knight > 2)
+	(can-research-with-escrow ri-cavalier)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+      (research ri-cavalier)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+      (unit-type-count-total cavalier > 2)
+	(can-research-with-escrow ri-paladin)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-paladin)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+      (unit-type-count-total archer-line > 2)
+	(can-research-with-escrow ri-thumb-ring)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-thumb-ring)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count archer > 6)
+	(can-research-with-escrow ri-crossbow)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-crossbow)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count crossbowman > 6)
+	(can-research-with-escrow ri-arbalest)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-arbalest)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count cavalry-archer > 6)
+	(can-research-with-escrow ri-heavy-cavalry-archer)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-heavy-cavalry-archer)
+)
+
+(defrule
+	(unit-type-count-total skirmisher > 2)
+	(can-research-with-escrow ri-elite-skirmisher)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-elite-skirmisher)
+)
+(defrule
+	(unit-type-count-total skirmisher > 2)
+	(can-research-with-escrow ri-imperial-skirmisher)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-imperial-skirmisher)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count scorpion > 4)
+	(can-research-with-escrow ri-heavy-scorpion)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-heavy-scorpion)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+      (unit-type-count battering-ram > 2)
+	(can-research-with-escrow ri-capped-ram)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-capped-ram)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+      (unit-type-count capped-ram > 2)
+	(can-research-with-escrow ri-siege-ram)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-siege-ram)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count mangonel-line > 3)
+	(can-research-with-escrow ri-onager)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+      (research ri-onager)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+      (unit-type-count onager > 3)
+	(can-research-with-escrow ri-siege-onager)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-siege-onager)
+)
+
+; ======= DOCK UNITS =======
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count galley > 2)
+	(can-research-with-escrow ri-war-galley)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-war-galley)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count war-galley > 2)
+	(can-research-with-escrow ri-galleon)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-galleon)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count galleon > 2)
+		(unit-type-count war-galley > 2)
+	)
+	(can-research-with-escrow ri-cannon-galleon)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+      (research ri-cannon-galleon)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count-total fire-ship > 1)
+	(can-research-with-escrow ri-fast-fire-ship)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-fast-fire-ship)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count demolition-ship > 2)
+	(can-research-with-escrow ri-heavy-demolition-ship)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-heavy-demolition-ship)
+)
+
+; ======= WEAPONS =======
+
+(defrule
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-forging)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+     (research ri-forging)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-iron-casting)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-iron-casting)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-blast-furnace)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-blast-furnace)
+)
+
+; ======= ARCHER UPGRADES =======
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-fletching)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-fletching)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-bodkin-arrow)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-bodkin-arrow)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-bracer)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-bracer)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total archer-line > 3)
+		(or
+			(unit-type-count-total skirmisher-line > 3)
+			(unit-type-count-total cavalry-archer-line > 3)
+		)
+	)
+	(can-research-with-escrow ri-padded-archer-armor)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-padded-archer-armor)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total archer-line > 3)
+		(or
+			(unit-type-count-total skirmisher-line > 3)
+			(unit-type-count-total cavalry-archer-line > 3)
+		)
+	)
+	(can-research-with-escrow ri-leather-archer-armor)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-leather-archer-armor)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total archer-line > 3)
+		(or
+			(unit-type-count-total skirmisher-line > 3)
+			(unit-type-count-total cavalry-archer-line > 3)
+		)
+	)
+	(can-research-with-escrow ri-ring-archer-armor)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-ring-archer-armor)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total militiaman-line > 3)
+		(unit-type-count-total spearman-line > 3)
+	)
+	(can-research-with-escrow ri-scale-mail)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-scale-mail)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total militiaman-line > 3)
+		(unit-type-count-total spearman-line > 3)
+	)
+	(can-research-with-escrow ri-chain-mail)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-chain-mail)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total militiaman-line > 3)
+		(unit-type-count-total spearman-line > 3)
+	)
+	(can-research-with-escrow ri-plate-mail)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-plate-mail)
+)
+
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total militiaman-line > 3)
+		(unit-type-count-total spearman-line > 3)
+	)
+	(can-research-with-escrow ri-tracking)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-tracking)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total militiaman-line > 3)
+		(unit-type-count-total spearman-line > 3)
+	)
+	(can-research-with-escrow ri-squires)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-squires)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total knight-line > 3)
+		(unit-type-count-total scout-cavalry-line > 3)
+	)
+	(can-research-with-escrow ri-scale-barding)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-scale-barding)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total knight-line > 3)
+		(unit-type-count-total scout-cavalry-line > 3)
+	)
+	(can-research-with-escrow ri-chain-barding)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-chain-barding)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total knight-line > 3)
+		(unit-type-count-total scout-cavalry-line > 3)
+	)
+	(can-research-with-escrow ri-plate-barding)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-plate-barding)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count-total cavalry-archer-line > 3)
+		(or
+			(unit-type-count-total knight-line > 3)
+			(unit-type-count-total scout-cavalry-line > 3)
+		)
+	)
+	(can-research-with-escrow ri-husbandry)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-husbandry)
+)
+
+; ======= SIEGE RESEARCH ITEMS======= 
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-siege-engineers)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-siege-engineers)
+)
+
+;======= FORTRESS UPGRADES ======= 
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-hoardings)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-hoardings)
+)
+
+; ======= SHIPS ======= 
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count cannon-galleon > 2)
+	(can-research-with-escrow ri-deck-guns)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-deck-guns)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count transport-ship > 0)
+		(unit-type-count galley-line > 2)
+	)
+	(can-research-with-escrow ri-careening)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-careening)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count transport-ship > 0)
+		(unit-type-count galley-line > 2)
+	)
+	(can-research-with-escrow ri-dry-dock)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-dry-dock)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(unit-type-count galley-line > 2)
+		(or
+			(unit-type-count-total cannon-galleon-line > 1)
+			(unit-type-count-total fire-ship-line > 1)
+		)
+	)
+	(can-research-with-escrow ri-shipwright)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-shipwright)
+)
+
+; ======= OTHER RESEARCH ITEMS ======= 
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-ballistics)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-ballistics)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-chemistry)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-chemistry)
+)
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-parthian-tactics)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-parthian-tactics)
+)
+
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-conscription)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-conscription)
+)
+
+
+; ======= ECONOMIC======= 
+
+;mining-camp items
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-gold-mining)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-gold-mining)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)(goal age-advancement 0)
+	(can-research-with-escrow ri-bloodlines)
+    (or (unit-type-count-total knight-line > 2)
+		(unit-type-count-total scout-cavalry-line > 2))
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-bloodlines)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-gold-shaft-mining)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-gold-shaft-mining)
+)
+
+(defrule
+	(current-age > feudal-age)
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count mining-camp > 1)
+	(can-research-with-escrow ri-stone-mining)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-stone-mining)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count mining-camp > 1)
+	(can-research-with-escrow ri-stone-shaft-mining)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-stone-shaft-mining)
+)
+
+;mill items
+(defrule
+	(nand (current-age == feudal-age)
+		(goal strategy-fast-castle 1))
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-horse-collar)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-horse-collar)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-heavy-plow)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-heavy-plow)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-crop-rotation)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-crop-rotation)
+)
+
+;saw mill
+(defrule
+	(nand (current-age == feudal-age)
+		(goal strategy-fast-castle 1))
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-double-bit-axe)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-double-bit-axe)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-bow-saw)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-bow-saw)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-two-man-saw)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-two-man-saw)
+)
+
+;university stuff
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-masonry)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-masonry)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-arson)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-arson)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-architecture)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-architecture)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-stonecutting)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-stonecutting)
+)
+
+;market & town center
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-guilds)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-guilds)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(current-age == dark-age)
+	(can-research-with-escrow ri-loom)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-loom)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-hand-cart)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-hand-cart)
+)
+
+(defrule
+	(nand (current-age == feudal-age)
+		(goal strategy-fast-castle 1))
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research-with-escrow ri-wheel-barrow)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-wheel-barrow)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(players-stance any-computer ally)
+		(players-stance any-human ally)
+	)
+	(can-research-with-escrow ri-coinage)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-coinage)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(players-stance any-computer ally)
+		(players-stance any-human ally)
+	)
+	(can-research-with-escrow ri-banking)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-banking)
+)
+
+; ======= MONK ======= 
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(players-unit-type-count any-enemy monk > 1)
+                (unit-type-count-total war-elephant-line > 2)
+	)
+	(can-research-with-escrow ri-faith)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-faith)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+        (players-unit-type-count any-enemy monk > 2)
+	(can-research-with-escrow ri-atonement)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-atonement)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count-total monk > 2)
+	(can-research-with-escrow ri-block-printing)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-block-printing)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count-total monk > 2)
+	(can-research-with-escrow ri-illumination)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-illumination)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count-total monk > 2)
+	(can-research-with-escrow ri-fervor)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-fervor)
+)
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count-total monk > 2)
+	(can-research-with-escrow 441)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research 441)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count-total monk > 2)
+	(can-research-with-escrow ri-redemption)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-redemption)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count-total monk > 2)
+	(can-research-with-escrow ri-sanctity)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-sanctity)
+)
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(unit-type-count-total monk > 2)
+	(can-research-with-escrow ri-theocracy)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-theocracy)
+)
+
+;TOWERS
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count-total watch-tower > 1)
+	(can-research-with-escrow ri-guard-tower)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-guard-tower)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count-total guard-tower > 1)
+	(can-research-with-escrow ri-keep)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+    (research ri-keep)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count university > 0)
+	(building-type-count-total watch-tower-line > 3)
+	(research-available ri-bombard-tower)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+     (research ri-bombard-tower)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count-total watch-tower-line > 3)
+	(can-research-with-escrow ri-heated-shot)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+     (research ri-heated-shot)
+)
+
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(building-type-count-total watch-tower-line > 3)
+	(can-research-with-escrow 608)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+     (research 608)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(or
+		(building-type-count-total castle > 0)
+		(building-type-count-total watch-tower-line > 2)
+	)
+	(can-research-with-escrow ri-murder-holes)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-murder-holes)
+)
+
+(defrule
+	(goal age-advancement 0)(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+(or
+		(building-type-count-total castle > 0)
+		(building-type-count-total watch-tower-line > 2)
+	)
+	(can-research-with-escrow ri-fortified-wall)
+=>
+	(release-escrow wood)
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-fortified-wall)
+)

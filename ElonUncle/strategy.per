@@ -1,0 +1,1091 @@
+
+; ---------------------------
+; DEFINE STRATEGY VARIABLES
+; ---------------------------
+
+(defrule
+	(true)
+=>
+	(set-goal strategy-save-escrow 0)
+	(set-goal strategy-boom 0)
+	(set-goal strategy-drush 0)
+	(set-goal strategy-flush 0)
+	(set-goal strategy-archer-flush 0)
+	(set-goal strategy-trush 0)
+	(set-goal strategy-scout-flush 0)
+	(set-goal strategy-infantry-flush 0)
+	(set-goal strategy-gush 0)
+	(set-goal strategy-fire-rush 0)
+	(set-goal strategy-crush 0)
+	(set-goal strategy-smush 0)
+	(disable-self)
+)
+
+(defrule
+	(true)
+=>
+	(set-goal strategy-stone-for-gold 0)
+	(set-goal strategy-counter 0)
+	(set-goal strategy-forward-barracks 0)
+	(set-goal strategy-five-towers 0)
+	(set-goal strategy-forward-castle 0)
+	(set-goal strategy-no-feudal-research 0)
+	(set-goal strategy-raiding 0)
+	(set-goal strategy-monk-rush 0)
+	(set-goal am-in-peril 0)
+	(set-goal strategy-fast-imperial 0)
+	(set-goal strategy-improved-imperial 0)
+	(disable-self)
+)
+
+(defrule
+	(true)
+=>
+	(set-goal disable-drush-training 0)
+	(set-goal strategy-spring 0)
+	(set-goal strategy-springboard 0)
+	(set-goal strategy-counter-springboard 0)
+	(set-goal strategy-support 0)
+	(set-goal strategy-turtle 0)
+	(set-goal strategy-trash-rush 0)
+	(set-goal strategy-fast-feudal 0)
+	(set-goal strategy-fast-castle 0)
+	(set-goal strategy-knight-rush 0)
+	(set-goal strategy-extra-spawners 0)
+	(set-goal strategy-archer-crush 0)
+	(set-goal strategy-heavy-castling 0);tricky. rather than a boolean, 1 is for one instant castle, and 2 is for two instant castles.
+	(disable-self)
+)
+
+(defrule
+	(true)
+=>
+	(set-goal strategy-boom-no-castle 0)
+)
+
+; ---------------------------
+; SPRINGS AND SPRINGBOARDS
+; ---------------------------
+
+#load-if-not-defined ALL-TECHS-ENABLED
+
+(defrule
+	(true)
+=>
+	(set-goal eligible-for-springboard 0)
+	(set-goal eligible-for-spring 0)
+	(disable-self)
+)
+
+;springboards
+#load-if-not-defined BRITON-CIV
+#load-if-not-defined BYZANTINE-CIV
+#load-if-not-defined FRANKISH-CIV
+#load-if-not-defined GOTHIC-CIV
+#load-if-not-defined JAPANESE-CIV
+#load-if-not-defined MONGOL-CIV
+#load-if-not-defined SARACEN-CIV
+#load-if-not-defined TEUTONIC-CIV
+#load-if-not-defined VIKING-CIV
+#load-if-not-defined HUN-CIV
+#load-if-not-defined SPANISH-CIV
+#load-if-not-defined MAGYAR-CIV
+#load-if-not-defined BERBERS-CIV
+#load-if-not-defined ETHIOPIAN-CIV
+#load-if-not-defined MALIAN-CIV
+#load-if-not-defined PORTUGUESE-CIV
+
+(defrule
+	(true)
+=>
+	(set-goal eligible-for-springboard 1)
+	(disable-self)
+)
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+
+
+;springs
+#load-if-not-defined BRITON-CIV
+#load-if-not-defined CELTIC-CIV
+#load-if-not-defined CHINESE-CIV
+#load-if-not-defined GOTHIC-CIV
+#load-if-not-defined JAPANESE-CIV
+#load-if-not-defined MONGOL-CIV
+#load-if-not-defined TEUTONIC-CIV
+#load-if-not-defined TURKISH-CIV
+#load-if-not-defined VIKING-CIV
+#load-if-not-defined AZTEC-CIV
+#load-if-not-defined HUN-CIV
+#load-if-not-defined KOREAN-CIV
+#load-if-not-defined MAYAN-CIV
+#load-if-not-defined INCAN-CIV
+#load-if-not-defined MAGYAR-CIV
+#load-if-not-defined SLAVIC-CIV
+#load-if-not-defined BERBERS-CIV
+#load-if-not-defined ETHIOPIAN-CIV
+#load-if-not-defined MALIAN-CIV
+(defrule
+	(true)
+=>
+	(set-goal eligible-for-spring 1)
+	(disable-self)
+)
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+
+(defrule
+	(current-age == dark-age)
+	(goal eligible-for-springboard 1)
+	(or (or (or (or (or (or (or (players-civ any-ally spanish)
+		(players-civ any-ally byzantine))
+		(players-civ any-ally frankish))
+		(players-civ any-ally saracen))
+		(players-civ any-ally persian))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally portuguese))
+=>
+	(set-goal strategy-springboard 1)
+	(chat-to-player this-any-ally "You will be the spring, and I shall supply you.")
+	(set-goal strategy-boom 1)
+	(set-goal strategy-fast-castle 1)
+	(set-goal strategy-save-escrow 1)
+	(set-goal strategy-no-feudal-research 1)
+	(disable-self)
+)
+
+(defrule
+	(current-age == dark-age)
+	(goal eligible-for-spring 1)
+	(or (or (or (or (or (or (or (or (or (or (players-civ any-ally mayan)
+		(players-civ any-ally aztec))
+		(players-civ any-ally chinese))
+		(players-civ any-ally persian))
+		(players-civ any-ally celtic))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally korean))
+		(players-civ any-ally slavic))
+		(players-civ any-ally incan))
+		(players-civ any-ally turkish))
+=>
+	(set-goal strategy-spring 1)
+	(set-goal strategy-boom 0)
+	(set-goal strategy-fast-castle 0)
+	(set-goal strategy-save-escrow 0)
+	(set-goal strategy-no-feudal-research 0)
+	(set-goal strategy-springboard 0)
+	(chat-to-player this-any-ally "You will be the springboard. Keep me supplied with resources.")
+	(disable-self)
+)
+
+;(defrule
+;	(true);testing purposes
+;=>
+;	(set-goal strategy-spring 0)
+;	(set-goal strategy-boom 0)
+;	(set-goal strategy-springboard 0)
+;	(disable-self)
+;)
+
+(defrule
+	(goal strategy-springboard 1)
+	(can-build-with-escrow market)
+	(building-type-count market < 1)
+=>
+	(release-escrow wood)
+	(build market)
+)
+
+(defrule
+	(goal strategy-springboard 1)
+	(game-time > 1200)
+=>
+	(enable-timer springboard-timer 1)
+	(disable-self)
+)
+
+(defrule
+	(timer-triggered springboard-timer)
+	(game-time < 2400)
+	(or (or (or (or (or (or (or (players-civ any-ally spanish)
+		(players-civ any-ally byzantine))
+		(players-civ any-ally frankish))
+		(players-civ any-ally saracen))
+		(players-civ any-ally persian))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally portuguese))
+=>
+	(disable-timer springboard-timer)
+	(enable-timer springboard-timer 180)
+	(tribute-to-player this-any-ally food 200)
+	(tribute-to-player this-any-ally wood 200)
+	(tribute-to-player this-any-ally gold 200)
+	(chat-to-player this-any-ally "More resources, m'lord.")
+)
+(defrule
+	(timer-triggered springboard-timer)
+	(game-time < 3000)
+	(or (or (or (or (or (or (or (players-civ any-ally spanish)
+		(players-civ any-ally byzantine))
+		(players-civ any-ally frankish))
+		(players-civ any-ally saracen))
+		(players-civ any-ally persian))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally portuguese))
+=>
+	(disable-timer springboard-timer)
+	(enable-timer springboard-timer 180)
+	(tribute-to-player this-any-ally food 400)
+	(tribute-to-player this-any-ally wood 400)
+	(tribute-to-player this-any-ally gold 200)
+	(chat-to-player this-any-ally "More resources, m'lord.")
+)
+(defrule
+	(timer-triggered springboard-timer)
+	(game-time < 3600)
+	(or (or (or (or (or (or (or (players-civ any-ally spanish)
+		(players-civ any-ally byzantine))
+		(players-civ any-ally frankish))
+		(players-civ any-ally saracen))
+		(players-civ any-ally persian))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally portuguese))
+=>
+	(disable-timer springboard-timer)
+	(enable-timer springboard-timer 180)
+	(tribute-to-player this-any-ally food 600)
+	(tribute-to-player this-any-ally wood 600)
+	(tribute-to-player this-any-ally stone 200)
+	(tribute-to-player this-any-ally gold 400)
+	(chat-to-player this-any-ally "More resources, m'lord.")
+)
+(defrule
+	(timer-triggered springboard-timer)
+	(game-time < 4200)
+	(or (or (or (or (or (or (or (players-civ any-ally spanish)
+		(players-civ any-ally byzantine))
+		(players-civ any-ally frankish))
+		(players-civ any-ally saracen))
+		(players-civ any-ally persian))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally portuguese))
+=>
+	(disable-timer springboard-timer)
+	(enable-timer springboard-timer 180)
+	(tribute-to-player this-any-ally food 800)
+	(tribute-to-player this-any-ally wood 600)
+	(tribute-to-player this-any-ally gold 400)
+	(chat-to-player this-any-ally "More resources, m'lord.")
+)
+(defrule
+	(timer-triggered springboard-timer)
+	(game-time < 4800)
+	(or (or (or (or (or (or (or (players-civ any-ally spanish)
+		(players-civ any-ally byzantine))
+		(players-civ any-ally frankish))
+		(players-civ any-ally saracen))
+		(players-civ any-ally persian))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally portuguese))
+=>
+	(disable-timer springboard-timer)
+	(enable-timer springboard-timer 180)
+	(tribute-to-player this-any-ally food 800)
+	(tribute-to-player this-any-ally wood 1000)
+	(tribute-to-player this-any-ally gold 400)
+	(chat-to-player this-any-ally "More resources, m'lord.")
+)
+(defrule
+	(timer-triggered springboard-timer)
+	(game-time < 5400)
+	(or (or (or (or (or (or (or (players-civ any-ally spanish)
+		(players-civ any-ally byzantine))
+		(players-civ any-ally frankish))
+		(players-civ any-ally saracen))
+		(players-civ any-ally persian))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally portuguese))
+=>
+	(disable-timer springboard-timer)
+	(enable-timer springboard-timer 180)
+	(tribute-to-player this-any-ally food 1000)
+	(tribute-to-player this-any-ally wood 1000)
+	(tribute-to-player this-any-ally gold 400)
+	(chat-to-player this-any-ally "More resources, m'lord.")
+)
+(defrule
+	(timer-triggered springboard-timer)
+	(game-time > 5400)
+	(or (or (or (or (or (or (or (players-civ any-ally spanish)
+		(players-civ any-ally byzantine))
+		(players-civ any-ally frankish))
+		(players-civ any-ally saracen))
+		(players-civ any-ally persian))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally portuguese))
+=>
+	(disable-timer springboard-timer)
+	(chat-to-player this-any-ally "I have finished supplying you with resources.")
+)
+
+
+(defrule
+	(goal am-in-peril 0)
+	(goal strategy-springboard 1)
+	(goal am-under-attack 1)
+	(or (or (or (or (or (or (or (players-civ any-ally spanish)
+		(players-civ any-ally byzantine))
+		(players-civ any-ally frankish))
+		(players-civ any-ally saracen))
+		(players-civ any-ally persian))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally portuguese))
+=>
+	(enable-timer attack-timeout-timer 180)
+	(set-goal am-in-peril 1)
+	(chat-to-player this-any-ally "Please defend me if you desire my continued support.")
+)
+
+(defrule
+	(timer-triggered attack-timeout-timer)
+	(goal am-in-peril 1)
+	(goal strategy-springboard 1)
+	(goal am-under-attack 1)
+	(or (or (or (or (or (or (or (players-civ any-ally spanish)
+		(players-civ any-ally byzantine))
+		(players-civ any-ally frankish))
+		(players-civ any-ally saracen))
+		(players-civ any-ally persian))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally portuguese))
+=>
+	(disable-timer attack-timeout-timer)
+	(set-goal strategy-springboard 0)
+	(set-goal strategy-boom 0)
+	(set-goal strategy-fast-castle 0)
+	(set-goal strategy-save-escrow 0)
+	(set-goal strategy-no-feudal-research 0)
+	(set-goal strategy-spring 0)
+	(chat-to-player this-any-ally "You did not defend me well enough. I am leaving your service.")
+)
+
+(defrule
+	(timer-triggered attack-timeout-timer)
+	(goal am-in-peril 1)
+	(goal strategy-springboard 1)
+	(goal am-under-attack 0)
+	(or (or (or (or (or (or (or (players-civ any-ally spanish)
+		(players-civ any-ally byzantine))
+		(players-civ any-ally frankish))
+		(players-civ any-ally saracen))
+		(players-civ any-ally persian))
+		(players-civ any-ally indian))
+		(players-civ any-ally italian))
+		(players-civ any-ally portuguese))
+=>
+	(disable-timer attack-timeout-timer)
+	(set-goal am-in-peril 0)
+	(chat-to-player this-any-ally "Thank you, m'lord. I feel safe once more.")
+)
+
+
+; ---------------------------
+; CIVILIZATION-SPECIFIC NUMBERS - ONLY IF NOT ALL-TECHS
+; ---------------------------
+
+#load-if-defined BRITON-CIV
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-archer-flush 1)
+	(set-goal strategy-boom 1)
+	(set-goal strategy-flush 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined CHINESE-CIV
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-save-escrow 1)
+	(set-goal strategy-archer-flush 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined BYZANTINE-CIV
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-trash-rush 1)
+	(set-goal strategy-save-escrow 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined CELTIC-CIV
+;works after fixes
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-save-escrow 1)
+	(set-goal strategy-infantry-flush 1)
+	(set-goal strategy-drush 1)
+	(set-goal strategy-flush 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined FRANKISH-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>	
+	(set-goal strategy-knight-rush 1)
+	(set-goal strategy-flush 1)
+	(set-goal strategy-archer-flush 1);yes, seriously
+	(set-goal strategy-forward-castle 1)
+	(disable-self)
+)
+#end-if
+
+
+#load-if-defined GOTHIC-CIV
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-boom 1)
+	(set-goal strategy-infantry-flush 1)
+	(set-goal strategy-flush 1)
+	(set-goal strategy-extra-spawners 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined JAPANESE-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-boom 1)
+	(set-goal strategy-infantry-flush 1)
+	(set-goal strategy-flush 1)
+	(set-goal strategy-extra-spawners 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined MONGOL-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-scout-flush 1)
+	(set-goal strategy-flush 1)
+	(set-goal strategy-archer-flush 1)
+	(set-goal strategy-crush 1)
+	(set-goal strategy-raiding 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined PERSIAN-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-boom 1)
+	(set-goal strategy-knight-rush 1)
+	(set-goal strategy-flush 1)
+	(set-goal strategy-archer-flush 1)
+	(set-goal strategy-crush 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined SARACEN-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-knight-rush 1)
+	(set-goal strategy-flush 1)
+	(set-goal strategy-monk-rush 1)
+	(set-goal strategy-boom 1)
+	(set-goal strategy-stone-for-gold 1);stone for gold dot com!
+	(disable-self)
+)
+#end-if
+
+#load-if-defined TEUTONIC-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-raiding 1)
+	(set-goal strategy-extra-spawners 1)
+	(set-goal strategy-infantry-flush 1)
+	(set-goal strategy-drush 1)
+	(set-goal strategy-flush 1)
+	(set-goal strategy-crush 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined TURKISH-CIV ;when you're a turk, wall and pray.
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-boom 1)
+	(set-goal strategy-fast-walls 1)
+	(set-goal strategy-scout-flush 1)
+	(set-goal strategy-save-escrow 1)
+	(set-goal strategy-fast-castle 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined VIKING-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-raiding 1)
+	(set-goal strategy-infantry-flush 1)
+	(set-goal strategy-flush 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined AZTEC-CIV
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-save-escrow 1)
+	(set-goal strategy-infantry-flush 1)
+	(set-goal strategy-drush 1)
+	(set-goal strategy-extra-spawners 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined HUN-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-raiding 1)
+	(set-goal strategy-save-escrow 1)
+	(set-goal strategy-extra-spawners 1)
+	(set-goal strategy-archer-flush 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined KOREAN-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-fast-walls 1)
+	;(set-goal strategy-trush 1);tower rushes do not work with AI, apparently, because they're quite bad at it
+	(set-goal strategy-counter 1);
+	;(set-goal strategy-turtle 1)
+	(set-goal strategy-heavy-castling 2)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined MAYAN-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-archer-flush 1)
+	(set-goal strategy-heavy-castling 2)
+	(set-goal strategy-extra-spawners 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined SPANISH-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-boom 1)
+	(set-goal strategy-fast-castle 1)
+	(set-goal strategy-monk-rush 1)
+	(set-goal strategy-knight-rush 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined INCAN-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-extra-spawners 1)
+	(set-goal strategy-fast-walls 1)
+	(set-goal strategy-fast-castle 1)
+	(set-goal strategy-save-escrow 1)
+	(set-goal strategy-trash-rush 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined INDIAN-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-boom 1)
+	(set-goal strategy-improved-imperial 1)
+	(set-goal strategy-fast-castle 1)
+	(set-goal strategy-fast-walls 1)
+	(set-goal strategy-save-escrow 1)
+	(set-goal strategy-scout-flush 1)
+	(set-goal strategy-no-feudal-research 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined ITALIAN-CIV
+;does not work
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-fast-castle 1)
+	(set-goal strategy-boom 1)
+	(set-goal strategy-improved-imperial 1)
+	(set-goal strategy-fast-walls 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined MAGYAR-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-raiding 1)
+	;(set-goal strategy-fast-feudal 1)
+	(set-goal strategy-flush 1)
+	(set-goal strategy-archer-crush 1)
+	(set-goal strategy-scout-flush 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined SLAVIC-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	;(set-goal strategy-fast-feudal 1)
+	;(set-goal strategy-flush 1)
+	(set-goal strategy-raiding 1)
+	(set-goal strategy-infantry-flush 1)
+	(set-goal strategy-extra-spawners 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined BERBERS-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-knight-rush 1)
+	;(set-goal strategy-crush 1)
+	(set-goal strategy-archer-flush 1)
+	;(set-goal strategy-flush 1) was bad
+	(set-goal strategy-boom 1)
+	(disable-self)
+)
+#end-if
+
+
+#load-if-defined ETHIOPIAN-CIV
+;works, so hardcore
+(defrule
+	(goal strategy-springboard 0)
+=>	
+	(set-goal strategy-archer-flush 1)
+	(set-goal strategy-save-escrow 1)
+	(set-goal strategy-extra-spawners 1)
+	(set-goal strategy-forward-castle 1)
+	;(set-goal strategy-heavy-castling 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined MALIAN-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-boom 1)
+	(set-goal strategy-infantry-flush 1)
+	(set-goal strategy-flush 1)
+	(set-goal strategy-extra-spawners 1)
+	;(set-goal strategy-forward-castle 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined PORTUGUESE-CIV
+;works, and quite well
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-boom 1)
+	(set-goal strategy-fast-castle 1)
+	(set-goal strategy-fast-walls 1)
+	(set-goal strategy-improved-imperial 1)
+	(disable-self)
+)
+#end-if
+
+#load-if-defined BURMESE-CIV
+
+;AMUSINGLY, BURMESE ARE JUST PEACHY KEEN WITHOUT A SINGLE OUNCE OF STRATEGY.
+;THEY ARE BASICALLY THE BRUTE-FORCE TYPE OF CIV AI WAS ORIGINALLY DESIGNED FOR.
+
+#end-if
+
+#load-if-defined KHMER-CIV
+;works
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-knight-rush 1)
+	(set-goal strategy-flush 1)
+	(set-goal strategy-archer-flush 1)
+	(set-goal strategy-fast-castle 1)
+	(disable-self)
+)
+#end-if
+#end-if ;if not all-techs-enabled
+
+#load-if-defined MALAY-CIV
+;seems nothing is actually needed here either?
+#end-if
+
+#load-if-defined VIETNAMESE-CIV
+
+(defrule
+	(goal strategy-springboard 0)
+=>
+	(set-goal strategy-save-escrow 1)	
+	(set-goal strategy-archer-flush 1)
+	(set-goal strategy-heavy-castling 1)	
+	(set-goal strategy-extra-spawners 1)
+)
+#end-if
+
+; ---------------------------
+; GENERAL STRATEGY
+; ---------------------------
+
+(defrule
+	(goal strategy-boom 1)
+	(current-age > feudal-age)
+	(can-train villager)
+	(unit-type-count villager < 250)
+=>
+	(train villager)
+)
+
+
+(defrule
+	(goal strategy-fast-feudal 1)
+	(or (and (goal strategy-fast-castle 0)
+			(unit-type-count villager > 20))
+		(and (goal strategy-fast-castle 1)
+			(unit-type-count villager > 25)))
+	(current-age == dark-age)
+	(food-amount < 550)
+=>
+	(set-goal disable-villager-training 1)
+)
+
+(defrule
+	(goal strategy-fast-castle 1)
+	(current-age == feudal-age)
+	(unit-type-count villager > 27)
+	(food-amount < 850)
+=>
+	(set-goal disable-villager-training 1)
+)
+
+(defrule
+	(goal strategy-fast-castle 1)
+	(current-age == feudal-age)
+=>
+	(set-goal disable-melee-training 1)
+)
+
+(defrule
+	(goal strategy-boom 1)
+	(goal strategy-infantry-flush 0)
+	(current-age == feudal-age)
+=>
+	(set-goal disable-melee-training 1)
+)
+
+(defrule
+	(goal strategy-trash-rush 1)
+	(current-age == feudal-age)
+=>
+	(set-goal disable-gold-training 1)
+)
+
+
+(defrule
+	(not (death-match-game))
+	(building-type-count town-center < 2)
+=>
+	(set-goal single-villager-training 1)
+)
+
+(defrule
+	(goal strategy-drush 1)
+	(current-age == dark-age)
+	(building-type-count barracks > 0)
+=>	
+	(up-modify-sn sn-gold-gatherer-percentage c:+ 6);enough gold miners to get us the rest of the way towards a drush
+	(up-modify-sn sn-food-gatherer-percentage c:- 3)
+	(up-modify-sn sn-wood-gatherer-percentage c:- 3)
+	(disable-self)
+)
+
+(defrule
+	(goal strategy-no-feudal-research 1)
+	(current-age == feudal-age)
+=>
+	(set-goal no-research 1)
+)
+
+
+(defrule
+	(goal strategy-boom 1)
+	(or (or (can-train villager)
+		(unit-type-count villager > 150))
+		(and (current-age == feudal-age)
+			(up-research-status c: castle-age >= research-pending)))
+	(food-amount < 200)
+	(goal am-under-attack 0)
+=>
+	(set-goal disable-melee-training 1)
+)
+
+(defrule
+	(goal strategy-turtle 1)
+	(strategic-number sn-military-level < 9)
+=>
+	(set-goal allowed-to-attack 0)
+)
+
+(defrule
+	(goal strategy-heavy-castling 1)
+	(can-research-with-escrow ri-stone-mining)
+=>
+	(release-escrow food)
+	(release-escrow wood)
+	(research ri-stone-mining)
+)
+
+
+(defrule
+	(goal strategy-heavy-castling 1)
+	(building-type-count town-center > 1)
+	(building-type-count castle > 0)
+=>
+	(set-goal strategy-heavy-castling 0)
+	(disable-self)
+)
+
+(defrule
+	(goal strategy-heavy-castling 2)
+	(building-type-count town-center > 1)
+	(building-type-count castle > 1)
+=>
+	(set-goal strategy-heavy-castling 0)
+	(disable-self)
+)
+
+(defrule
+	(goal strategy-counter 1)
+	(goal recompare-enemy-count 2)
+=>
+	(up-modify-goal not-countered-spearman c:+ 1)
+	(up-modify-goal not-countered-militiaman c:+ 1)
+	(up-modify-goal not-countered-eagle-warrior c:+ 1)
+	(up-modify-goal not-countered-skirmisher c:+ 1)
+	(up-modify-goal not-countered-archer c:+ 1)
+	(up-modify-goal not-countered-hand-cannoneer c:+ 1)
+	(up-modify-goal not-countered-cavalry-archer c:+ 1)
+	(up-modify-goal not-countered-monk c:+ 1)
+	(up-modify-goal not-countered-scout-cavalry c:+ 1)
+	(up-modify-goal not-countered-camel c:+ 1)
+	(up-modify-goal not-countered-knight c:+ 1)
+	(up-modify-goal not-countered-scorpion c:+ 1)
+	(up-modify-goal not-countered-battering-ram c:+ 1)
+	(up-modify-goal not-countered-mangonel c:+ 1)
+	(up-modify-goal not-countered-bombard-cannon c:+ 1)
+)
+
+(defrule
+	(goal strategy-counter 1)
+	(goal recompare-enemy-count 2)
+=>
+	(up-modify-goal can-spearman-counter c:+ 1)
+	(up-modify-goal can-militiaman-counter c:+ 1)
+	(up-modify-goal can-eagle-warrior-counter c:+ 1)
+	(up-modify-goal can-skirmisher-counter c:+ 1)
+	(up-modify-goal can-archer-counter c:+ 1)
+	(up-modify-goal can-hand-cannoneer-counter c:+ 1)
+	(up-modify-goal can-cavalry-archer-counter c:+ 1)
+	(up-modify-goal can-monk-counter c:+ 1)
+	(up-modify-goal can-scout-cavalry-counter c:+ 1)
+	(up-modify-goal can-camel-counter c:+ 1)
+	(up-modify-goal can-knight-counter c:+ 1)
+	(up-modify-goal can-scorpion-counter c:+ 1)
+	(up-modify-goal can-battering-ram-counter c:+ 1)
+	(up-modify-goal can-mangonel-counter c:+ 1)
+	(up-modify-goal can-bombard-cannon-counter c:+ 1)
+)
+
+
+(defrule
+	(goal strategy-trush 1)
+	(current-age == feudal-age)
+=>
+	;(set-strategic-number sn-number-forward-builders 3)
+	(up-assign-builders c: watch-tower-line c: 3)
+	(disable-self)
+)
+
+
+(defrule
+	(goal strategy-heavy-castling 1)
+	(goal strategy-trush 1)
+	(current-age == castle-age)
+=>
+	(set-goal strategy-heavy-castling 0)
+)
+
+(defrule
+	(goal strategy-trush 1)
+	(current-age == castle-age)
+=>
+	(set-strategic-number sn-number-forward-builders 0)
+	(up-assign-builders c: watch-tower-line c: 1)
+	(set-goal strategy-trush 0)
+	(disable-self)
+)
+
+(defrule;if booming, REALLY try to save up for those damn town centers, because they're the core of booming
+	(goal strategy-boom 1)
+	(building-type-count-total town-center < 3)
+	(current-age > feudal-age)
+	(wood-amount < 475)
+	(goal am-under-attack 0)
+=>
+	(set-goal save-for-town-center 1)
+	(set-goal no-research 1)
+)
+
+(defrule
+	(current-age == castle-age)
+	(goal strategy-boom 1)
+=>
+	(up-assign-builders c: town-center c: 4)
+	(up-assign-builders c: castle c: 4)
+	(disable-self)
+)
+
+(defrule
+	(goal strategy-fast-imperial 1)
+	(unit-type-count villager > 33)
+	(current-age == castle-age)
+	(building-type-count town-center > 2)
+	(up-research-status c: imperial-age < research-pending)
+	(goal am-under-attack 0)
+=>
+	(set-goal allowed-to-attack 0)
+	(set-goal no-research 1)
+)
+
+(defrule
+	(goal strategy-boom 1)
+	(building-type-count town-center > 2)
+=>
+	(set-goal strategy-boom 0)
+	(disable-self)
+)
+
+(defrule
+	(goal strategy-scout-flush 1)
+	(current-age == feudal-age)
+=>
+	(set-goal disable-melee-training 1)
+)
+
+(defrule
+	(building-type-count barracks > 0)
+	(goal strategy-drush 1)
+	(players-building-type-count any-enemy town-center < 1)
+	(players-building-type-count any-enemy house < 1)
+	(players-building-type-count any-enemy farm < 1)
+=>
+	(set-goal strategy-drush 0)
+	(chat-local-to-self "Have not found enemy yet; disabling drush strategy.")
+	(disable-self)
+)

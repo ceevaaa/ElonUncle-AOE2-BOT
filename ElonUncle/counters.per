@@ -1,0 +1,3742 @@
+; ---------------------------
+; ANTI-COUNTER 1
+; ---------------------------
+
+(defrule ;should train spearman
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy skirmisher-line < 10)
+	(players-unit-type-count every-enemy archer-line < 10)
+	(players-unit-type-count every-enemy plumed-archer-line < 10)
+	(players-unit-type-count every-enemy militiaman-line < 10)
+	(players-unit-type-count every-enemy scorpion-line < 10)
+	(players-unit-type-count every-enemy hand-cannoneer < 10)
+	(players-unit-type-count every-enemy monk < 10)
+	(players-unit-type-count every-enemy janissary-line < 10)
+	(players-unit-type-count every-enemy jaguar-man-line < 10)
+	(players-unit-type-count every-enemy longbowman-line < 10)	
+	(players-unit-type-count every-enemy berserk-line < 10)
+	(players-unit-type-count every-enemy cataphract-line < 10)
+	(players-unit-type-count every-enemy woad-raider-line < 10)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 10)
+=>
+	(set-goal not-countered-spearman 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy archer-line < 10)
+	(players-unit-type-count every-enemy cavalry-archer-line < 10)
+	(players-unit-type-count every-enemy knight-line < 10)
+	(players-unit-type-count every-enemy scorpion-line < 10)
+	(players-unit-type-count every-enemy hand-cannoneer < 10)
+	(players-unit-type-count every-enemy janissary-line < 10)
+	(players-unit-type-count every-enemy jaguar-man-line < 10)
+	(players-unit-type-count every-enemy longbowman-line < 10)
+	(players-unit-type-count every-enemy cataphract-line < 10)
+	(players-unit-type-count every-enemy mameluke-line < 10)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 10)
+	(players-unit-type-count every-enemy conquistador-line < 10)
+=>
+	(set-goal not-countered-militiaman 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy hand-cannoneer < 10)
+	(players-unit-type-count every-enemy militiaman-line < 10)
+	(players-unit-type-count every-enemy spearman-line < 10)
+	(players-unit-type-count every-enemy janissary-line < 10)
+	(players-unit-type-count every-enemy jaguar-man-line < 10)
+	(players-unit-type-count every-enemy berserk-line < 10)
+	(players-unit-type-count every-enemy cataphract-line < 10)
+	(players-unit-type-count every-enemy woad-raider-line < 10)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 10)
+=>
+	(set-goal not-countered-eagle-warrior 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy camel-line < 10)
+	(players-unit-type-count every-enemy militiaman-line < 10)
+	(players-unit-type-count every-enemy knight-line < 10)
+	(players-unit-type-count every-enemy scorpion-line < 10)
+	(players-unit-type-count every-enemy mangonel-line < 5)
+	(players-unit-type-count every-enemy huskarl-line < 10)
+	(players-unit-type-count every-enemy jaguar-man-line < 10)
+	(players-unit-type-count every-enemy berserk-line < 10)
+	(players-unit-type-count every-enemy cataphract-line < 10)
+	(players-unit-type-count every-enemy woad-raider-line < 10)
+	(players-unit-type-count every-enemy mameluke-line < 10)
+=>
+	(set-goal not-countered-skirmisher 2)
+	
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy scout-cavalry-line < 10)
+	(players-unit-type-count every-enemy skirmisher-line < 10)
+	(players-unit-type-count every-enemy knight-line < 10)
+	(players-unit-type-count every-enemy mangonel-line < 5)
+	(players-unit-type-count every-enemy camel-line < 10)
+	(players-unit-type-count every-enemy eagle-warrior-line < 10)
+	(players-unit-type-count every-enemy huskarl-line < 10)
+	(players-unit-type-count every-enemy longbowman-line < 10)
+=>
+	(set-goal not-countered-archer 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy skirmisher-line < 10)
+	(players-unit-type-count every-enemy scorpion-line < 10)
+	(players-unit-type-count every-enemy mangonel-line < 5)
+	(players-unit-type-count every-enemy knight-line < 10)
+	(players-unit-type-count every-enemy huskarl-line < 10)
+=>
+	(set-goal not-countered-hand-cannoneer 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy skirmisher-line < 10)
+	(players-unit-type-count every-enemy spearman-line < 10)
+	(players-unit-type-count every-enemy knight-line < 10)
+	(players-unit-type-count every-enemy eagle-warrior-line < 10)
+	(players-unit-type-count every-enemy scorpion-line < 10)
+	(players-unit-type-count every-enemy mangonel-line < 5)
+	(players-unit-type-count every-enemy camel-line < 10)
+	(players-unit-type-count every-enemy mameluke-line < 10)
+=>
+	(set-goal not-countered-cavalry-archer 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy eagle-warrior-line < 10)
+	(players-unit-type-count every-enemy scout-cavalry-line < 10)
+	(players-unit-type-count every-enemy monk < 10)
+	(players-unit-type-count every-enemy mangonel-line < 5)
+=>
+	(set-goal not-countered-monk 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy spearman-line < 10)
+	(players-unit-type-count every-enemy militiaman-line < 10)
+	(players-unit-type-count every-enemy knight-line < 10)
+	(players-unit-type-count every-enemy camel-line < 10)
+	(players-unit-type-count every-enemy janissary-line < 10)
+	(players-unit-type-count every-enemy berserk-line < 10)
+	(players-unit-type-count every-enemy cataphract-line < 10)
+	(players-unit-type-count every-enemy woad-raider-line < 10)
+	(players-unit-type-count every-enemy mameluke-line < 10)
+=>
+	(set-goal not-countered-scout-cavalry 2)
+	;(chat-local-to-self "it's a good day to train cavs")
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy militiaman-line < 10)
+	(players-unit-type-count every-enemy spearman-line < 10)
+	(players-unit-type-count every-enemy archer-line < 10)
+	(players-unit-type-count every-enemy plumed-archer-line < 10)
+	(players-unit-type-count every-enemy janissary-line < 10)
+	(players-unit-type-count every-enemy berserk-line < 10)
+	(players-unit-type-count every-enemy mameluke-line < 10)
+	(players-unit-type-count every-enemy camel-line < 10)
+=>
+	(set-goal not-countered-camel 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy spearman-line < 10)
+	(players-unit-type-count every-enemy camel-line < 10)
+	(players-unit-type-count every-enemy monk < 10)
+	(players-unit-type-count every-enemy janissary-line < 10)
+	(players-unit-type-count every-enemy mameluke-line < 10)
+=>
+	(set-goal not-countered-knight 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy janissary-line < 10)
+	(players-unit-type-count every-enemy scout-cavalry-line < 10)
+	(players-unit-type-count every-enemy knight-line < 10)
+	(players-unit-type-count every-enemy eagle-warrior-line < 10)
+	(players-unit-type-count every-enemy militiaman-line < 10)
+	(players-unit-type-count every-enemy bombard-cannon < 5)
+	(players-unit-type-count every-enemy cataphract-line < 10)
+	(players-unit-type-count every-enemy woad-raider-line < 10)
+	(players-unit-type-count every-enemy mameluke-line < 10)
+=>
+	(set-goal not-countered-scorpion 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy scout-cavalry-line < 10)
+	(players-unit-type-count every-enemy knight-line < 10)
+	(players-unit-type-count every-enemy militiaman-line < 10)
+	(players-unit-type-count every-enemy spearman-line < 10)
+	(players-unit-type-count every-enemy eagle-warrior-line < 10)
+	(players-unit-type-count every-enemy camel-line < 10)
+	(players-unit-type-count every-enemy cataphract-line < 10)
+	(players-unit-type-count every-enemy woad-raider-line < 10)
+	(players-unit-type-count every-enemy mameluke-line < 10)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 10)
+=>
+	(set-goal not-countered-battering-ram 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy scout-cavalry-line < 10)
+	(players-unit-type-count every-enemy knight-line < 10)
+	(players-unit-type-count every-enemy camel-line < 10)
+	(players-unit-type-count every-enemy militiaman-line < 10)
+	(players-unit-type-count every-enemy eagle-warrior-line < 10)
+	(players-unit-type-count every-enemy bombard-cannon < 5)
+	(players-unit-type-count every-enemy cataphract-line < 10)
+	(players-unit-type-count every-enemy woad-raider-line < 10)
+	(players-unit-type-count every-enemy mameluke-line < 10)
+=>
+	(set-goal not-countered-mangonel 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy eagle-warrior-line < 10)
+	(players-unit-type-count every-enemy knight-line < 10)
+	(players-unit-type-count every-enemy scout-cavalry-line < 10)
+	(players-unit-type-count every-enemy camel-line < 10)
+	(players-unit-type-count every-enemy militiaman-line < 10)
+	(players-unit-type-count every-enemy spearman-line < 10)
+	(players-unit-type-count every-enemy cataphract-line < 10)
+	(players-unit-type-count every-enemy woad-raider-line < 10)
+	(players-unit-type-count every-enemy mameluke-line < 10)
+=>
+	(set-goal not-countered-bombard-cannon 2)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 5)
+	(players-unit-type-count every-enemy archer-line < 10)
+	(players-unit-type-count every-enemy scorpion-line < 10)
+	(players-unit-type-count every-enemy mangonel-line < 5)
+	(players-unit-type-count every-enemy cavalry-archer-line < 10)
+	(players-unit-type-count every-enemy plumed-archer-line < 10)
+	(players-unit-type-count every-enemy spearman-line < 10)
+=>
+	(set-goal not-countered-petard 2)
+)
+
+(defrule 
+	(up-compare-goal enemies-sighted > 5)
+	(goal recompare-enemy-count 2)
+	(players-unit-type-count every-enemy battering-ram-line < 5)
+	(players-unit-type-count every-enemy knight-line < 10)
+	(players-unit-type-count every-enemy bombard-cannon < 5)
+	(players-unit-type-count every-enemy camel-line < 10)
+	(players-unit-type-count every-enemy scout-cavalry-line < 10)
+	(players-unit-type-count every-enemy eagle-warrior-line < 10)
+	(players-unit-type-count every-enemy petard < 10)
+	(players-unit-type-count every-enemy cataphract-line < 10)
+	(players-unit-type-count every-enemy woad-raider-line < 10)
+	(players-unit-type-count every-enemy mameluke-line < 10)
+=>
+	(set-goal not-countered-trebuchet 2)
+)
+
+; ---------------------------
+; END ANTI-COUNTER SECTION 1
+; ---------------------------
+; ---------------------------
+; ANTI-COUNTER 2
+; ---------------------------
+
+(defrule ;should train spearman
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy skirmisher-line < 20)
+	(players-unit-type-count every-enemy archer-line < 20)
+	(players-unit-type-count every-enemy plumed-archer-line < 20)
+	(players-unit-type-count every-enemy militiaman-line < 20)
+	(players-unit-type-count every-enemy scorpion-line < 20)
+	(players-unit-type-count every-enemy hand-cannoneer < 20)
+	(players-unit-type-count every-enemy monk < 20)
+	(players-unit-type-count every-enemy janissary-line < 20)
+	(players-unit-type-count every-enemy jaguar-man-line < 20)
+	(players-unit-type-count every-enemy longbowman-line < 20)	
+	(players-unit-type-count every-enemy berserk-line < 20)
+	(players-unit-type-count every-enemy cataphract-line < 20)
+	(players-unit-type-count every-enemy woad-raider-line < 20)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 20)
+=>
+	(set-goal not-countered-spearman 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy archer-line < 20)
+	(players-unit-type-count every-enemy cavalry-archer-line < 20)
+	(players-unit-type-count every-enemy knight-line < 20)
+	(players-unit-type-count every-enemy scorpion-line < 20)
+	(players-unit-type-count every-enemy hand-cannoneer < 20)
+	(players-unit-type-count every-enemy janissary-line < 20)
+	(players-unit-type-count every-enemy jaguar-man-line < 20)
+	(players-unit-type-count every-enemy longbowman-line < 20)
+	(players-unit-type-count every-enemy cataphract-line < 20)
+	(players-unit-type-count every-enemy mameluke-line < 20)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 20)
+	(players-unit-type-count every-enemy conquistador-line < 20)
+=>
+	(set-goal not-countered-militiaman 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy hand-cannoneer < 20)
+	(players-unit-type-count every-enemy militiaman-line < 20)
+	(players-unit-type-count every-enemy spearman-line < 20)
+	(players-unit-type-count every-enemy janissary-line < 20)
+	(players-unit-type-count every-enemy jaguar-man-line < 20)
+	(players-unit-type-count every-enemy berserk-line < 20)
+	(players-unit-type-count every-enemy cataphract-line < 20)
+	(players-unit-type-count every-enemy woad-raider-line < 20)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 20)
+=>
+	(set-goal not-countered-eagle-warrior 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy camel-line < 20)
+	(players-unit-type-count every-enemy militiaman-line < 20)
+	(players-unit-type-count every-enemy knight-line < 20)
+	(players-unit-type-count every-enemy scorpion-line < 20)
+	(players-unit-type-count every-enemy mangonel-line < 10)
+	(players-unit-type-count every-enemy huskarl-line < 20)
+	(players-unit-type-count every-enemy jaguar-man-line < 20)
+	(players-unit-type-count every-enemy berserk-line < 20)
+	(players-unit-type-count every-enemy cataphract-line < 20)
+	(players-unit-type-count every-enemy woad-raider-line < 20)
+	(players-unit-type-count every-enemy mameluke-line < 20)
+=>
+	(set-goal not-countered-skirmisher 3)
+	
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy scout-cavalry-line < 20)
+	(players-unit-type-count every-enemy skirmisher-line < 20)
+	(players-unit-type-count every-enemy knight-line < 20)
+	(players-unit-type-count every-enemy mangonel-line < 10)
+	(players-unit-type-count every-enemy camel-line < 20)
+	(players-unit-type-count every-enemy eagle-warrior-line < 20)
+	(players-unit-type-count every-enemy huskarl-line < 20)
+	(players-unit-type-count every-enemy longbowman-line < 20)
+=>
+	(set-goal not-countered-archer 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy skirmisher-line < 20)
+	(players-unit-type-count every-enemy scorpion-line < 20)
+	(players-unit-type-count every-enemy mangonel-line < 10)
+	(players-unit-type-count every-enemy knight-line < 20)
+	(players-unit-type-count every-enemy huskarl-line < 20)
+=>
+	(set-goal not-countered-hand-cannoneer 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy skirmisher-line < 20)
+	(players-unit-type-count every-enemy spearman-line < 20)
+	(players-unit-type-count every-enemy knight-line < 20)
+	(players-unit-type-count every-enemy eagle-warrior-line < 20)
+	(players-unit-type-count every-enemy scorpion-line < 20)
+	(players-unit-type-count every-enemy mangonel-line < 10)
+	(players-unit-type-count every-enemy camel-line < 20)
+	(players-unit-type-count every-enemy mameluke-line < 20)
+=>
+	(set-goal not-countered-cavalry-archer 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy eagle-warrior-line < 20)
+	(players-unit-type-count every-enemy scout-cavalry-line < 20)
+	(players-unit-type-count every-enemy monk < 20)
+	(players-unit-type-count every-enemy mangonel-line < 10)
+=>
+	(set-goal not-countered-monk 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy spearman-line < 20)
+	(players-unit-type-count every-enemy militiaman-line < 20)
+	(players-unit-type-count every-enemy knight-line < 20)
+	(players-unit-type-count every-enemy camel-line < 20)
+	(players-unit-type-count every-enemy janissary-line < 20)
+	(players-unit-type-count every-enemy berserk-line < 20)
+	(players-unit-type-count every-enemy cataphract-line < 20)
+	(players-unit-type-count every-enemy woad-raider-line < 20)
+	(players-unit-type-count every-enemy mameluke-line < 20)
+=>
+	(set-goal not-countered-scout-cavalry 3)
+	;(chat-local-to-self "it's a good day to train cavs")
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy militiaman-line < 20)
+	(players-unit-type-count every-enemy spearman-line < 20)
+	(players-unit-type-count every-enemy archer-line < 20)
+	(players-unit-type-count every-enemy plumed-archer-line < 20)
+	(players-unit-type-count every-enemy janissary-line < 20)
+	(players-unit-type-count every-enemy berserk-line < 20)
+	(players-unit-type-count every-enemy mameluke-line < 20)
+	(players-unit-type-count every-enemy camel-line < 20)
+=>
+	(set-goal not-countered-camel 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy spearman-line < 20)
+	(players-unit-type-count every-enemy camel-line < 20)
+	(players-unit-type-count every-enemy monk < 20)
+	(players-unit-type-count every-enemy janissary-line < 20)
+	(players-unit-type-count every-enemy mameluke-line < 20)
+=>
+	(set-goal not-countered-knight 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy janissary-line < 20)
+	(players-unit-type-count every-enemy scout-cavalry-line < 20)
+	(players-unit-type-count every-enemy knight-line < 20)
+	(players-unit-type-count every-enemy eagle-warrior-line < 20)
+	(players-unit-type-count every-enemy militiaman-line < 20)
+	(players-unit-type-count every-enemy bombard-cannon < 10)
+	(players-unit-type-count every-enemy cataphract-line < 20)
+	(players-unit-type-count every-enemy woad-raider-line < 20)
+	(players-unit-type-count every-enemy mameluke-line < 20)
+=>
+	(set-goal not-countered-scorpion 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy scout-cavalry-line < 20)
+	(players-unit-type-count every-enemy knight-line < 20)
+	(players-unit-type-count every-enemy militiaman-line < 20)
+	(players-unit-type-count every-enemy spearman-line < 20)
+	(players-unit-type-count every-enemy eagle-warrior-line < 20)
+	(players-unit-type-count every-enemy camel-line < 20)
+	(players-unit-type-count every-enemy cataphract-line < 20)
+	(players-unit-type-count every-enemy woad-raider-line < 20)
+	(players-unit-type-count every-enemy mameluke-line < 20)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 20)
+=>
+	(set-goal not-countered-battering-ram 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy scout-cavalry-line < 20)
+	(players-unit-type-count every-enemy knight-line < 20)
+	(players-unit-type-count every-enemy camel-line < 20)
+	(players-unit-type-count every-enemy militiaman-line < 20)
+	(players-unit-type-count every-enemy eagle-warrior-line < 20)
+	(players-unit-type-count every-enemy bombard-cannon < 10)
+	(players-unit-type-count every-enemy cataphract-line < 20)
+	(players-unit-type-count every-enemy woad-raider-line < 20)
+	(players-unit-type-count every-enemy mameluke-line < 20)
+=>
+	(set-goal not-countered-mangonel 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy eagle-warrior-line < 20)
+	(players-unit-type-count every-enemy knight-line < 20)
+	(players-unit-type-count every-enemy scout-cavalry-line < 20)
+	(players-unit-type-count every-enemy camel-line < 20)
+	(players-unit-type-count every-enemy militiaman-line < 20)
+	(players-unit-type-count every-enemy spearman-line < 20)
+	(players-unit-type-count every-enemy cataphract-line < 20)
+	(players-unit-type-count every-enemy woad-raider-line < 20)
+	(players-unit-type-count every-enemy mameluke-line < 20)
+=>
+	(set-goal not-countered-bombard-cannon 3)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 15)
+	(players-unit-type-count every-enemy archer-line < 20)
+	(players-unit-type-count every-enemy scorpion-line < 20)
+	(players-unit-type-count every-enemy mangonel-line < 10)
+	(players-unit-type-count every-enemy cavalry-archer-line < 20)
+	(players-unit-type-count every-enemy plumed-archer-line < 20)
+	(players-unit-type-count every-enemy spearman-line < 20)
+=>
+	(set-goal not-countered-petard 3)
+)
+
+(defrule 
+	(up-compare-goal enemies-sighted > 15)
+	(goal recompare-enemy-count 2)
+	(players-unit-type-count every-enemy battering-ram-line < 10)
+	(players-unit-type-count every-enemy knight-line < 20)
+	(players-unit-type-count every-enemy bombard-cannon < 10)
+	(players-unit-type-count every-enemy camel-line < 20)
+	(players-unit-type-count every-enemy scout-cavalry-line < 20)
+	(players-unit-type-count every-enemy eagle-warrior-line < 20)
+	(players-unit-type-count every-enemy petard < 20)
+	(players-unit-type-count every-enemy cataphract-line < 20)
+	(players-unit-type-count every-enemy woad-raider-line < 20)
+	(players-unit-type-count every-enemy mameluke-line < 20)
+=>
+	(set-goal not-countered-trebuchet 3)
+)
+
+; ---------------------------
+; END ANTI-COUNTER SECTION 2
+; ---------------------------
+; ---------------------------
+; ANTI-COUNTER 3
+; ---------------------------
+
+(defrule ;should train spearman
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy skirmisher-line < 40)
+	(players-unit-type-count every-enemy archer-line < 40)
+	(players-unit-type-count every-enemy plumed-archer-line < 40)
+	(players-unit-type-count every-enemy militiaman-line < 40)
+	(players-unit-type-count every-enemy scorpion-line < 40)
+	(players-unit-type-count every-enemy hand-cannoneer < 40)
+	(players-unit-type-count every-enemy monk < 40)
+	(players-unit-type-count every-enemy janissary-line < 40)
+	(players-unit-type-count every-enemy jaguar-man-line < 40)
+	(players-unit-type-count every-enemy longbowman-line < 40)	
+	(players-unit-type-count every-enemy berserk-line < 40)
+	(players-unit-type-count every-enemy cataphract-line < 40)
+	(players-unit-type-count every-enemy woad-raider-line < 40)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 40)
+=>
+	(set-goal not-countered-spearman 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy archer-line < 40)
+	(players-unit-type-count every-enemy cavalry-archer-line < 40)
+	(players-unit-type-count every-enemy knight-line < 40)
+	(players-unit-type-count every-enemy scorpion-line < 40)
+	(players-unit-type-count every-enemy hand-cannoneer < 40)
+	(players-unit-type-count every-enemy janissary-line < 40)
+	(players-unit-type-count every-enemy jaguar-man-line < 40)
+	(players-unit-type-count every-enemy longbowman-line < 40)
+	(players-unit-type-count every-enemy cataphract-line < 40)
+	(players-unit-type-count every-enemy mameluke-line < 40)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 40)
+	(players-unit-type-count every-enemy conquistador-line < 40)
+=>
+	(set-goal not-countered-militiaman 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy hand-cannoneer < 40)
+	(players-unit-type-count every-enemy militiaman-line < 40)
+	(players-unit-type-count every-enemy spearman-line < 40)
+	(players-unit-type-count every-enemy janissary-line < 40)
+	(players-unit-type-count every-enemy jaguar-man-line < 40)
+	(players-unit-type-count every-enemy berserk-line < 40)
+	(players-unit-type-count every-enemy cataphract-line < 40)
+	(players-unit-type-count every-enemy woad-raider-line < 40)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 40)
+=>
+	(set-goal not-countered-eagle-warrior 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy camel-line < 40)
+	(players-unit-type-count every-enemy militiaman-line < 40)
+	(players-unit-type-count every-enemy knight-line < 40)
+	(players-unit-type-count every-enemy scorpion-line < 40)
+	(players-unit-type-count every-enemy mangonel-line < 20)
+	(players-unit-type-count every-enemy huskarl-line < 40)
+	(players-unit-type-count every-enemy jaguar-man-line < 40)
+	(players-unit-type-count every-enemy berserk-line < 40)
+	(players-unit-type-count every-enemy cataphract-line < 40)
+	(players-unit-type-count every-enemy woad-raider-line < 40)
+	(players-unit-type-count every-enemy mameluke-line < 40)
+=>
+	(set-goal not-countered-skirmisher 4)
+	
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy scout-cavalry-line < 40)
+	(players-unit-type-count every-enemy skirmisher-line < 40)
+	(players-unit-type-count every-enemy knight-line < 40)
+	(players-unit-type-count every-enemy mangonel-line < 20)
+	(players-unit-type-count every-enemy camel-line < 40)
+	(players-unit-type-count every-enemy eagle-warrior-line < 40)
+	(players-unit-type-count every-enemy huskarl-line < 40)
+	(players-unit-type-count every-enemy longbowman-line < 40)
+=>
+	(set-goal not-countered-archer 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy skirmisher-line < 40)
+	(players-unit-type-count every-enemy scorpion-line < 40)
+	(players-unit-type-count every-enemy mangonel-line < 20)
+	(players-unit-type-count every-enemy knight-line < 40)
+	(players-unit-type-count every-enemy huskarl-line < 40)
+=>
+	(set-goal not-countered-hand-cannoneer 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy skirmisher-line < 40)
+	(players-unit-type-count every-enemy spearman-line < 40)
+	(players-unit-type-count every-enemy knight-line < 40)
+	(players-unit-type-count every-enemy eagle-warrior-line < 40)
+	(players-unit-type-count every-enemy scorpion-line < 40)
+	(players-unit-type-count every-enemy mangonel-line < 20)
+	(players-unit-type-count every-enemy camel-line < 40)
+	(players-unit-type-count every-enemy mameluke-line < 40)
+=>
+	(set-goal not-countered-cavalry-archer 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy eagle-warrior-line < 40)
+	(players-unit-type-count every-enemy scout-cavalry-line < 40)
+	(players-unit-type-count every-enemy monk < 40)
+	(players-unit-type-count every-enemy mangonel-line < 20)
+=>
+	(set-goal not-countered-monk 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy spearman-line < 40)
+	(players-unit-type-count every-enemy militiaman-line < 40)
+	(players-unit-type-count every-enemy knight-line < 40)
+	(players-unit-type-count every-enemy camel-line < 40)
+	(players-unit-type-count every-enemy janissary-line < 40)
+	(players-unit-type-count every-enemy berserk-line < 40)
+	(players-unit-type-count every-enemy cataphract-line < 40)
+	(players-unit-type-count every-enemy woad-raider-line < 40)
+	(players-unit-type-count every-enemy mameluke-line < 40)
+=>
+	(set-goal not-countered-scout-cavalry 4)
+	;(chat-local-to-self "it's a good day to train cavs")
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy militiaman-line < 40)
+	(players-unit-type-count every-enemy spearman-line < 40)
+	(players-unit-type-count every-enemy archer-line < 40)
+	(players-unit-type-count every-enemy plumed-archer-line < 40)
+	(players-unit-type-count every-enemy janissary-line < 40)
+	(players-unit-type-count every-enemy berserk-line < 40)
+	(players-unit-type-count every-enemy mameluke-line < 40)
+	(players-unit-type-count every-enemy camel-line < 40)
+=>
+	(set-goal not-countered-camel 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy spearman-line < 40)
+	(players-unit-type-count every-enemy camel-line < 40)
+	(players-unit-type-count every-enemy monk < 40)
+	(players-unit-type-count every-enemy janissary-line < 40)
+	(players-unit-type-count every-enemy mameluke-line < 40)
+=>
+	(set-goal not-countered-knight 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy janissary-line < 40)
+	(players-unit-type-count every-enemy scout-cavalry-line < 40)
+	(players-unit-type-count every-enemy knight-line < 40)
+	(players-unit-type-count every-enemy eagle-warrior-line < 40)
+	(players-unit-type-count every-enemy militiaman-line < 40)
+	(players-unit-type-count every-enemy bombard-cannon < 20)
+	(players-unit-type-count every-enemy cataphract-line < 40)
+	(players-unit-type-count every-enemy woad-raider-line < 40)
+	(players-unit-type-count every-enemy mameluke-line < 40)
+=>
+	(set-goal not-countered-scorpion 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy scout-cavalry-line < 40)
+	(players-unit-type-count every-enemy knight-line < 40)
+	(players-unit-type-count every-enemy militiaman-line < 40)
+	(players-unit-type-count every-enemy spearman-line < 40)
+	(players-unit-type-count every-enemy eagle-warrior-line < 40)
+	(players-unit-type-count every-enemy camel-line < 40)
+	(players-unit-type-count every-enemy cataphract-line < 40)
+	(players-unit-type-count every-enemy woad-raider-line < 40)
+	(players-unit-type-count every-enemy mameluke-line < 40)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 40)
+=>
+	(set-goal not-countered-battering-ram 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy scout-cavalry-line < 40)
+	(players-unit-type-count every-enemy knight-line < 40)
+	(players-unit-type-count every-enemy camel-line < 40)
+	(players-unit-type-count every-enemy militiaman-line < 40)
+	(players-unit-type-count every-enemy eagle-warrior-line < 40)
+	(players-unit-type-count every-enemy bombard-cannon < 20)
+	(players-unit-type-count every-enemy cataphract-line < 40)
+	(players-unit-type-count every-enemy woad-raider-line < 40)
+	(players-unit-type-count every-enemy mameluke-line < 40)
+=>
+	(set-goal not-countered-mangonel 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy eagle-warrior-line < 40)
+	(players-unit-type-count every-enemy knight-line < 40)
+	(players-unit-type-count every-enemy scout-cavalry-line < 40)
+	(players-unit-type-count every-enemy camel-line < 40)
+	(players-unit-type-count every-enemy militiaman-line < 40)
+	(players-unit-type-count every-enemy spearman-line < 40)
+	(players-unit-type-count every-enemy cataphract-line < 40)
+	(players-unit-type-count every-enemy woad-raider-line < 40)
+	(players-unit-type-count every-enemy mameluke-line < 40)
+=>
+	(set-goal not-countered-bombard-cannon 4)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 35)
+	(players-unit-type-count every-enemy archer-line < 40)
+	(players-unit-type-count every-enemy scorpion-line < 40)
+	(players-unit-type-count every-enemy mangonel-line < 20)
+	(players-unit-type-count every-enemy cavalry-archer-line < 40)
+	(players-unit-type-count every-enemy plumed-archer-line < 40)
+	(players-unit-type-count every-enemy spearman-line < 40)
+=>
+	(set-goal not-countered-petard 4)
+)
+
+(defrule 
+	(up-compare-goal enemies-sighted > 35)
+	(goal recompare-enemy-count 2)
+	(players-unit-type-count every-enemy battering-ram-line < 20)
+	(players-unit-type-count every-enemy knight-line < 40)
+	(players-unit-type-count every-enemy bombard-cannon < 20)
+	(players-unit-type-count every-enemy camel-line < 40)
+	(players-unit-type-count every-enemy scout-cavalry-line < 40)
+	(players-unit-type-count every-enemy eagle-warrior-line < 40)
+	(players-unit-type-count every-enemy petard < 40)
+	(players-unit-type-count every-enemy cataphract-line < 40)
+	(players-unit-type-count every-enemy woad-raider-line < 40)
+	(players-unit-type-count every-enemy mameluke-line < 40)
+=>
+	(set-goal not-countered-trebuchet 4)
+)
+
+; ---------------------------
+; END ANTI-COUNTER SECTION 3
+; ---------------------------
+; ---------------------------
+; ANTI-COUNTER 4
+; ---------------------------
+
+(defrule ;should train spearman
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy skirmisher-line < 80)
+	(players-unit-type-count every-enemy archer-line < 80)
+	(players-unit-type-count every-enemy plumed-archer-line < 80)
+	(players-unit-type-count every-enemy militiaman-line < 80)
+	(players-unit-type-count every-enemy scorpion-line < 80)
+	(players-unit-type-count every-enemy hand-cannoneer < 80)
+	(players-unit-type-count every-enemy monk < 80)
+	(players-unit-type-count every-enemy janissary-line < 80)
+	(players-unit-type-count every-enemy jaguar-man-line < 80)
+	(players-unit-type-count every-enemy longbowman-line < 80)	
+	(players-unit-type-count every-enemy berserk-line < 80)
+	(players-unit-type-count every-enemy cataphract-line < 80)
+	(players-unit-type-count every-enemy woad-raider-line < 80)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 80)
+=>
+	(set-goal not-countered-spearman 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy archer-line < 80)
+	(players-unit-type-count every-enemy cavalry-archer-line < 80)
+	(players-unit-type-count every-enemy knight-line < 80)
+	(players-unit-type-count every-enemy scorpion-line < 80)
+	(players-unit-type-count every-enemy hand-cannoneer < 80)
+	(players-unit-type-count every-enemy janissary-line < 80)
+	(players-unit-type-count every-enemy jaguar-man-line < 80)
+	(players-unit-type-count every-enemy longbowman-line < 80)
+	(players-unit-type-count every-enemy cataphract-line < 80)
+	(players-unit-type-count every-enemy mameluke-line < 80)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 80)
+	(players-unit-type-count every-enemy conquistador-line < 80)
+=>
+	(set-goal not-countered-militiaman 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy hand-cannoneer < 80)
+	(players-unit-type-count every-enemy militiaman-line < 80)
+	(players-unit-type-count every-enemy spearman-line < 80)
+	(players-unit-type-count every-enemy janissary-line < 80)
+	(players-unit-type-count every-enemy jaguar-man-line < 80)
+	(players-unit-type-count every-enemy berserk-line < 80)
+	(players-unit-type-count every-enemy cataphract-line < 80)
+	(players-unit-type-count every-enemy woad-raider-line < 80)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 80)
+=>
+	(set-goal not-countered-eagle-warrior 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy camel-line < 80)
+	(players-unit-type-count every-enemy militiaman-line < 80)
+	(players-unit-type-count every-enemy knight-line < 80)
+	(players-unit-type-count every-enemy scorpion-line < 80)
+	(players-unit-type-count every-enemy mangonel-line < 40)
+	(players-unit-type-count every-enemy huskarl-line < 80)
+	(players-unit-type-count every-enemy jaguar-man-line < 80)
+	(players-unit-type-count every-enemy berserk-line < 80)
+	(players-unit-type-count every-enemy cataphract-line < 80)
+	(players-unit-type-count every-enemy woad-raider-line < 80)
+	(players-unit-type-count every-enemy mameluke-line < 80)
+=>
+	(set-goal not-countered-skirmisher 5)
+	
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy scout-cavalry-line < 80)
+	(players-unit-type-count every-enemy skirmisher-line < 80)
+	(players-unit-type-count every-enemy knight-line < 80)
+	(players-unit-type-count every-enemy mangonel-line < 40)
+	(players-unit-type-count every-enemy camel-line < 80)
+	(players-unit-type-count every-enemy eagle-warrior-line < 80)
+	(players-unit-type-count every-enemy huskarl-line < 80)
+	(players-unit-type-count every-enemy longbowman-line < 80)
+=>
+	(set-goal not-countered-archer 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy skirmisher-line < 80)
+	(players-unit-type-count every-enemy scorpion-line < 80)
+	(players-unit-type-count every-enemy mangonel-line < 40)
+	(players-unit-type-count every-enemy knight-line < 80)
+	(players-unit-type-count every-enemy huskarl-line < 80)
+=>
+	(set-goal not-countered-hand-cannoneer 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy skirmisher-line < 80)
+	(players-unit-type-count every-enemy spearman-line < 80)
+	(players-unit-type-count every-enemy knight-line < 80)
+	(players-unit-type-count every-enemy eagle-warrior-line < 80)
+	(players-unit-type-count every-enemy scorpion-line < 80)
+	(players-unit-type-count every-enemy mangonel-line < 40)
+	(players-unit-type-count every-enemy camel-line < 80)
+	(players-unit-type-count every-enemy mameluke-line < 80)
+=>
+	(set-goal not-countered-cavalry-archer 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy eagle-warrior-line < 80)
+	(players-unit-type-count every-enemy scout-cavalry-line < 80)
+	(players-unit-type-count every-enemy monk < 80)
+	(players-unit-type-count every-enemy mangonel-line < 40)
+=>
+	(set-goal not-countered-monk 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy spearman-line < 80)
+	(players-unit-type-count every-enemy militiaman-line < 80)
+	(players-unit-type-count every-enemy knight-line < 80)
+	(players-unit-type-count every-enemy camel-line < 80)
+	(players-unit-type-count every-enemy janissary-line < 80)
+	(players-unit-type-count every-enemy berserk-line < 80)
+	(players-unit-type-count every-enemy cataphract-line < 80)
+	(players-unit-type-count every-enemy woad-raider-line < 80)
+	(players-unit-type-count every-enemy mameluke-line < 80)
+=>
+	(set-goal not-countered-scout-cavalry 5)
+	;(chat-local-to-self "it's a good day to train cavs")
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy militiaman-line < 80)
+	(players-unit-type-count every-enemy spearman-line < 80)
+	(players-unit-type-count every-enemy archer-line < 80)
+	(players-unit-type-count every-enemy plumed-archer-line < 80)
+	(players-unit-type-count every-enemy janissary-line < 80)
+	(players-unit-type-count every-enemy berserk-line < 80)
+	(players-unit-type-count every-enemy mameluke-line < 80)
+	(players-unit-type-count every-enemy camel-line < 80)
+=>
+	(set-goal not-countered-camel 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy spearman-line < 80)
+	(players-unit-type-count every-enemy camel-line < 80)
+	(players-unit-type-count every-enemy monk < 80)
+	(players-unit-type-count every-enemy janissary-line < 80)
+	(players-unit-type-count every-enemy mameluke-line < 80)
+=>
+	(set-goal not-countered-knight 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy janissary-line < 80)
+	(players-unit-type-count every-enemy scout-cavalry-line < 80)
+	(players-unit-type-count every-enemy knight-line < 80)
+	(players-unit-type-count every-enemy eagle-warrior-line < 80)
+	(players-unit-type-count every-enemy militiaman-line < 80)
+	(players-unit-type-count every-enemy bombard-cannon < 40)
+	(players-unit-type-count every-enemy cataphract-line < 80)
+	(players-unit-type-count every-enemy woad-raider-line < 80)
+	(players-unit-type-count every-enemy mameluke-line < 80)
+=>
+	(set-goal not-countered-scorpion 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy scout-cavalry-line < 80)
+	(players-unit-type-count every-enemy knight-line < 80)
+	(players-unit-type-count every-enemy militiaman-line < 80)
+	(players-unit-type-count every-enemy spearman-line < 80)
+	(players-unit-type-count every-enemy eagle-warrior-line < 80)
+	(players-unit-type-count every-enemy camel-line < 80)
+	(players-unit-type-count every-enemy cataphract-line < 80)
+	(players-unit-type-count every-enemy woad-raider-line < 80)
+	(players-unit-type-count every-enemy mameluke-line < 80)
+	(players-unit-type-count every-enemy chu-ko-nu-line < 80)
+=>
+	(set-goal not-countered-battering-ram 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy scout-cavalry-line < 80)
+	(players-unit-type-count every-enemy knight-line < 80)
+	(players-unit-type-count every-enemy camel-line < 80)
+	(players-unit-type-count every-enemy militiaman-line < 80)
+	(players-unit-type-count every-enemy eagle-warrior-line < 80)
+	(players-unit-type-count every-enemy bombard-cannon < 40)
+	(players-unit-type-count every-enemy cataphract-line < 80)
+	(players-unit-type-count every-enemy woad-raider-line < 80)
+	(players-unit-type-count every-enemy mameluke-line < 80)
+=>
+	(set-goal not-countered-mangonel 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy eagle-warrior-line < 80)
+	(players-unit-type-count every-enemy knight-line < 80)
+	(players-unit-type-count every-enemy scout-cavalry-line < 80)
+	(players-unit-type-count every-enemy camel-line < 80)
+	(players-unit-type-count every-enemy militiaman-line < 80)
+	(players-unit-type-count every-enemy spearman-line < 80)
+	(players-unit-type-count every-enemy cataphract-line < 80)
+	(players-unit-type-count every-enemy woad-raider-line < 80)
+	(players-unit-type-count every-enemy mameluke-line < 80)
+=>
+	(set-goal not-countered-bombard-cannon 5)
+)
+
+(defrule 
+	(goal recompare-enemy-count 2)
+	(up-compare-goal enemies-sighted > 75)
+	(players-unit-type-count every-enemy archer-line < 80)
+	(players-unit-type-count every-enemy scorpion-line < 80)
+	(players-unit-type-count every-enemy mangonel-line < 40)
+	(players-unit-type-count every-enemy cavalry-archer-line < 80)
+	(players-unit-type-count every-enemy plumed-archer-line < 80)
+	(players-unit-type-count every-enemy spearman-line < 80)
+=>
+	(set-goal not-countered-petard 5)
+)
+
+(defrule 
+	(up-compare-goal enemies-sighted > 75)
+	(goal recompare-enemy-count 2)
+	(players-unit-type-count every-enemy battering-ram-line < 40)
+	(players-unit-type-count every-enemy knight-line < 80)
+	(players-unit-type-count every-enemy bombard-cannon < 40)
+	(players-unit-type-count every-enemy camel-line < 80)
+	(players-unit-type-count every-enemy scout-cavalry-line < 80)
+	(players-unit-type-count every-enemy eagle-warrior-line < 80)
+	(players-unit-type-count every-enemy petard < 80)
+	(players-unit-type-count every-enemy cataphract-line < 80)
+	(players-unit-type-count every-enemy woad-raider-line < 80)
+	(players-unit-type-count every-enemy mameluke-line < 80)
+=>
+	(set-goal not-countered-trebuchet 5)
+)
+
+; ---------------------------
+; END ANTI-COUNTER SECTION 4
+; ---------------------------
+(defrule
+	(goal recompare-enemy-count 2)
+=>
+	(set-goal can-spearman-counter 1)
+	(set-goal can-militiaman-counter 1)
+	(set-goal can-eagle-warrior-counter 1)
+	(set-goal can-skirmisher-counter 1)
+	(set-goal can-archer-counter 1)
+	(set-goal can-hand-cannoneer-counter 1)
+	(set-goal can-cavalry-archer-counter 1)
+	(set-goal can-monk-counter 1)
+	(set-goal can-scout-cavalry-counter 1)
+	(set-goal can-camel-counter 1)
+	(set-goal can-knight-counter 1)
+	(set-goal can-scorpion-counter 1)
+	(set-goal can-battering-ram-counter 1)
+	(set-goal can-mangonel-counter 1)
+	(set-goal can-bombard-cannon-counter 1)
+	(set-goal can-petard-counter 1)
+	(set-goal can-trebuchet-counter 1)
+	(set-goal can-galley-counter 1)
+	(set-goal can-cannon-galleon-counter 1)
+	(set-goal can-fire-ship-counter 1)
+	(set-goal can-demolition-ship-counter 1)
+)
+
+; ---------------------------
+; DEFINE CAN-COUNTERS 1
+; ---------------------------
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy archer-line > 10)
+		(players-unit-type-count any-enemy cavalry-archer-line > 10))
+		(players-unit-type-count any-enemy skirmisher-line > 10))
+		(players-unit-type-count any-enemy camel-line > 10))
+		(players-unit-type-count any-enemy scout-cavalry-line > 10))
+		(players-unit-type-count any-enemy battering-ram-line > 5))
+		(players-unit-type-count any-enemy bombard-cannon > 5))
+		(players-unit-type-count any-enemy mangonel-line > 5))
+		(players-unit-type-count any-enemy scorpion-line > 5))
+		(players-unit-type-count any-enemy longbowman-line > 10))
+		(players-unit-type-count any-enemy mameluke-line > 10))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 10))
+		(players-unit-type-count any-enemy conquistador-line > 10))
+		(players-unit-type-count any-enemy plumed-archer-line > 10))
+=>
+	(set-goal can-eagle-warrior-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy spearman-line > 10)
+		(players-unit-type-count any-enemy eagle-warrior-line > 10))
+		(players-unit-type-count any-enemy skirmisher-line > 10))
+		(players-unit-type-count any-enemy camel-line > 10))
+		(players-unit-type-count any-enemy scout-cavalry-line > 10))
+		(players-unit-type-count any-enemy battering-ram-line > 5))
+		(players-unit-type-count any-enemy bombard-cannon > 5))
+		(players-unit-type-count any-enemy huskarl-line > 10))
+=>
+	(set-goal can-militiaman-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy scout-cavalry-line > 10)
+		(players-unit-type-count any-enemy cavalry-archer-line > 10))
+		(players-unit-type-count any-enemy plumed-archer-line > 10))
+		(players-unit-type-count any-enemy knight-line > 10))
+		(players-unit-type-count any-enemy camel-line > 10))
+		(players-unit-type-count any-enemy bombard-cannon > 5))
+		(players-unit-type-count any-enemy mameluke-line > 10))
+		(players-unit-type-count any-enemy conquistador-line > 10))
+=>
+	(set-goal can-spearman-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy militiaman-line > 10)
+		(players-unit-type-count any-enemy monk > 10))
+		(players-unit-type-count any-enemy petard > 10))
+		(players-unit-type-count any-enemy jaguar-man-line > 10))
+		(players-unit-type-count any-enemy cataphract-line > 10))
+		(players-unit-type-count any-enemy woad-raider-line > 10))
+=>
+	(set-goal can-cavalry-archer-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy militiaman-line > 10)
+		(players-unit-type-count any-enemy spearman-line > 10))
+		(players-unit-type-count any-enemy eagle-warrior-line > 10))
+		(players-unit-type-count any-enemy jaguar-man-line > 10))
+		(players-unit-type-count any-enemy berserk-line > 10))
+		(players-unit-type-count any-enemy woad-raider-line > 10))
+=>
+	(set-goal can-hand-cannoneer-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy spearman-line > 10)
+		(players-unit-type-count any-enemy hand-cannoneer > 10))
+		(players-unit-type-count any-enemy militiaman-line > 10))
+		(players-unit-type-count any-enemy jaguar-man-line > 10))
+		(players-unit-type-count any-enemy cataphract-line > 10))
+		(players-unit-type-count any-enemy woad-raider-line > 10))
+=>
+	(set-goal can-archer-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy cavalry-archer-line > 10)
+		(players-unit-type-count any-enemy plumed-archer-line > 10))
+		(players-unit-type-count any-enemy archer-line > 10))
+		(players-unit-type-count any-enemy hand-cannoneer > 10))
+		(players-unit-type-count any-enemy janissary-line > 10))
+		(players-unit-type-count any-enemy longbowman-line > 10))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 10))
+		(players-unit-type-count any-enemy conquistador-line > 10))
+=>
+	(set-goal can-skirmisher-counter 2)
+	
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (players-unit-type-count any-enemy militiaman-line > 10)
+		(players-unit-type-count any-enemy knight-line > 10))
+		(players-unit-type-count any-enemy spearman-line > 10))
+=>
+	(set-goal can-monk-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 10)
+		(players-unit-type-count any-enemy militiaman-line > 10))
+		(players-unit-type-count any-enemy archer-line > 10))
+		(players-unit-type-count any-enemy scout-cavalry-line > 10))
+		(players-unit-type-count any-enemy scorpion-line > 10))
+		(players-unit-type-count any-enemy mangonel-line > 5))
+		(players-unit-type-count any-enemy battering-ram-line > 5))
+		(players-unit-type-count any-enemy cavalry-archer-line > 10))
+		(players-unit-type-count any-enemy trebuchet > 5))
+		(players-unit-type-count any-enemy hand-cannoneer > 10))
+		(players-unit-type-count any-enemy bombard-cannon > 5))
+=>
+	(set-goal can-knight-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or	(players-unit-type-count any-enemy huskarl-line > 10)
+		(players-unit-type-count any-enemy jaguar-man-line > 10))
+		(players-unit-type-count any-enemy longbowman-line > 10))
+		(players-unit-type-count any-enemy cataphract-line > 10))
+		(players-unit-type-count any-enemy woad-raider-line > 10))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 10))
+		(players-unit-type-count any-enemy plumed-archer-line > 10))
+=>
+	(set-goal can-knight-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy knight-line > 10)
+		(players-unit-type-count any-enemy scout-cavalry-line > 10))
+		(players-unit-type-count any-enemy mangonel-line > 5))
+		(players-unit-type-count any-enemy battering-ram-line > 5))
+		(players-unit-type-count any-enemy scorpion-line > 10))
+		(players-unit-type-count any-enemy bombard-cannon > 5))
+		(players-unit-type-count any-enemy trebuchet > 5))
+		(players-unit-type-count any-enemy eagle-warrior-line > 10))
+		(players-unit-type-count any-enemy conquistador-line > 10))
+		(players-unit-type-count any-enemy plumed-archer-line > 10))
+=>
+	(set-goal can-camel-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (players-unit-type-count any-enemy archer-line > 10)
+		(players-unit-type-count any-enemy mangonel-line > 5))
+		(players-unit-type-count any-enemy monk > 10))
+		(players-unit-type-count any-enemy battering-ram-line > 5))
+		(players-unit-type-count any-enemy scorpion-line > 10))
+		(players-unit-type-count any-enemy bombard-cannon > 5))
+		(players-unit-type-count any-enemy longbowman-line > 10))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 10))
+		(players-unit-type-count any-enemy plumed-archer-line > 10))
+=>
+	(set-goal can-scout-cavalry-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy archer-line > 10)
+		(players-unit-type-count any-enemy skirmisher-line > 10))
+		(players-unit-type-count any-enemy scorpion-line > 10))
+		(players-unit-type-count any-enemy mangonel-line > 5))
+		(players-unit-type-count any-enemy trebuchet > 5))
+		(players-unit-type-count any-enemy battering-ram-line > 5))
+=>
+	(set-goal can-bombard-cannon-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 10)
+		(players-unit-type-count any-enemy archer-line > 10))
+		(players-unit-type-count any-enemy battering-ram-line > 5))
+		(players-unit-type-count any-enemy fire-ship-line > 5))
+		(players-unit-type-count any-enemy galley-line > 5))
+		(players-unit-type-count any-enemy cannon-galleon-line > 5))
+		(players-unit-type-count any-enemy scorpion-line > 10))
+		(players-unit-type-count any-enemy cavalry-archer-line > 10))
+		(players-unit-type-count any-enemy plumed-archer-line > 10))
+=>
+	(set-goal can-mangonel-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy plumed-archer-line > 10)
+		(players-unit-type-count any-enemy hand-cannoneer > 10))
+		(players-unit-type-count any-enemy janissary-line > 10))
+		(players-unit-type-count any-enemy jaguar-man-line > 10))
+		(players-unit-type-count any-enemy longbowman-line > 10))
+		(players-unit-type-count any-enemy berserk-line > 10))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 10))
+		(players-unit-type-count any-enemy conquistador-line > 10))
+=>
+	(set-goal can-mangonel-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy trebuchet > 5)
+		(players-building-type-count any-enemy house > 15))
+		(players-building-type-count any-enemy castle > 0))
+		(players-building-type-count any-enemy watch-tower-line > 5))
+		(players-unit-type-count any-enemy archer-line > 10))
+=>
+	(set-goal can-battering-ram-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 10)
+		(players-unit-type-count any-enemy archer-line > 10))
+		(players-unit-type-count any-enemy spearman-line > 10))
+		(players-unit-type-count any-enemy militiaman-line > 10))
+		(players-unit-type-count any-enemy cavalry-archer-line > 10))
+		(players-unit-type-count any-enemy plumed-archer-line > 10))
+		(players-unit-type-count any-enemy hand-cannoneer > 10))
+		(players-unit-type-count any-enemy janissary-line > 10))
+		(players-unit-type-count any-enemy jaguar-man-line > 10))
+		(players-unit-type-count any-enemy longbowman-line > 10))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 10))
+=>
+	(set-goal can-scorpion-counter 2)
+)
+
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (players-building-type-count any-enemy house > 15)
+		(players-building-type-count any-enemy castle > 0))
+		(players-building-type-count any-enemy watch-tower-line > 5))
+=>
+	(set-goal can-trebuchet-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy battering-ram-line > 5)
+		(players-unit-type-count any-enemy trebuchet > 5))
+		(players-building-type-count any-enemy house > 15))
+		(players-building-type-count any-enemy castle > 0))
+		(players-building-type-count any-enemy watch-tower-line > 5))
+=>
+	(set-goal can-petard-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-building-type-count any-enemy house > 15)
+	(or (players-unit-type-count every-enemy fire-ship-line < 5)
+		(players-building-type-count any-enemy watch-tower-line > 5))
+=>
+	(set-goal can-cannon-galleon-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy cannon-galleon-line > 5)
+		(players-unit-type-count any-enemy galley-line > 5))
+		(players-unit-type-count any-enemy fire-ship-line > 5))
+		(players-unit-type-count any-enemy transport-ship > 5))
+		(players-unit-type-count any-enemy turtle-ship-line > 0))
+=>
+	(set-goal can-demolition-ship-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (players-unit-type-count any-enemy cannon-galleon-line > 5)
+		(players-unit-type-count any-enemy galley-line > 5))
+		(players-unit-type-count any-enemy fishing-ship > 10))
+		(players-unit-type-count any-enemy transport-ship > 5))
+=>
+	(set-goal can-fire-ship-counter 2)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (players-unit-type-count any-enemy militiaman-line > 10)
+		(players-unit-type-count any-enemy spearman-line > 10))
+		(players-unit-type-count any-enemy fishing-ship > 10))
+		(players-unit-type-count any-enemy transport-ship > 5))
+	(players-unit-type-count every-enemy fire-ship-line < 5)
+=>
+	(set-goal can-galley-counter 2)
+)
+
+; ---------------------------
+; END CAN-COUNTER SECTION - 1
+; ---------------------------
+; DEFINE CAN-COUNTERS 2
+; ---------------------------
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy archer-line > 20)
+		(players-unit-type-count any-enemy cavalry-archer-line > 20))
+		(players-unit-type-count any-enemy skirmisher-line > 20))
+		(players-unit-type-count any-enemy camel-line > 20))
+		(players-unit-type-count any-enemy scout-cavalry-line > 20))
+		(players-unit-type-count any-enemy battering-ram-line > 10))
+		(players-unit-type-count any-enemy bombard-cannon > 10))
+		(players-unit-type-count any-enemy mangonel-line > 10))
+		(players-unit-type-count any-enemy scorpion-line > 10))
+		(players-unit-type-count any-enemy longbowman-line > 20))
+		(players-unit-type-count any-enemy mameluke-line > 20))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 20))
+		(players-unit-type-count any-enemy conquistador-line > 20))
+		(players-unit-type-count any-enemy plumed-archer-line > 20))
+=>
+	(set-goal can-eagle-warrior-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy spearman-line > 20)
+		(players-unit-type-count any-enemy eagle-warrior-line > 20))
+		(players-unit-type-count any-enemy skirmisher-line > 20))
+		(players-unit-type-count any-enemy camel-line > 20))
+		(players-unit-type-count any-enemy scout-cavalry-line > 20))
+		(players-unit-type-count any-enemy battering-ram-line > 10))
+		(players-unit-type-count any-enemy bombard-cannon > 10))
+		(players-unit-type-count any-enemy huskarl-line > 20))
+=>
+	(set-goal can-militiaman-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy scout-cavalry-line > 20)
+		(players-unit-type-count any-enemy cavalry-archer-line > 20))
+		(players-unit-type-count any-enemy plumed-archer-line > 20))
+		(players-unit-type-count any-enemy knight-line > 20))
+		(players-unit-type-count any-enemy camel-line > 20))
+		(players-unit-type-count any-enemy bombard-cannon > 10))
+		(players-unit-type-count any-enemy mameluke-line > 20))
+		(players-unit-type-count any-enemy conquistador-line > 20))
+=>
+	(set-goal can-spearman-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy militiaman-line > 20)
+		(players-unit-type-count any-enemy monk > 20))
+		(players-unit-type-count any-enemy petard > 20))
+		(players-unit-type-count any-enemy jaguar-man-line > 20))
+		(players-unit-type-count any-enemy cataphract-line > 20))
+		(players-unit-type-count any-enemy woad-raider-line > 20))
+=>
+	(set-goal can-cavalry-archer-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy militiaman-line > 20)
+		(players-unit-type-count any-enemy spearman-line > 20))
+		(players-unit-type-count any-enemy eagle-warrior-line > 20))
+		(players-unit-type-count any-enemy jaguar-man-line > 20))
+		(players-unit-type-count any-enemy berserk-line > 20))
+		(players-unit-type-count any-enemy woad-raider-line > 20))
+=>
+	(set-goal can-hand-cannoneer-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy spearman-line > 20)
+		(players-unit-type-count any-enemy hand-cannoneer > 20))
+		(players-unit-type-count any-enemy militiaman-line > 20))
+		(players-unit-type-count any-enemy jaguar-man-line > 20))
+		(players-unit-type-count any-enemy cataphract-line > 20))
+		(players-unit-type-count any-enemy woad-raider-line > 20))
+=>
+	(set-goal can-archer-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy cavalry-archer-line > 20)
+		(players-unit-type-count any-enemy plumed-archer-line > 20))
+		(players-unit-type-count any-enemy archer-line > 20))
+		(players-unit-type-count any-enemy hand-cannoneer > 20))
+		(players-unit-type-count any-enemy janissary-line > 20))
+		(players-unit-type-count any-enemy longbowman-line > 20))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 20))
+		(players-unit-type-count any-enemy conquistador-line > 20))
+=>
+	(set-goal can-skirmisher-counter 3)
+	
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (players-unit-type-count any-enemy militiaman-line > 20)
+		(players-unit-type-count any-enemy knight-line > 20))
+		(players-unit-type-count any-enemy spearman-line > 20))
+=>
+	(set-goal can-monk-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 20)
+		(players-unit-type-count any-enemy militiaman-line > 20))
+		(players-unit-type-count any-enemy archer-line > 20))
+		(players-unit-type-count any-enemy scout-cavalry-line > 20))
+		(players-unit-type-count any-enemy scorpion-line > 20))
+		(players-unit-type-count any-enemy mangonel-line > 10))
+		(players-unit-type-count any-enemy battering-ram-line > 10))
+		(players-unit-type-count any-enemy cavalry-archer-line > 20))
+		(players-unit-type-count any-enemy trebuchet > 10))
+		(players-unit-type-count any-enemy hand-cannoneer > 20))
+		(players-unit-type-count any-enemy bombard-cannon > 10))
+=>
+	(set-goal can-knight-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or	(players-unit-type-count any-enemy huskarl-line > 20)
+		(players-unit-type-count any-enemy jaguar-man-line > 20))
+		(players-unit-type-count any-enemy longbowman-line > 20))
+		(players-unit-type-count any-enemy cataphract-line > 20))
+		(players-unit-type-count any-enemy woad-raider-line > 20))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 20))
+		(players-unit-type-count any-enemy plumed-archer-line > 20))
+=>
+	(set-goal can-knight-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy knight-line > 20)
+		(players-unit-type-count any-enemy scout-cavalry-line > 20))
+		(players-unit-type-count any-enemy mangonel-line > 10))
+		(players-unit-type-count any-enemy battering-ram-line > 10))
+		(players-unit-type-count any-enemy scorpion-line > 20))
+		(players-unit-type-count any-enemy bombard-cannon > 10))
+		(players-unit-type-count any-enemy trebuchet > 10))
+		(players-unit-type-count any-enemy eagle-warrior-line > 20))
+		(players-unit-type-count any-enemy conquistador-line > 20))
+		(players-unit-type-count any-enemy plumed-archer-line > 20))
+=>
+	(set-goal can-camel-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (players-unit-type-count any-enemy archer-line > 20)
+		(players-unit-type-count any-enemy mangonel-line > 10))
+		(players-unit-type-count any-enemy monk > 20))
+		(players-unit-type-count any-enemy battering-ram-line > 10))
+		(players-unit-type-count any-enemy scorpion-line > 20))
+		(players-unit-type-count any-enemy bombard-cannon > 10))
+		(players-unit-type-count any-enemy longbowman-line > 20))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 20))
+		(players-unit-type-count any-enemy plumed-archer-line > 20))
+=>
+	(set-goal can-scout-cavalry-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy archer-line > 20)
+		(players-unit-type-count any-enemy skirmisher-line > 20))
+		(players-unit-type-count any-enemy scorpion-line > 20))
+		(players-unit-type-count any-enemy mangonel-line > 10))
+		(players-unit-type-count any-enemy trebuchet > 10))
+		(players-unit-type-count any-enemy battering-ram-line > 10))
+=>
+	(set-goal can-bombard-cannon-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 20)
+		(players-unit-type-count any-enemy archer-line > 20))
+		(players-unit-type-count any-enemy battering-ram-line > 10))
+		(players-unit-type-count any-enemy fire-ship-line > 10))
+		(players-unit-type-count any-enemy galley-line > 10))
+		(players-unit-type-count any-enemy cannon-galleon-line > 10))
+		(players-unit-type-count any-enemy scorpion-line > 20))
+		(players-unit-type-count any-enemy cavalry-archer-line > 20))
+		(players-unit-type-count any-enemy plumed-archer-line > 20))
+=>
+	(set-goal can-mangonel-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy plumed-archer-line > 20)
+		(players-unit-type-count any-enemy hand-cannoneer > 20))
+		(players-unit-type-count any-enemy janissary-line > 20))
+		(players-unit-type-count any-enemy jaguar-man-line > 20))
+		(players-unit-type-count any-enemy longbowman-line > 20))
+		(players-unit-type-count any-enemy berserk-line > 20))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 20))
+		(players-unit-type-count any-enemy conquistador-line > 20))
+=>
+	(set-goal can-mangonel-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy trebuchet > 10)
+		(players-building-type-count any-enemy house > 30))
+		(players-building-type-count any-enemy castle > 0))
+		(players-building-type-count any-enemy watch-tower-line > 10))
+		(players-unit-type-count any-enemy archer-line > 20))
+=>
+	(set-goal can-battering-ram-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 20)
+		(players-unit-type-count any-enemy archer-line > 20))
+		(players-unit-type-count any-enemy spearman-line > 20))
+		(players-unit-type-count any-enemy militiaman-line > 20))
+		(players-unit-type-count any-enemy cavalry-archer-line > 20))
+		(players-unit-type-count any-enemy plumed-archer-line > 20))
+		(players-unit-type-count any-enemy hand-cannoneer > 20))
+		(players-unit-type-count any-enemy janissary-line > 20))
+		(players-unit-type-count any-enemy jaguar-man-line > 20))
+		(players-unit-type-count any-enemy longbowman-line > 20))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 20))
+=>
+	(set-goal can-scorpion-counter 3)
+)
+
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (players-building-type-count any-enemy house > 30)
+		(players-building-type-count any-enemy castle > 0))
+		(players-building-type-count any-enemy watch-tower-line > 10))
+=>
+	(set-goal can-trebuchet-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy battering-ram-line > 10)
+		(players-unit-type-count any-enemy trebuchet > 10))
+		(players-building-type-count any-enemy house > 30))
+		(players-building-type-count any-enemy castle > 0))
+		(players-building-type-count any-enemy watch-tower-line > 10))
+=>
+	(set-goal can-petard-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-building-type-count any-enemy house > 30)
+	(or (players-unit-type-count every-enemy fire-ship-line < 10)
+		(players-building-type-count any-enemy watch-tower-line > 10))
+=>
+	(set-goal can-cannon-galleon-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy cannon-galleon-line > 10)
+		(players-unit-type-count any-enemy galley-line > 10))
+		(players-unit-type-count any-enemy fire-ship-line > 10))
+		(players-unit-type-count any-enemy transport-ship > 10))
+		(players-unit-type-count any-enemy turtle-ship-line > 0));WRECK THE TURTLE SHIPS WITH MAXIMUM PREJUDICE
+=>
+	(set-goal can-demolition-ship-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (players-unit-type-count any-enemy cannon-galleon-line > 10)
+		(players-unit-type-count any-enemy galley-line > 10))
+		(players-unit-type-count any-enemy fishing-ship > 20))
+		(players-unit-type-count any-enemy transport-ship > 10))
+=>
+	(set-goal can-fire-ship-counter 3)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (players-unit-type-count any-enemy militiaman-line > 20)
+		(players-unit-type-count any-enemy spearman-line > 20))
+		(players-unit-type-count any-enemy fishing-ship > 20))
+		(players-unit-type-count any-enemy transport-ship > 10))
+	(players-unit-type-count every-enemy fire-ship-line < 10)
+=>
+	(set-goal can-galley-counter 3)
+)
+
+; ---------------------------
+; END CAN-COUNTER SECTION - 2
+; ---------------------------
+; DEFINE CAN-COUNTERS 3
+; ---------------------------
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy archer-line > 40)
+		(players-unit-type-count any-enemy cavalry-archer-line > 40))
+		(players-unit-type-count any-enemy skirmisher-line > 40))
+		(players-unit-type-count any-enemy camel-line > 40))
+		(players-unit-type-count any-enemy scout-cavalry-line > 40))
+		(players-unit-type-count any-enemy battering-ram-line > 20))
+		(players-unit-type-count any-enemy bombard-cannon > 20))
+		(players-unit-type-count any-enemy mangonel-line > 20))
+		(players-unit-type-count any-enemy scorpion-line > 20))
+		(players-unit-type-count any-enemy longbowman-line > 40))
+		(players-unit-type-count any-enemy mameluke-line > 40))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 40))
+		(players-unit-type-count any-enemy conquistador-line > 40))
+		(players-unit-type-count any-enemy plumed-archer-line > 40))
+=>
+	(set-goal can-eagle-warrior-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy spearman-line > 40)
+		(players-unit-type-count any-enemy eagle-warrior-line > 40))
+		(players-unit-type-count any-enemy skirmisher-line > 40))
+		(players-unit-type-count any-enemy camel-line > 40))
+		(players-unit-type-count any-enemy scout-cavalry-line > 40))
+		(players-unit-type-count any-enemy battering-ram-line > 20))
+		(players-unit-type-count any-enemy bombard-cannon > 20))
+		(players-unit-type-count any-enemy huskarl-line > 40))
+=>
+	(set-goal can-militiaman-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy scout-cavalry-line > 40)
+		(players-unit-type-count any-enemy cavalry-archer-line > 40))
+		(players-unit-type-count any-enemy plumed-archer-line > 40))
+		(players-unit-type-count any-enemy knight-line > 40))
+		(players-unit-type-count any-enemy camel-line > 40))
+		(players-unit-type-count any-enemy bombard-cannon > 20))
+		(players-unit-type-count any-enemy mameluke-line > 40))
+		(players-unit-type-count any-enemy conquistador-line > 40))
+=>
+	(set-goal can-spearman-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy militiaman-line > 40)
+		(players-unit-type-count any-enemy monk > 40))
+		(players-unit-type-count any-enemy petard > 40))
+		(players-unit-type-count any-enemy jaguar-man-line > 40))
+		(players-unit-type-count any-enemy cataphract-line > 40))
+		(players-unit-type-count any-enemy woad-raider-line > 40))
+=>
+	(set-goal can-cavalry-archer-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy militiaman-line > 40)
+		(players-unit-type-count any-enemy spearman-line > 40))
+		(players-unit-type-count any-enemy eagle-warrior-line > 40))
+		(players-unit-type-count any-enemy jaguar-man-line > 40))
+		(players-unit-type-count any-enemy berserk-line > 40))
+		(players-unit-type-count any-enemy woad-raider-line > 40))
+=>
+	(set-goal can-hand-cannoneer-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy spearman-line > 40)
+		(players-unit-type-count any-enemy hand-cannoneer > 40))
+		(players-unit-type-count any-enemy militiaman-line > 40))
+		(players-unit-type-count any-enemy jaguar-man-line > 40))
+		(players-unit-type-count any-enemy cataphract-line > 40))
+		(players-unit-type-count any-enemy woad-raider-line > 40))
+=>
+	(set-goal can-archer-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy cavalry-archer-line > 40)
+		(players-unit-type-count any-enemy plumed-archer-line > 40))
+		(players-unit-type-count any-enemy archer-line > 40))
+		(players-unit-type-count any-enemy hand-cannoneer > 40))
+		(players-unit-type-count any-enemy janissary-line > 40))
+		(players-unit-type-count any-enemy longbowman-line > 40))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 40))
+		(players-unit-type-count any-enemy conquistador-line > 40))
+=>
+	(set-goal can-skirmisher-counter 4)
+	
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (players-unit-type-count any-enemy militiaman-line > 40)
+		(players-unit-type-count any-enemy knight-line > 40))
+		(players-unit-type-count any-enemy spearman-line > 40))
+=>
+	(set-goal can-monk-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 40)
+		(players-unit-type-count any-enemy militiaman-line > 40))
+		(players-unit-type-count any-enemy archer-line > 40))
+		(players-unit-type-count any-enemy scout-cavalry-line > 40))
+		(players-unit-type-count any-enemy scorpion-line > 40))
+		(players-unit-type-count any-enemy mangonel-line > 20))
+		(players-unit-type-count any-enemy battering-ram-line > 20))
+		(players-unit-type-count any-enemy cavalry-archer-line > 40))
+		(players-unit-type-count any-enemy trebuchet > 20))
+		(players-unit-type-count any-enemy hand-cannoneer > 40))
+		(players-unit-type-count any-enemy bombard-cannon > 20))
+=>
+	(set-goal can-knight-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or	(players-unit-type-count any-enemy huskarl-line > 40)
+		(players-unit-type-count any-enemy jaguar-man-line > 40))
+		(players-unit-type-count any-enemy longbowman-line > 40))
+		(players-unit-type-count any-enemy cataphract-line > 40))
+		(players-unit-type-count any-enemy woad-raider-line > 40))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 40))
+		(players-unit-type-count any-enemy plumed-archer-line > 40))
+=>
+	(set-goal can-knight-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy knight-line > 40)
+		(players-unit-type-count any-enemy scout-cavalry-line > 40))
+		(players-unit-type-count any-enemy mangonel-line > 20))
+		(players-unit-type-count any-enemy battering-ram-line > 20))
+		(players-unit-type-count any-enemy scorpion-line > 40))
+		(players-unit-type-count any-enemy bombard-cannon > 20))
+		(players-unit-type-count any-enemy trebuchet > 20))
+		(players-unit-type-count any-enemy eagle-warrior-line > 40))
+		(players-unit-type-count any-enemy conquistador-line > 40))
+		(players-unit-type-count any-enemy plumed-archer-line > 40))
+=>
+	(set-goal can-camel-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (players-unit-type-count any-enemy archer-line > 40)
+		(players-unit-type-count any-enemy mangonel-line > 20))
+		(players-unit-type-count any-enemy monk > 40))
+		(players-unit-type-count any-enemy battering-ram-line > 20))
+		(players-unit-type-count any-enemy scorpion-line > 40))
+		(players-unit-type-count any-enemy bombard-cannon > 20))
+		(players-unit-type-count any-enemy longbowman-line > 40))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 40))
+		(players-unit-type-count any-enemy plumed-archer-line > 40))
+=>
+	(set-goal can-scout-cavalry-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy archer-line > 40)
+		(players-unit-type-count any-enemy skirmisher-line > 40))
+		(players-unit-type-count any-enemy scorpion-line > 40))
+		(players-unit-type-count any-enemy mangonel-line > 20))
+		(players-unit-type-count any-enemy trebuchet > 20))
+		(players-unit-type-count any-enemy battering-ram-line > 20))
+=>
+	(set-goal can-bombard-cannon-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 40)
+		(players-unit-type-count any-enemy archer-line > 40))
+		(players-unit-type-count any-enemy battering-ram-line > 20))
+		(players-unit-type-count any-enemy fire-ship-line > 20))
+		(players-unit-type-count any-enemy galley-line > 20))
+		(players-unit-type-count any-enemy cannon-galleon-line > 20))
+		(players-unit-type-count any-enemy scorpion-line > 40))
+		(players-unit-type-count any-enemy cavalry-archer-line > 40))
+		(players-unit-type-count any-enemy plumed-archer-line > 40))
+=>
+	(set-goal can-mangonel-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy plumed-archer-line > 40)
+		(players-unit-type-count any-enemy hand-cannoneer > 40))
+		(players-unit-type-count any-enemy janissary-line > 40))
+		(players-unit-type-count any-enemy jaguar-man-line > 40))
+		(players-unit-type-count any-enemy longbowman-line > 40))
+		(players-unit-type-count any-enemy berserk-line > 40))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 40))
+		(players-unit-type-count any-enemy conquistador-line > 40))
+=>
+	(set-goal can-mangonel-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy trebuchet > 20)
+		(players-building-type-count any-enemy house > 60))
+		(players-building-type-count any-enemy castle > 2))
+		(players-building-type-count any-enemy watch-tower-line > 20))
+		(players-unit-type-count any-enemy archer-line > 40))
+=>
+	(set-goal can-battering-ram-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 40)
+		(players-unit-type-count any-enemy archer-line > 40))
+		(players-unit-type-count any-enemy spearman-line > 40))
+		(players-unit-type-count any-enemy militiaman-line > 40))
+		(players-unit-type-count any-enemy cavalry-archer-line > 40))
+		(players-unit-type-count any-enemy plumed-archer-line > 40))
+		(players-unit-type-count any-enemy hand-cannoneer > 40))
+		(players-unit-type-count any-enemy janissary-line > 40))
+		(players-unit-type-count any-enemy jaguar-man-line > 40))
+		(players-unit-type-count any-enemy longbowman-line > 40))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 40))
+=>
+	(set-goal can-scorpion-counter 4)
+)
+
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (players-building-type-count any-enemy house > 60)
+		(players-building-type-count any-enemy castle > 2))
+		(players-building-type-count any-enemy watch-tower-line > 20))
+=>
+	(set-goal can-trebuchet-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy battering-ram-line > 20)
+		(players-unit-type-count any-enemy trebuchet > 20))
+		(players-building-type-count any-enemy house > 60))
+		(players-building-type-count any-enemy castle > 2))
+		(players-building-type-count any-enemy watch-tower-line > 20))
+=>
+	(set-goal can-petard-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-building-type-count any-enemy house > 60)
+	(or (players-unit-type-count every-enemy fire-ship-line < 20)
+		(players-building-type-count any-enemy watch-tower-line > 20))
+=>
+	(set-goal can-cannon-galleon-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy cannon-galleon-line > 20)
+		(players-unit-type-count any-enemy galley-line > 20))
+		(players-unit-type-count any-enemy fire-ship-line > 20))
+		(players-unit-type-count any-enemy transport-ship > 20))
+		(players-unit-type-count any-enemy turtle-ship-line > 0));WRECK THE TURTLE SHIPS WITH MAXIMUM PREJUDICE
+=>
+	(set-goal can-demolition-ship-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (players-unit-type-count any-enemy cannon-galleon-line > 20)
+		(players-unit-type-count any-enemy galley-line > 20))
+		(players-unit-type-count any-enemy fishing-ship > 40))
+		(players-unit-type-count any-enemy transport-ship > 20))
+=>
+	(set-goal can-fire-ship-counter 4)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (players-unit-type-count any-enemy militiaman-line > 40)
+		(players-unit-type-count any-enemy spearman-line > 40))
+		(players-unit-type-count any-enemy fishing-ship > 40))
+		(players-unit-type-count any-enemy transport-ship > 20))
+	(players-unit-type-count every-enemy fire-ship-line < 20)
+=>
+	(set-goal can-galley-counter 4)
+)
+
+; ---------------------------
+; END CAN-COUNTER SECTION - 3
+; ---------------------------
+; DEFINE CAN-COUNTERS 4
+; ---------------------------
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy archer-line > 80)
+		(players-unit-type-count any-enemy cavalry-archer-line > 80))
+		(players-unit-type-count any-enemy skirmisher-line > 80))
+		(players-unit-type-count any-enemy camel-line > 80))
+		(players-unit-type-count any-enemy scout-cavalry-line > 80))
+		(players-unit-type-count any-enemy battering-ram-line > 40))
+		(players-unit-type-count any-enemy bombard-cannon > 40))
+		(players-unit-type-count any-enemy mangonel-line > 40))
+		(players-unit-type-count any-enemy scorpion-line > 40))
+		(players-unit-type-count any-enemy longbowman-line > 80))
+		(players-unit-type-count any-enemy mameluke-line > 80))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 80))
+		(players-unit-type-count any-enemy conquistador-line > 80))
+		(players-unit-type-count any-enemy plumed-archer-line > 80))
+=>
+	(set-goal can-eagle-warrior-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy spearman-line > 80)
+		(players-unit-type-count any-enemy eagle-warrior-line > 80))
+		(players-unit-type-count any-enemy skirmisher-line > 80))
+		(players-unit-type-count any-enemy camel-line > 80))
+		(players-unit-type-count any-enemy scout-cavalry-line > 80))
+		(players-unit-type-count any-enemy battering-ram-line > 40))
+		(players-unit-type-count any-enemy bombard-cannon > 40))
+		(players-unit-type-count any-enemy huskarl-line > 80))
+=>
+	(set-goal can-militiaman-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy scout-cavalry-line > 80)
+		(players-unit-type-count any-enemy cavalry-archer-line > 80))
+		(players-unit-type-count any-enemy plumed-archer-line > 80))
+		(players-unit-type-count any-enemy knight-line > 80))
+		(players-unit-type-count any-enemy camel-line > 80))
+		(players-unit-type-count any-enemy bombard-cannon > 40))
+		(players-unit-type-count any-enemy mameluke-line > 80))
+		(players-unit-type-count any-enemy conquistador-line > 80))
+=>
+	(set-goal can-spearman-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy militiaman-line > 80)
+		(players-unit-type-count any-enemy monk > 80))
+		(players-unit-type-count any-enemy petard > 80))
+		(players-unit-type-count any-enemy jaguar-man-line > 80))
+		(players-unit-type-count any-enemy cataphract-line > 80))
+		(players-unit-type-count any-enemy woad-raider-line > 80))
+=>
+	(set-goal can-cavalry-archer-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy militiaman-line > 80)
+		(players-unit-type-count any-enemy spearman-line > 80))
+		(players-unit-type-count any-enemy eagle-warrior-line > 80))
+		(players-unit-type-count any-enemy jaguar-man-line > 80))
+		(players-unit-type-count any-enemy berserk-line > 80))
+		(players-unit-type-count any-enemy woad-raider-line > 80))
+=>
+	(set-goal can-hand-cannoneer-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy spearman-line > 80)
+		(players-unit-type-count any-enemy hand-cannoneer > 80))
+		(players-unit-type-count any-enemy militiaman-line > 80))
+		(players-unit-type-count any-enemy jaguar-man-line > 80))
+		(players-unit-type-count any-enemy cataphract-line > 80))
+		(players-unit-type-count any-enemy woad-raider-line > 80))
+=>
+	(set-goal can-archer-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy cavalry-archer-line > 80)
+		(players-unit-type-count any-enemy plumed-archer-line > 80))
+		(players-unit-type-count any-enemy archer-line > 80))
+		(players-unit-type-count any-enemy hand-cannoneer > 80))
+		(players-unit-type-count any-enemy janissary-line > 80))
+		(players-unit-type-count any-enemy longbowman-line > 80))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 80))
+		(players-unit-type-count any-enemy conquistador-line > 80))
+=>
+	(set-goal can-skirmisher-counter 5)
+	
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (players-unit-type-count any-enemy militiaman-line > 80)
+		(players-unit-type-count any-enemy knight-line > 80))
+		(players-unit-type-count any-enemy spearman-line > 80))
+=>
+	(set-goal can-monk-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 80)
+		(players-unit-type-count any-enemy militiaman-line > 80))
+		(players-unit-type-count any-enemy archer-line > 80))
+		(players-unit-type-count any-enemy scout-cavalry-line > 80))
+		(players-unit-type-count any-enemy scorpion-line > 80))
+		(players-unit-type-count any-enemy mangonel-line > 40))
+		(players-unit-type-count any-enemy battering-ram-line > 40))
+		(players-unit-type-count any-enemy cavalry-archer-line > 80))
+		(players-unit-type-count any-enemy trebuchet > 40))
+		(players-unit-type-count any-enemy hand-cannoneer > 80))
+		(players-unit-type-count any-enemy bombard-cannon > 40))
+=>
+	(set-goal can-knight-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or	(players-unit-type-count any-enemy huskarl-line > 80)
+		(players-unit-type-count any-enemy jaguar-man-line > 80))
+		(players-unit-type-count any-enemy longbowman-line > 80))
+		(players-unit-type-count any-enemy cataphract-line > 80))
+		(players-unit-type-count any-enemy woad-raider-line > 80))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 80))
+		(players-unit-type-count any-enemy plumed-archer-line > 80))
+=>
+	(set-goal can-knight-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy knight-line > 80)
+		(players-unit-type-count any-enemy scout-cavalry-line > 80))
+		(players-unit-type-count any-enemy mangonel-line > 40))
+		(players-unit-type-count any-enemy battering-ram-line > 40))
+		(players-unit-type-count any-enemy scorpion-line > 80))
+		(players-unit-type-count any-enemy bombard-cannon > 40))
+		(players-unit-type-count any-enemy trebuchet > 40))
+		(players-unit-type-count any-enemy eagle-warrior-line > 80))
+		(players-unit-type-count any-enemy conquistador-line > 80))
+		(players-unit-type-count any-enemy plumed-archer-line > 80))
+=>
+	(set-goal can-camel-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (players-unit-type-count any-enemy archer-line > 80)
+		(players-unit-type-count any-enemy mangonel-line > 40))
+		(players-unit-type-count any-enemy monk > 80))
+		(players-unit-type-count any-enemy battering-ram-line > 40))
+		(players-unit-type-count any-enemy scorpion-line > 80))
+		(players-unit-type-count any-enemy bombard-cannon > 40))
+		(players-unit-type-count any-enemy longbowman-line > 80))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 80))
+		(players-unit-type-count any-enemy plumed-archer-line > 80))
+=>
+	(set-goal can-scout-cavalry-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (players-unit-type-count any-enemy archer-line > 80)
+		(players-unit-type-count any-enemy skirmisher-line > 80))
+		(players-unit-type-count any-enemy scorpion-line > 80))
+		(players-unit-type-count any-enemy mangonel-line > 40))
+		(players-unit-type-count any-enemy trebuchet > 40))
+		(players-unit-type-count any-enemy battering-ram-line > 40))
+=>
+	(set-goal can-bombard-cannon-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 80)
+		(players-unit-type-count any-enemy archer-line > 80))
+		(players-unit-type-count any-enemy battering-ram-line > 40))
+		(players-unit-type-count any-enemy fire-ship-line > 40))
+		(players-unit-type-count any-enemy galley-line > 40))
+		(players-unit-type-count any-enemy cannon-galleon-line > 40))
+		(players-unit-type-count any-enemy scorpion-line > 80))
+		(players-unit-type-count any-enemy cavalry-archer-line > 80))
+		(players-unit-type-count any-enemy plumed-archer-line > 80))
+=>
+	(set-goal can-mangonel-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (players-unit-type-count any-enemy plumed-archer-line > 80)
+		(players-unit-type-count any-enemy hand-cannoneer > 80))
+		(players-unit-type-count any-enemy janissary-line > 80))
+		(players-unit-type-count any-enemy jaguar-man-line > 80))
+		(players-unit-type-count any-enemy longbowman-line > 80))
+		(players-unit-type-count any-enemy berserk-line > 80))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 80))
+		(players-unit-type-count any-enemy conquistador-line > 80))
+=>
+	(set-goal can-mangonel-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy trebuchet > 40)
+		(players-building-type-count any-enemy house > 120))
+		(players-building-type-count any-enemy castle > 3))
+		(players-building-type-count any-enemy watch-tower-line > 40))
+		(players-unit-type-count any-enemy archer-line > 80))
+=>
+	(set-goal can-battering-ram-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (or (or (or (or (or (or (players-unit-type-count any-enemy skirmisher-line > 80)
+		(players-unit-type-count any-enemy archer-line > 80))
+		(players-unit-type-count any-enemy spearman-line > 80))
+		(players-unit-type-count any-enemy militiaman-line > 80))
+		(players-unit-type-count any-enemy cavalry-archer-line > 80))
+		(players-unit-type-count any-enemy plumed-archer-line > 80))
+		(players-unit-type-count any-enemy hand-cannoneer > 80))
+		(players-unit-type-count any-enemy janissary-line > 80))
+		(players-unit-type-count any-enemy jaguar-man-line > 80))
+		(players-unit-type-count any-enemy longbowman-line > 80))
+		(players-unit-type-count any-enemy chu-ko-nu-line > 80))
+=>
+	(set-goal can-scorpion-counter 5)
+)
+
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (players-building-type-count any-enemy house > 120)
+		(players-building-type-count any-enemy castle > 3))
+		(players-building-type-count any-enemy watch-tower-line > 40))
+=>
+	(set-goal can-trebuchet-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy battering-ram-line > 40)
+		(players-unit-type-count any-enemy trebuchet > 40))
+		(players-building-type-count any-enemy house > 120))
+		(players-building-type-count any-enemy castle > 3))
+		(players-building-type-count any-enemy watch-tower-line > 40))
+=>
+	(set-goal can-petard-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(players-building-type-count any-enemy house > 120)
+	(or (players-unit-type-count every-enemy fire-ship-line < 40)
+		(players-building-type-count any-enemy watch-tower-line > 40))
+=>
+	(set-goal can-cannon-galleon-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (or (players-unit-type-count any-enemy cannon-galleon-line > 40)
+		(players-unit-type-count any-enemy galley-line > 40))
+		(players-unit-type-count any-enemy fire-ship-line > 40))
+		(players-unit-type-count any-enemy transport-ship > 40))
+		(players-unit-type-count any-enemy turtle-ship-line > 0));WRECK THE TURTLE SHIPS WITH MAXIMUM PREJUDICE
+=>
+	(set-goal can-demolition-ship-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (players-unit-type-count any-enemy cannon-galleon-line > 40)
+		(players-unit-type-count any-enemy galley-line > 40))
+		(players-unit-type-count any-enemy fishing-ship > 80))
+		(players-unit-type-count any-enemy transport-ship > 40))
+=>
+	(set-goal can-fire-ship-counter 5)
+)
+
+(defrule
+	(goal recompare-enemy-count 2)
+	(or (or (or (players-unit-type-count any-enemy militiaman-line > 80)
+		(players-unit-type-count any-enemy spearman-line > 80))
+		(players-unit-type-count any-enemy fishing-ship > 80))
+		(players-unit-type-count any-enemy transport-ship > 40))
+	(players-unit-type-count every-enemy fire-ship-line < 40)
+=>
+	(set-goal can-galley-counter 5)
+)
+
+; ---------------------------
+; END CAN-COUNTER SECTION - 4
+; ---------------------------
+; ---------------------------
+; COUNTER-UNIT CREATION SECTION 1
+; ---------------------------
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train spearman-line)
+	(up-compare-goal not-countered-spearman > 1)
+	(up-compare-goal can-spearman-counter > 1)
+	(unit-type-count spearman-line < 10)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(can-train militiaman-line)
+	(up-compare-goal not-countered-militiaman > 1)
+	(up-compare-goal can-militiaman-counter > 1)
+	(unit-type-count militiaman-line < 10)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(can-train eagle-warrior-line)
+	(up-compare-goal not-countered-eagle-warrior > 1)
+	(up-compare-goal can-eagle-warrior-counter > 1)
+	(unit-type-count eagle-warrior-line < 10)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train eagle-warrior-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train skirmisher-line)
+	(up-compare-goal not-countered-skirmisher > 1)
+	(up-compare-goal can-skirmisher-counter > 1)
+	(unit-type-count skirmisher-line < 10)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train archer-line)
+	(up-compare-goal not-countered-archer > 1)
+	(up-compare-goal can-archer-counter > 1)
+	(unit-type-count archer-line < 10)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(can-train hand-cannoneer)
+	(up-compare-goal not-countered-hand-cannoneer > 1)
+	(up-compare-goal can-hand-cannoneer-counter > 1)
+	(unit-type-count hand-cannoneer < 10)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train hand-cannoneer)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train cavalry-archer-line)
+	(up-compare-goal not-countered-cavalry-archer > 1)
+	(up-compare-goal can-cavalry-archer-counter > 1)
+	(unit-type-count cavalry-archer-line < 10)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(can-train monk)
+	(up-compare-goal not-countered-monk > 1)
+	(up-compare-goal can-monk-counter > 1)
+	(unit-type-count monk < 10)
+	(gold-amount > 200)
+	(up-compare-goal church-train-count < 3) 
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+
+(defrule
+	(can-train scout-cavalry-line)
+	(up-compare-goal not-countered-scout-cavalry > 1)
+	(up-compare-goal can-scout-cavalry-counter > 1)
+	(unit-type-count scout-cavalry-line < 10)
+	(food-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(can-train camel-line)
+	(up-compare-goal not-countered-camel > 1)
+	(up-compare-goal can-camel-counter > 1)
+	(unit-type-count camel-line < 10)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train camel-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(can-train knight-line)
+	(up-compare-goal not-countered-knight > 1)
+	(up-compare-goal can-knight-counter > 1)
+	(unit-type-count knight-line < 10)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train scorpion-line)
+	(up-compare-goal not-countered-scorpion > 1)
+	(up-compare-goal can-scorpion-counter > 1)
+	(unit-type-count scorpion-line < 10)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train battering-ram-line)
+	(up-compare-goal not-countered-battering-ram > 1)
+	(up-compare-goal can-battering-ram-counter > 1)
+	(unit-type-count battering-ram-line < 5)
+	(not (town-under-attack))
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(game-time > 900)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train battering-ram-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train mangonel-line)
+	(up-compare-goal not-countered-mangonel > 1)
+	(up-compare-goal can-mangonel-counter > 1)
+	(unit-type-count mangonel-line < 10)
+	(or (or (up-compare-goal can-demolition-ship-counter > 1);if we're training demolition ships, we probably need mangonels too for some land-side support.
+		(players-unit-type-count any-enemy villager > 80));if you can see this many villagers, we're probably already in their town
+			(and (unit-type-count archer-line > 5)
+				(unit-type-count spearman-line > 5)));otherwise, mangonels need to be built en masse with some fire support
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train mangonel-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(can-train bombard-cannon)
+	(up-compare-goal not-countered-bombard-cannon > 1)
+	(up-compare-goal can-bombard-cannon-counter > 1)
+	(unit-type-count bombard-cannon < 5)
+	(not (town-under-attack))
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train bombard-cannon)
+	(set-goal have-siege-counter 2)
+)
+
+;(defrule
+;	(can-train siege-tower)
+;	(up-compare-goal not-countered-battering-ram > 1)
+;	(up-compare-goal can-battering-ram-counter > 1)
+;	(or (or (or (or (players-unit-type-count any-enemy archer-line > 10)
+;		(players-unit-type-count any-enemy cavalry-archer-line > 10))
+;		(players-unit-type-count any-enemy hand-cannoneer > 10))
+;		(players-unit-type-count any-enemy mangonel-line > 5))
+;		(players-unit-type-count any-enemy scorpion-line > 5))
+;	(unit-type-count militiaman-line > 10)
+;	(not (town-under-attack))
+;	(wood-amount > 200)
+;	(gold-amount > 200)
+;	(unit-type-count siege-tower < 5)
+;=>
+;	(train siege-tower)
+;	(set-goal have-siege-counter 2)
+;)
+
+(defrule
+	(can-train petard)
+	(up-compare-goal not-countered-petard > 1)
+	(up-compare-goal can-trebuchet-counter > 1)
+	(unit-type-count petard < 10)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal castle-train-count < 3) 
+	(military-population > 40)
+	(players-military-population target-player < 40)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train petard)
+	(set-goal have-castle-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train trebuchet)
+	(up-compare-goal not-countered-trebuchet > 1)
+	(up-compare-goal can-trebuchet-counter > 1)
+	(unit-type-count trebuchet < 5)
+	(not (town-under-attack))
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train trebuchet)
+	(set-goal have-castle-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train turtle-ship-line)
+	(or (or (up-compare-goal can-cannon-galleon-counter > 1)
+		(up-compare-goal can-fire-ship-counter > 1))
+		(up-compare-goal can-demolition-ship-counter > 1))
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(unit-type-count turtle-ship-line < 10)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train turtle-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train cannon-galleon-line)
+	(up-compare-goal can-cannon-galleon-counter > 1)
+	(unit-type-count cannon-galleon-line < 10)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train demolition-ship-line)
+	(up-compare-goal can-demolition-ship-counter > 1)
+	(unit-type-count demolition-ship-line < 20)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train demolition-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train fire-ship-line)
+	(up-compare-goal can-fire-ship-counter > 1)
+	(unit-type-count fire-ship-line < 10)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train galley-line)
+	(up-compare-goal can-galley-counter > 1)
+	(unit-type-count galley-line < 10)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+	(set-goal have-dock-counter 2)
+)
+
+
+; ---------------------------
+; END COUNTER-UNIT CREATION SECTION 1
+; ---------------------------
+; ---------------------------
+; COUNTER-UNIT CREATION SECTION 2
+; ---------------------------
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train spearman-line)
+	(up-compare-goal not-countered-spearman > 2)
+	(up-compare-goal can-spearman-counter > 2)
+	(unit-type-count spearman-line < 20)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(can-train militiaman-line)
+	(up-compare-goal not-countered-militiaman > 2)
+	(up-compare-goal can-militiaman-counter > 2)
+	(unit-type-count militiaman-line < 20)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(can-train eagle-warrior-line)
+	(up-compare-goal not-countered-eagle-warrior > 2)
+	(up-compare-goal can-eagle-warrior-counter > 2)
+	(unit-type-count eagle-warrior-line < 20)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train eagle-warrior-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train skirmisher-line)
+	(up-compare-goal not-countered-skirmisher > 2)
+	(up-compare-goal can-skirmisher-counter > 2)
+	(unit-type-count skirmisher-line < 20)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train archer-line)
+	(up-compare-goal not-countered-archer > 2)
+	(up-compare-goal can-archer-counter > 2)
+	(unit-type-count archer-line < 20)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(can-train hand-cannoneer)
+	(up-compare-goal not-countered-hand-cannoneer > 2)
+	(up-compare-goal can-hand-cannoneer-counter > 2)
+	(unit-type-count hand-cannoneer < 20)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train hand-cannoneer)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train cavalry-archer-line)
+	(up-compare-goal not-countered-cavalry-archer > 2)
+	(up-compare-goal can-cavalry-archer-counter > 2)
+	(unit-type-count cavalry-archer-line < 20)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(can-train monk)
+	(up-compare-goal not-countered-monk > 2)
+	(up-compare-goal can-monk-counter > 2)
+	(unit-type-count monk < 20)
+	(gold-amount > 200)
+	(up-compare-goal church-train-count < 3) 
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+
+(defrule
+	(can-train scout-cavalry-line)
+	(up-compare-goal not-countered-scout-cavalry > 2)
+	(up-compare-goal can-scout-cavalry-counter > 2)
+	(unit-type-count scout-cavalry-line < 20)
+	(food-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(can-train camel-line)
+	(up-compare-goal not-countered-camel > 2)
+	(up-compare-goal can-camel-counter > 2)
+	(unit-type-count camel-line < 20)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train camel-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(can-train knight-line)
+	(up-compare-goal not-countered-knight > 2)
+	(up-compare-goal can-knight-counter > 2)
+	(unit-type-count knight-line < 20)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train scorpion-line)
+	(up-compare-goal not-countered-scorpion > 2)
+	(up-compare-goal can-scorpion-counter > 2)
+	(unit-type-count scorpion-line < 20)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train battering-ram-line)
+	(up-compare-goal not-countered-battering-ram > 2)
+	(up-compare-goal can-battering-ram-counter > 2)
+	(unit-type-count battering-ram-line < 10)
+	(not (town-under-attack))
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(game-time > 900)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train battering-ram-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train mangonel-line)
+	(up-compare-goal not-countered-mangonel > 2)
+	(up-compare-goal can-mangonel-counter > 2)
+	(unit-type-count mangonel-line < 20)
+	(or (or (up-compare-goal can-demolition-ship-counter > 2);if we're training demolition ships, we probably need mangonels too for some land-side support.
+		(players-unit-type-count any-enemy villager > 80));if you can see this many villagers, we're probably already in their town
+			(and (unit-type-count archer-line > 10)
+				(unit-type-count spearman-line > 10)));otherwise, mangonels need to be built en masse with some fire support
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train mangonel-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(can-train bombard-cannon)
+	(up-compare-goal not-countered-bombard-cannon > 2)
+	(up-compare-goal can-bombard-cannon-counter > 2)
+	(unit-type-count bombard-cannon < 10)
+	(not (town-under-attack))
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train bombard-cannon)
+	(set-goal have-siege-counter 2)
+)
+
+;(defrule
+;	(can-train siege-tower)
+;	(up-compare-goal not-countered-battering-ram > 2)
+;	(up-compare-goal can-battering-ram-counter > 2)
+;	(or (or (or (or (players-unit-type-count any-enemy archer-line > 20)
+;		(players-unit-type-count any-enemy cavalry-archer-line > 20))
+;		(players-unit-type-count any-enemy hand-cannoneer > 20))
+;		(players-unit-type-count any-enemy mangonel-line > 10))
+;		(players-unit-type-count any-enemy scorpion-line > 10))
+;	(unit-type-count militiaman-line > 20)
+;	(not (town-under-attack))
+;	(wood-amount > 200)
+;	(gold-amount > 200)
+;	(unit-type-count siege-tower < 10)
+;=>
+;	(train siege-tower)
+;	(set-goal have-siege-counter 2)
+;)
+
+(defrule
+	(can-train petard)
+	(up-compare-goal not-countered-petard > 2)
+	(up-compare-goal can-trebuchet-counter > 2)
+	(unit-type-count petard < 20)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal castle-train-count < 3) 
+	(military-population > 40)
+	(players-military-population target-player < 40)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train petard)
+	(set-goal have-castle-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train trebuchet)
+	(up-compare-goal not-countered-trebuchet > 2)
+	(up-compare-goal can-trebuchet-counter > 2)
+	(unit-type-count trebuchet < 10)
+	(not (town-under-attack))
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train trebuchet)
+	(set-goal have-castle-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train turtle-ship-line)
+	(or (or (up-compare-goal can-cannon-galleon-counter > 2)
+		(up-compare-goal can-fire-ship-counter > 2))
+		(up-compare-goal can-demolition-ship-counter > 2))
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(unit-type-count turtle-ship-line < 20)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train turtle-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train cannon-galleon-line)
+	(up-compare-goal can-cannon-galleon-counter > 2)
+	(unit-type-count cannon-galleon-line < 20)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train demolition-ship-line)
+	(up-compare-goal can-demolition-ship-counter > 2)
+	(unit-type-count demolition-ship-line < 40)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train demolition-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train fire-ship-line)
+	(up-compare-goal can-fire-ship-counter > 2)
+	(unit-type-count fire-ship-line < 20)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train galley-line)
+	(up-compare-goal can-galley-counter > 2)
+	(unit-type-count galley-line < 20)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+	(set-goal have-dock-counter 2)
+)
+
+
+; ---------------------------
+; END COUNTER-UNIT CREATION SECTION 2
+; ---------------------------
+; ---------------------------
+; COUNTER-UNIT CREATION SECTION 3
+; ---------------------------
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train spearman-line)
+	(up-compare-goal not-countered-spearman > 3)
+	(up-compare-goal can-spearman-counter > 3)
+	(unit-type-count spearman-line < 40)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(can-train militiaman-line)
+	(up-compare-goal not-countered-militiaman > 3)
+	(up-compare-goal can-militiaman-counter > 3)
+	(unit-type-count militiaman-line < 40)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(can-train eagle-warrior-line)
+	(up-compare-goal not-countered-eagle-warrior > 3)
+	(up-compare-goal can-eagle-warrior-counter > 3)
+	(unit-type-count eagle-warrior-line < 40)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train eagle-warrior-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train skirmisher-line)
+	(up-compare-goal not-countered-skirmisher > 3)
+	(up-compare-goal can-skirmisher-counter > 3)
+	(unit-type-count skirmisher-line < 40)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train archer-line)
+	(up-compare-goal not-countered-archer > 3)
+	(up-compare-goal can-archer-counter > 3)
+	(unit-type-count archer-line < 40)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(can-train hand-cannoneer)
+	(up-compare-goal not-countered-hand-cannoneer > 3)
+	(up-compare-goal can-hand-cannoneer-counter > 3)
+	(unit-type-count hand-cannoneer < 40)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train hand-cannoneer)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train cavalry-archer-line)
+	(up-compare-goal not-countered-cavalry-archer > 3)
+	(up-compare-goal can-cavalry-archer-counter > 3)
+	(unit-type-count cavalry-archer-line < 40)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(can-train monk)
+	(up-compare-goal not-countered-monk > 3)
+	(up-compare-goal can-monk-counter > 3)
+	(unit-type-count monk < 40)
+	(gold-amount > 200)
+	(up-compare-goal church-train-count < 3) 
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+
+(defrule
+	(can-train scout-cavalry-line)
+	(up-compare-goal not-countered-scout-cavalry > 3)
+	(up-compare-goal can-scout-cavalry-counter > 3)
+	(unit-type-count scout-cavalry-line < 40)
+	(food-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(can-train camel-line)
+	(up-compare-goal not-countered-camel > 3)
+	(up-compare-goal can-camel-counter > 3)
+	(unit-type-count camel-line < 40)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train camel-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(can-train knight-line)
+	(up-compare-goal not-countered-knight > 3)
+	(up-compare-goal can-knight-counter > 3)
+	(unit-type-count knight-line < 40)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train scorpion-line)
+	(up-compare-goal not-countered-scorpion > 3)
+	(up-compare-goal can-scorpion-counter > 3)
+	(unit-type-count scorpion-line < 40)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train battering-ram-line)
+	(up-compare-goal not-countered-battering-ram > 3)
+	(up-compare-goal can-battering-ram-counter > 3)
+	(unit-type-count battering-ram-line < 20)
+	(not (town-under-attack))
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(game-time > 900)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train battering-ram-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train mangonel-line)
+	(up-compare-goal not-countered-mangonel > 3)
+	(up-compare-goal can-mangonel-counter > 3)
+	(unit-type-count mangonel-line < 40)
+	(or (or (up-compare-goal can-demolition-ship-counter > 3);if we're training demolition ships, we probably need mangonels too for some land-side support.
+		(players-unit-type-count any-enemy villager > 80));if you can see this many villagers, we're probably already in their town
+			(and (unit-type-count archer-line > 20)
+				(unit-type-count spearman-line > 20)));otherwise, mangonels need to be built en masse with some fire support
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train mangonel-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(can-train bombard-cannon)
+	(up-compare-goal not-countered-bombard-cannon > 3)
+	(up-compare-goal can-bombard-cannon-counter > 3)
+	(unit-type-count bombard-cannon < 20)
+	(not (town-under-attack))
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train bombard-cannon)
+	(set-goal have-siege-counter 2)
+)
+
+;(defrule
+;	(can-train siege-tower)
+;	(up-compare-goal not-countered-battering-ram > 3)
+;	(up-compare-goal can-battering-ram-counter > 3)
+;	(or (or (or (or (players-unit-type-count any-enemy archer-line > 40)
+;		(players-unit-type-count any-enemy cavalry-archer-line > 40))
+;		(players-unit-type-count any-enemy hand-cannoneer > 40))
+;		(players-unit-type-count any-enemy mangonel-line > 20))
+;		(players-unit-type-count any-enemy scorpion-line > 20))
+;	(unit-type-count militiaman-line > 40)
+;	(not (town-under-attack))
+;	(wood-amount > 200)
+;	(gold-amount > 200)
+;	(unit-type-count siege-tower < 20)
+;=>
+;	(train siege-tower)
+;	(set-goal have-siege-counter 2)
+;)
+
+(defrule
+	(can-train petard)
+	(up-compare-goal not-countered-petard > 3)
+	(up-compare-goal can-trebuchet-counter > 3)
+	(unit-type-count petard < 40)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal castle-train-count < 3) 
+	(military-population > 40)
+	(players-military-population target-player < 40)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train petard)
+	(set-goal have-castle-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train trebuchet)
+	(up-compare-goal not-countered-trebuchet > 3)
+	(up-compare-goal can-trebuchet-counter > 3)
+	(unit-type-count trebuchet < 20)
+	(not (town-under-attack))
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train trebuchet)
+	(set-goal have-castle-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train turtle-ship-line)
+	(or (or (up-compare-goal can-cannon-galleon-counter > 3)
+		(up-compare-goal can-fire-ship-counter > 3))
+		(up-compare-goal can-demolition-ship-counter > 3))
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(unit-type-count turtle-ship-line < 40)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train turtle-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train cannon-galleon-line)
+	(up-compare-goal can-cannon-galleon-counter > 3)
+	(unit-type-count cannon-galleon-line < 40)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train demolition-ship-line)
+	(up-compare-goal can-demolition-ship-counter > 3)
+	(unit-type-count demolition-ship-line < 80)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train demolition-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train fire-ship-line)
+	(up-compare-goal can-fire-ship-counter > 3)
+	(unit-type-count fire-ship-line < 40)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train galley-line)
+	(up-compare-goal can-galley-counter > 3)
+	(unit-type-count galley-line < 40)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+	(set-goal have-dock-counter 2)
+)
+
+
+; ---------------------------
+; END COUNTER-UNIT CREATION SECTION 3
+; ---------------------------
+; ---------------------------
+; COUNTER-UNIT CREATION SECTION 4
+; ---------------------------
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train spearman-line)
+	(up-compare-goal not-countered-spearman > 4)
+	(up-compare-goal can-spearman-counter > 4)
+	(unit-type-count spearman-line < 80)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train spearman-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(can-train militiaman-line)
+	(up-compare-goal not-countered-militiaman > 4)
+	(up-compare-goal can-militiaman-counter > 4)
+	(unit-type-count militiaman-line < 80)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train militiaman-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(can-train eagle-warrior-line)
+	(up-compare-goal not-countered-eagle-warrior > 4)
+	(up-compare-goal can-eagle-warrior-counter > 4)
+	(unit-type-count eagle-warrior-line < 80)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal barracks-train-count < 3) 
+=>
+	(up-modify-goal barracks-train-count c:+ 1)
+	(train eagle-warrior-line)
+	(set-goal have-barracks-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train skirmisher-line)
+	(up-compare-goal not-countered-skirmisher > 4)
+	(up-compare-goal can-skirmisher-counter > 4)
+	(unit-type-count skirmisher-line < 80)
+	(food-amount > 200)
+	(wood-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train skirmisher-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train archer-line)
+	(up-compare-goal not-countered-archer > 4)
+	(up-compare-goal can-archer-counter > 4)
+	(unit-type-count archer-line < 80)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train archer-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(can-train hand-cannoneer)
+	(up-compare-goal not-countered-hand-cannoneer > 4)
+	(up-compare-goal can-hand-cannoneer-counter > 4)
+	(unit-type-count hand-cannoneer < 80)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train hand-cannoneer)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train cavalry-archer-line)
+	(up-compare-goal not-countered-cavalry-archer > 4)
+	(up-compare-goal can-cavalry-archer-counter > 4)
+	(unit-type-count cavalry-archer-line < 80)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal archery-train-count < 3) 
+=>
+	(up-modify-goal archery-train-count c:+ 1)
+	(train cavalry-archer-line)
+	(set-goal have-archery-counter 2)
+)
+
+(defrule
+	(can-train monk)
+	(up-compare-goal not-countered-monk > 4)
+	(up-compare-goal can-monk-counter > 4)
+	(unit-type-count monk < 80)
+	(gold-amount > 200)
+	(up-compare-goal church-train-count < 3) 
+=>
+	(up-modify-goal church-train-count c:+ 1)
+	(train monk)
+)
+
+(defrule
+	(can-train scout-cavalry-line)
+	(up-compare-goal not-countered-scout-cavalry > 4)
+	(up-compare-goal can-scout-cavalry-counter > 4)
+	(unit-type-count scout-cavalry-line < 80)
+	(food-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train scout-cavalry-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(can-train camel-line)
+	(up-compare-goal not-countered-camel > 4)
+	(up-compare-goal can-camel-counter > 4)
+	(unit-type-count camel-line < 80)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train camel-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(can-train knight-line)
+	(up-compare-goal not-countered-knight > 4)
+	(up-compare-goal can-knight-counter > 4)
+	(unit-type-count knight-line < 80)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal stable-train-count < 3) 
+=>
+	(up-modify-goal stable-train-count c:+ 1)
+	(train knight-line)
+	(set-goal have-stable-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train scorpion-line)
+	(up-compare-goal not-countered-scorpion > 4)
+	(up-compare-goal can-scorpion-counter > 4)
+	(unit-type-count scorpion-line < 80)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train scorpion-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train battering-ram-line)
+	(up-compare-goal not-countered-battering-ram > 4)
+	(up-compare-goal can-battering-ram-counter > 4)
+	(unit-type-count battering-ram-line < 40)
+	(not (town-under-attack))
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(game-time > 900)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train battering-ram-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train mangonel-line)
+	(up-compare-goal not-countered-mangonel > 4)
+	(up-compare-goal can-mangonel-counter > 4)
+	(unit-type-count mangonel-line < 80)
+	(or (or (up-compare-goal can-demolition-ship-counter > 4);if we're training demolition ships, we probably need mangonels too for some land-side support.
+		(players-unit-type-count any-enemy villager > 80));if you can see this many villagers, we're probably already in their town
+			(and (unit-type-count archer-line > 40)
+				(unit-type-count spearman-line > 40)));otherwise, mangonels need to be built en masse with some fire support
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train mangonel-line)
+	(set-goal have-siege-counter 2)
+)
+
+(defrule
+	(can-train bombard-cannon)
+	(up-compare-goal not-countered-bombard-cannon > 4)
+	(up-compare-goal can-bombard-cannon-counter > 4)
+	(unit-type-count bombard-cannon < 40)
+	(not (town-under-attack))
+	(up-compare-goal siege-train-count < 3) 
+=>
+	(up-modify-goal siege-train-count c:+ 1)
+	(train bombard-cannon)
+	(set-goal have-siege-counter 2)
+)
+
+;(defrule
+;	(can-train siege-tower)
+;	(up-compare-goal not-countered-battering-ram > 4)
+;	(up-compare-goal can-battering-ram-counter > 4)
+;	(or (or (or (or (players-unit-type-count any-enemy archer-line > 80)
+;		(players-unit-type-count any-enemy cavalry-archer-line > 80))
+;		(players-unit-type-count any-enemy hand-cannoneer > 80))
+;		(players-unit-type-count any-enemy mangonel-line > 40))
+;		(players-unit-type-count any-enemy scorpion-line > 40))
+;	(unit-type-count militiaman-line > 80)
+;	(not (town-under-attack))
+;	(wood-amount > 200)
+;	(gold-amount > 200)
+;	(unit-type-count siege-tower < 40)
+;=>
+;	(train siege-tower)
+;	(set-goal have-siege-counter 2)
+;)
+
+(defrule
+	(can-train petard)
+	(up-compare-goal not-countered-petard > 4)
+	(up-compare-goal can-trebuchet-counter > 4)
+	(unit-type-count petard < 80)
+	(food-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal castle-train-count < 3) 
+	(military-population > 40)
+	(players-military-population target-player < 40)
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train petard)
+	(set-goal have-castle-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train trebuchet)
+	(up-compare-goal not-countered-trebuchet > 4)
+	(up-compare-goal can-trebuchet-counter > 4)
+	(unit-type-count trebuchet < 40)
+	(not (town-under-attack))
+	(up-compare-goal castle-train-count < 3) 
+=>
+	(up-modify-goal castle-train-count c:+ 1)
+	(train trebuchet)
+	(set-goal have-castle-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train turtle-ship-line)
+	(or (or (up-compare-goal can-cannon-galleon-counter > 4)
+		(up-compare-goal can-fire-ship-counter > 4))
+		(up-compare-goal can-demolition-ship-counter > 4))
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(unit-type-count turtle-ship-line < 80)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train turtle-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train cannon-galleon-line)
+	(up-compare-goal can-cannon-galleon-counter > 4)
+	(unit-type-count cannon-galleon-line < 80)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train cannon-galleon-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train demolition-ship-line)
+	(up-compare-goal can-demolition-ship-counter > 4)
+	(unit-type-count demolition-ship-line < 160)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train demolition-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train fire-ship-line)
+	(up-compare-goal can-fire-ship-counter > 4)
+	(unit-type-count fire-ship-line < 80)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train fire-ship-line)
+	(set-goal have-dock-counter 2)
+)
+
+(defrule
+	(goal save-for-town-center 0)
+	(can-train galley-line)
+	(up-compare-goal can-galley-counter > 4)
+	(unit-type-count galley-line < 80)
+	(wood-amount > 200)
+	(gold-amount > 200)
+	(up-compare-goal dock-train-count < 3) 
+	(goal warship-training-disabled 0)
+=>
+	(up-modify-goal dock-train-count c:+ 1)
+	(train galley-line)
+	(set-goal have-dock-counter 2)
+)
+
+; ---------------------------
+; END COUNTER-UNIT CREATION SECTION 4
+; ---------------------------

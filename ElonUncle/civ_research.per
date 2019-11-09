@@ -1,0 +1,3154 @@
+;TYPES AND ORDER:
+;ARCHERS
+;CAVALRY ARCHERS
+;GUNPOWDER
+;CAVALRY
+;INFANTRY
+;SIEGE
+;MONKS
+;DEFENSE
+;NAVY
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0);conscription is just fkin awesome
+	(can-research ri-conscription)
+=>
+	(research ri-conscription)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1));did I mention that it's awesome?
+	(can-research-with-escrow ri-conscription)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-conscription)
+)
+
+
+; ---------------------------
+; CIV-UNIQUE SPECIAL RESEARCH GOAL SETTINGS
+; ---------------------------
+
+#load-if-defined BRITON-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(or (unit-type-count archer-line >= 11)
+		(unit-type-count longbowman-line >= 11))
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+	
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count trebuchet-set >= 2)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+
+
+#end-if
+
+
+#load-if-defined BYZANTINE-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count fire-ship-line >= 7)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count cataphract-line >= 6)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+
+#end-if
+
+
+#load-if-defined CELTIC-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(or (building-type-count castle > 0)
+		(building-type-count watch-tower-line >= 6))
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (or (unit-type-count battering-ram-line >= 3)
+		(unit-type-count mangonel-line >= 2))
+		(unit-type-count scorpion-line >= 5))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+
+#end-if
+
+
+#load-if-defined CHINESE-CIV
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(building-type-count stone-wall-line >= 60)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (unit-type-count chu-ko-nu-line >= 11)
+		(unit-type-count scorpion-line >= 5))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined FRANKISH-CIV
+
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(building-type-count stable >= 2)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count my-unique-unit-line >= 10)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined GOTHIC-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(building-type-count barracks >= 2)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(building-type-count barracks >= 2)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined JAPANESE-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(building-type-count watch-tower-line >= 6)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count trebuchet-set >= 2)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined MONGOL-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(building-type-count house >= 13)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (or (unit-type-count battering-ram-line >= 3)
+		(unit-type-count mangonel-line >= 2))
+		(unit-type-count scorpion-line >= 5))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined PERSIAN-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(building-type-count castle > 0)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count my-unique-unit-line >= 3)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined SARACEN-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count monk >= 8)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (unit-type-count mameluke-line >= 6)
+		(unit-type-count camel-line >= 7))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined TEUTONIC-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(or (or (unit-type-count battering-ram-line >= 3)
+		(unit-type-count mangonel-line >= 2))
+		(unit-type-count scorpion-line >= 5))
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(building-type-count castle > 0)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined TURKISH-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count cavalry-archer-line >= 8)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (or (building-type-count bombard-tower >= 2)
+		(unit-type-count bombard-cannon >= 2))
+		(unit-type-count cannon-galleon-line >= 2))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined VIKING-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(or (or (unit-type-count militiaman-line >= 10)
+		(unit-type-count berserk-line >= 9))
+		(unit-type-count spearman-line >= 13))
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count berserk-line >= 9)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined AZTEC-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count skirmisher-line >= 13)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (or (or (unit-type-count militiaman-line >= 10)
+		(unit-type-count eagle-warrior-line >= 11))
+		(unit-type-count spearman-line >= 13))
+		(unit-type-count my-unique-unit-line >= 9))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined HUN-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(building-type-count stable >= 2)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count archer-line > 999);this tech is totally pointless for an AI, really
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined KOREAN-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count turtle-ship-line >= 2)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count mangonel-line >= 2)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined MAYAN-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count archer-line >= 11)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count eagle-warrior-line >= 11)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined SPANISH-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(or (unit-type-count monk >= 8)
+		(unit-type-count missionary >= 8))
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count villager >= 999) ;AIs don't exactly use villagers
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined INCAN-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(or (unit-type-count slinger >= 11)
+		(unit-type-count skirmisher-line >= 13))
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (or (unit-type-count slinger >= 11)
+		(unit-type-count eagle-warrior-line >= 11))
+		(unit-type-count my-unique-unit-line >= 9))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined INDIAN-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	;(unit-type-count ??? >= ???);just get it. if we have gold income, we need that gold income. as early as possible, too.
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count hand-cannoneer >= 8)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined ITALIAN-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(or (unit-type-count archer-line >= 11)
+		(unit-type-count my-unique-unit-line >= 9))
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count trade-cart >= 1)
+	(unit-type-count trade-cart <= 20)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined MAGYAR-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count my-unique-unit-line >= 9);just make sure we're actually trying to make them, and we're not dying
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count cavalry-archer-line >= 8)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined SLAVIC-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count monk >= 8)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(or (unit-type-count militiaman-line >= 10)
+		(unit-type-count spearman-line >= 13))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined BERBERS-CIV
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	;(unit-type-count ??? >= ???) just do it
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count camel-line >= 7)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined ETHIOPIAN-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count my-unique-unit-line >= 9)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (or (unit-type-count battering-ram-line >= 3)
+		(unit-type-count mangonel-line >= 2))
+		(unit-type-count scorpion-line >= 5))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined MALIAN-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	;(unit-type-count ??? >= ???) just get it
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (unit-type-count knight-line >= 6)
+		(unit-type-count scout-cavalry-line >= 10))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined PORTUGUESE-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(or (or (unit-type-count fire-ship-line >= 7)
+		(unit-type-count galley-line >= 7))
+		(unit-type-count caravel-line >= 6))
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (or (or (unit-type-count bombard-cannon >= 2)
+		(unit-type-count cannon-galleon-line >= 2))
+		(unit-type-count hand-cannoneer >= 8))
+		(unit-type-count my-unique-unit-line >= 5))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined BURMESE-CIV
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count battle-elephant-line >= 4)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (or (unit-type-count knight-line >= 6)
+		(unit-type-count scout-cavalry-line >= 10))
+		(unit-type-count my-unique-unit-line >= 7))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined KHMER-CIV
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count battle-elephant-line >= 4)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or (unit-type-count scorpion-line >= 5)
+		(unit-type-count my-unique-unit-line >= 4))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined MALAY-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(building-type-count dock >= 2)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(unit-type-count militiaman-line >= 10)
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+#load-if-defined VIETNAMESE-CIV
+
+(defrule
+	(building-type-count castle > 0)
+	(current-age > feudal-age)
+	(unit-type-count battle-elephant-line >= 4)
+	(goal finished-castle-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal castle-unique-goal 1)(chat-local-to-self "setting goal for castle unique research")
+	(enable-timer unique-research-timer 300)
+)
+;paper money is complicated
+(defrule
+	(building-type-count castle > 0)
+	(current-age > castle-age)
+	(or	
+		(player-in-game any-ally)
+		(or	
+			(and
+				(game-time > 3300)
+				(commodity-selling-price food < 20))
+			(or
+				(dropsite-min-distance gold <= -1)
+				(dropsite-min-distance gold > 10))))
+	(goal finished-imperial-unique 0)
+	(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+=>
+	(set-goal imperial-unique-goal 1)(chat-local-to-self "setting goal for imperial unique research")
+	(enable-timer unique-research-timer 300)
+)
+#end-if
+
+
+
+; ---------------------------
+; Unique research failure
+; ---------------------------
+
+;have failed to finish unique research
+(defrule
+	(timer-triggered unique-research-timer)
+	(goal failed-unique-research 0)
+	(or (goal castle-unique-goal 1)
+		(goal imperial-unique-goal 1))
+=>
+	(disable-timer unique-research-timer)
+	(enable-timer unique-research-timer 300)
+	(set-goal castle-unique-goal 0)
+	(set-goal imperial-unique-goal 0)
+	(set-goal failed-unique-research 1)
+	(set-goal finished-castle-unique 1)
+	(set-goal finished-imperial-unique 1)
+	(chat-local-to-self "Unique research timed out; will retry in five minutes.")
+)
+
+;timer times out; can retry unique research
+(defrule
+	(timer-triggered unique-research-timer)
+	(goal failed-unique-research 0)
+	(goal imperial-unique-goal 1)
+=>
+	(disable-timer unique-research-timer)
+	(enable-timer unique-research-timer 300)
+	(set-goal castle-unique-goal 0)
+	(set-goal imperial-unique-goal 0)
+	(set-goal failed-unique-research 0)
+	(set-goal finished-castle-unique 0)
+	(set-goal finished-imperial-unique 0)
+	(chat-local-to-self "Permitting a retry of unique research.")
+)
+
+
+
+
+
+
+; ---------------------------
+; Collective special research
+; ---------------------------
+
+(defrule
+	(goal castle-unique-goal 1)
+	(can-research-with-escrow ri-castle-research)
+=>
+	(release-escrow food)
+	(release-escrow wood)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-castle-research)
+	(set-goal finished-castle-unique 1)
+	(set-goal castle-unique-goal 0)
+	(disable-timer unique-research-timer)
+)
+(defrule
+	(goal imperial-unique-goal 1)
+	(can-research-with-escrow ri-imperial-research)
+=>
+	(release-escrow food)
+	(release-escrow wood)
+	(release-escrow gold)
+	(release-escrow stone)
+	(research ri-imperial-research)
+	(set-goal finished-imperial-unique 1)
+	(set-goal imperial-unique-goal 0)
+	(disable-timer unique-research-timer)
+)
+
+
+
+; ---------------------------
+; Gunpowder upgrades
+; ---------------------------
+#load-if-not-defined BRITON-CIV
+#load-if-not-defined BYZANTINE-CIV
+#load-if-not-defined CELTIC-CIV
+#load-if-not-defined CHINESE-CIV
+#load-if-not-defined FRANKISH-CIV
+#load-if-not-defined GOTHIC-CIV
+#load-if-not-defined JAPANESE-CIV
+#load-if-not-defined MONGOL-CIV
+#load-if-not-defined PERSIAN-CIV
+#load-if-not-defined SARACEN-CIV
+#load-if-not-defined TEUTONIC-CIV
+#load-if-not-defined VIKING-CIV
+#load-if-not-defined AZTEC-CIV
+#load-if-not-defined HUN-CIV
+#load-if-not-defined KOREAN-CIV
+#load-if-not-defined MAYAN-CIV
+#load-if-not-defined INCAN-CIV
+#load-if-not-defined MAGYAR-CIV
+#load-if-not-defined SLAVIC-CIV
+#load-if-not-defined BERBERS-CIV
+#load-if-not-defined ETHIOPIAN-CIV
+#load-if-not-defined MALIAN-CIV
+;looks underwhelming, but seriously, if we're a gunpowder civ, research it ASAP
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-chemistry)
+=>
+	(research ri-chemistry)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-chemistry)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-chemistry)
+)
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+
+; ---------------------------
+; Archers
+; ---------------------------
+#load-if-not-defined MALAY-CIV
+#load-if-not-defined BURMESE-CIV
+#load-if-not-defined KHMER-CIV
+#load-if-not-defined BYZANTINE-CIV
+#load-if-not-defined CELTIC-CIV
+#load-if-not-defined FRANKISH-CIV
+#load-if-not-defined GOTHIC-CIV
+#load-if-not-defined JAPANESE-CIV
+#load-if-not-defined MONGOL-CIV
+#load-if-not-defined PERSIAN-CIV
+#load-if-not-defined TEUTONIC-CIV
+#load-if-not-defined TURKISH-CIV
+#load-if-not-defined VIKING-CIV
+#load-if-not-defined AZTEC-CIV
+#load-if-not-defined HUN-CIV
+#load-if-not-defined KOREAN-CIV
+#load-if-not-defined SPANISH-CIV
+#load-if-not-defined INCAN-CIV
+#load-if-not-defined INDIAN-CIV
+#load-if-not-defined SLAVIC-CIV
+#load-if-not-defined BERBERS-CIV
+#load-if-not-defined MALIAN-CIV
+#load-if-not-defined PORTUGUESE-CIV
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-crossbow)
+=>
+	(research ri-crossbow)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-arbalest)
+=>
+	(research ri-arbalest)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-elite-skirmisher)
+=>
+	(research ri-elite-skirmisher)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-imperial-skirmisher)
+=>
+	(research ri-imperial-skirmisher)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-thumb-ring)
+=>
+	(research ri-thumb-ring)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-ballistics)
+=>
+	(research ri-ballistics)
+)
+
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-fletching)
+=>
+	(research ri-fletching)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-bodkin-arrow)
+=>
+	(research ri-bodkin-arrow)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-bracer)
+=>
+	(research ri-bracer)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-padded-archer-armor)
+=>
+	(research ri-padded-archer-armor)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-leather-archer-armor)
+=>
+	(research ri-leather-archer-armor)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-ring-archer-armor)
+=>
+	(research ri-ring-archer-armor)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-chemistry)
+=>
+	(research ri-chemistry)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-crossbow)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-crossbow)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-arbalest)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-arbalest)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-elite-skirmisher)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-elite-skirmisher)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-imperial-skirmisher)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-imperial-skirmisher)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-thumb-ring)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-thumb-ring)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-ballistics)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-ballistics)
+)
+
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-fletching)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-fletching)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-bodkin-arrow)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-bodkin-arrow)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-bracer)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-bracer)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-padded-archer-armor)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-padded-archer-armor)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-leather-archer-armor)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-leather-archer-armor)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-ring-archer-armor)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-ring-archer-armor)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-chemistry)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-chemistry)
+)
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+
+
+; ---------------------------
+; Cavalry archers
+; ---------------------------
+#load-if-not-defined BRITON-CIV
+#load-if-not-defined BYZANTINE-CIV
+#load-if-not-defined CELTIC-CIV
+#load-if-not-defined CHINESE-CIV
+#load-if-not-defined FRANKISH-CIV
+#load-if-not-defined GOTHIC-CIV
+#load-if-not-defined JAPANESE-CIV
+#load-if-not-defined PERSIAN-CIV
+#load-if-not-defined TEUTONIC-CIV
+#load-if-not-defined TURKISH-CIV
+#load-if-not-defined VIKING-CIV
+#load-if-not-defined AZTEC-CIV
+#load-if-not-defined KOREAN-CIV
+#load-if-not-defined MAYAN-CIV
+#load-if-not-defined SPANISH-CIV
+#load-if-not-defined INCAN-CIV
+#load-if-not-defined INDIAN-CIV
+#load-if-not-defined ITALIAN-CIV
+#load-if-not-defined MAGYAR-CIV
+#load-if-not-defined SLAVIC-CIV
+#load-if-not-defined BERBERS-CIV
+#load-if-not-defined ETHIOPIAN-CIV
+#load-if-not-defined MALIAN-CIV
+#load-if-not-defined PORTUGUESE-CIV
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-heavy-cavalry-archer)
+=>
+	(research ri-heavy-cavalry-archer)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-thumb-ring)
+=>
+	(research ri-thumb-ring)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-ballistics)
+=>
+	(research ri-ballistics)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-husbandry)
+=>
+	(research ri-husbandry)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-parthian-tactics)
+=>
+	(research ri-parthian-tactics)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-fletching)
+=>
+	(research ri-fletching)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-bodkin-arrow)
+=>
+	(research ri-bodkin-arrow)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-bracer)
+=>
+	(research ri-bracer)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-padded-archer-armor)
+=>
+	(research ri-padded-archer-armor)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-leather-archer-armor)
+=>
+	(research ri-leather-archer-armor)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-ring-archer-armor)
+=>
+	(research ri-ring-archer-armor)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-bloodlines)
+=>
+	(research ri-bloodlines)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-chemistry)
+=>
+	(research ri-chemistry)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-heavy-cavalry-archer)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-heavy-cavalry-archer)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-thumb-ring)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-thumb-ring)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-ballistics)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-ballistics)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-husbandry)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-husbandry)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-parthian-tactics)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-parthian-tactics)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-fletching)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-fletching)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-bodkin-arrow)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-bodkin-arrow)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-bracer)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-bracer)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-padded-archer-armor)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-padded-archer-armor)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-leather-archer-armor)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-leather-archer-armor)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-ring-archer-armor)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-ring-archer-armor)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-bloodlines)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-bloodlines)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-chemistry)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-chemistry)
+)
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+
+
+;cavalry unit upgrades
+#load-if-not-defined BRITON-CIV
+#load-if-not-defined BYZANTINE-CIV
+#load-if-not-defined CELTIC-CIV
+#load-if-not-defined CHINESE-CIV
+#load-if-not-defined GOTHIC-CIV
+#load-if-not-defined JAPANESE-CIV
+#load-if-not-defined TEUTONIC-CIV
+#load-if-not-defined VIKING-CIV
+#load-if-not-defined AZTEC-CIV
+#load-if-not-defined KOREAN-CIV
+#load-if-not-defined MAYAN-CIV
+#load-if-not-defined SPANISH-CIV
+#load-if-not-defined INCAN-CIV
+#load-if-not-defined ITALIAN-CIV
+#load-if-not-defined SLAVIC-CIV
+#load-if-not-defined ETHIOPIAN-CIV
+#load-if-not-defined MALIAN-CIV
+#load-if-not-defined PORTUGUESE-CIV
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-elite-battle-elephant)
+=>
+	(research ri-elite-battle-elephant)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-cavalier)
+=>
+	(research ri-cavalier)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-paladin)
+=>
+	(research ri-paladin)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-light-cavalry)
+=>
+	(research ri-light-cavalry)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-hussar)
+=>
+	(research ri-hussar)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-heavy-camel)
+=>
+	(research ri-heavy-camel)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-imperial-camel)
+=>
+	(research ri-imperial-camel)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-husbandry)
+=>
+	(research ri-husbandry)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-scale-barding)
+=>
+	(research ri-scale-barding)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-chain-barding)
+=>
+	(research ri-chain-barding)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-plate-barding)
+=>
+	(research ri-plate-barding)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-bloodlines)
+=>
+	(research ri-bloodlines)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-forging)
+=>
+	(research ri-forging)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-iron-casting)
+=>
+	(research ri-iron-casting)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-blast-furnace)
+=>
+	(research ri-blast-furnace)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-cavalier)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-cavalier)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-elite-battle-elephant)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-elite-battle-elephant)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-paladin)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-paladin)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-light-cavalry)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-light-cavalry)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-hussar)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-hussar)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-heavy-camel)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-heavy-camel)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-imperial-camel)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-imperial-camel)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-husbandry)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-husbandry)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-scale-barding)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-scale-barding)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-chain-barding)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-chain-barding)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-plate-barding)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-plate-barding)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-bloodlines)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-bloodlines)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-forging)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-forging)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-iron-casting)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-iron-casting)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-blast-furnace)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-blast-furnace)
+)
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+
+
+;infantry
+#load-if-not-defined VIETNAMESE-CIV
+#load-if-not-defined BURMESE-CIV
+#load-if-not-defined KHMER-CIV
+#load-if-not-defined BRITON-CIV
+#load-if-not-defined BYZANTINE-CIV
+#load-if-not-defined CHINESE-CIV
+#load-if-not-defined FRANKISH-CIV
+#load-if-not-defined MONGOL-CIV
+#load-if-not-defined PERSIAN-CIV
+#load-if-not-defined SARACEN-CIV
+#load-if-not-defined TURKISH-CIV
+#load-if-not-defined HUN-CIV
+#load-if-not-defined KOREAN-CIV
+#load-if-not-defined MAYAN-CIV
+#load-if-not-defined SPANISH-CIV
+#load-if-not-defined INDIAN-CIV
+#load-if-not-defined ITALIAN-CIV
+#load-if-not-defined MAGYAR-CIV
+#load-if-not-defined BERBERS-CIV
+#load-if-not-defined PORTUGUESE-CIV
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-eagle-warrior)
+=>
+	(research ri-eagle-warrior)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-elite-eagle-warrior)
+=>
+	(research ri-elite-eagle-warrior)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-man-at-arms)
+=>
+	(research ri-man-at-arms)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-long-swordsman)
+=>
+	(research ri-long-swordsman)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-champion)
+=>
+	(research ri-champion)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-pikeman)
+=>
+	(research ri-pikeman)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-halberdier)
+=>
+	(research ri-halberdier)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-squires)
+=>
+	(research ri-squires)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-scale-mail)
+=>
+	(research ri-scale-mail)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-plate-mail)
+=>
+	(research ri-plate-mail)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-arson)
+=>
+	(research ri-arson)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-forging)
+=>
+	(research ri-forging)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-iron-casting)
+=>
+	(research ri-iron-casting)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-blast-furnace)
+=>
+	(research ri-blast-furnace)
+)
+(defrule ;tracking kind of sucks for AI, actually - I've considered not researching it altogether
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-tracking)
+=>
+	(research ri-tracking)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-eagle-warrior)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-eagle-warrior)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-elite-eagle-warrior)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-elite-eagle-warrior)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-man-at-arms)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-man-at-arms)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-long-swordsman)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-long-swordsman)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-champion)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-champion)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-pikeman)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-pikeman)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-halberdier)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-halberdier)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-squires)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-squires)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-scale-mail)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-scale-mail)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-plate-mail)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-plate-mail)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-arson)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-arson)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-forging)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-forging)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-iron-casting)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-iron-casting)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-blast-furnace)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-blast-furnace)
+)
+(defrule ;tracking kind of sucks for AI, actually - I've considered not researching it altogether
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-tracking)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-tracking)
+)
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+
+;siege
+#load-if-not-defined MALAY-CIV
+#load-if-not-defined VIETNAMESE-CIV
+#load-if-not-defined BURMESE-CIV
+#load-if-not-defined BRITON-CIV
+#load-if-not-defined BYZANTINE-CIV
+#load-if-not-defined CHINESE-CIV
+#load-if-not-defined FRANKISH-CIV
+#load-if-not-defined GOTHIC-CIV
+#load-if-not-defined JAPANESE-CIV
+#load-if-not-defined MONGOL-CIV
+#load-if-not-defined PERSIAN-CIV
+#load-if-not-defined SARACEN-CIV
+#load-if-not-defined TEUTONIC-CIV
+#load-if-not-defined TURKISH-CIV
+#load-if-not-defined VIKING-CIV
+#load-if-not-defined AZTEC-CIV
+#load-if-not-defined HUN-CIV
+#load-if-not-defined MAYAN-CIV
+#load-if-not-defined SPANISH-CIV
+#load-if-not-defined INCAN-CIV
+#load-if-not-defined INDIAN-CIV
+#load-if-not-defined ITALIAN-CIV
+#load-if-not-defined MAGYAR-CIV
+#load-if-not-defined BERBERS-CIV
+#load-if-not-defined ETHIOPIAN-CIV
+#load-if-not-defined MALIAN-CIV
+#load-if-not-defined PORTUGUESE-CIV
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-capped-ram)
+=>
+	(research ri-capped-ram)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-siege-ram)
+=>
+	(research ri-siege-ram)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-onager)
+=>
+	(research ri-onager)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-siege-onager)
+=>
+	(research ri-siege-onager)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-heavy-scorpion)
+=>
+	(research ri-heavy-scorpion)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-siege-engineers)
+=>
+	(research ri-siege-engineers)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-chemistry)
+=>
+	(research ri-chemistry)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-capped-ram)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-capped-ram)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-siege-ram)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-siege-ram)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-onager)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-onager)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-siege-onager)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-siege-onager)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-heavy-scorpion)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-heavy-scorpion)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-siege-engineers)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-siege-engineers)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-chemistry)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-chemistry)
+)
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+
+
+
+;MONK UPGRADES
+#load-if-not-defined MALAY-CIV
+#load-if-not-defined VIETNAMESE-CIV
+#load-if-not-defined KHMER-CIV
+#load-if-not-defined BRITON-CIV
+#load-if-not-defined CELTIC-CIV
+#load-if-not-defined CHINESE-CIV
+#load-if-not-defined FRANKISH-CIV
+#load-if-not-defined GOTHIC-CIV
+#load-if-not-defined JAPANESE-CIV
+#load-if-not-defined MONGOL-CIV
+#load-if-not-defined PERSIAN-CIV
+#load-if-not-defined SARACEN-CIV
+#load-if-not-defined TURKISH-CIV
+#load-if-not-defined VIKING-CIV
+#load-if-not-defined HUN-CIV
+#load-if-not-defined KOREAN-CIV
+#load-if-not-defined MAYAN-CIV
+#load-if-not-defined INCAN-CIV
+#load-if-not-defined INDIAN-CIV
+#load-if-not-defined ITALIAN-CIV
+#load-if-not-defined MAGYAR-CIV
+#load-if-not-defined SLAVIC-CIV
+#load-if-not-defined BERBERS-CIV
+#load-if-not-defined ETHIOPIAN-CIV
+#load-if-not-defined MALIAN-CIV
+#load-if-not-defined PORTUGUESE-CIV
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-sanctity)
+=>
+	(research ri-sanctity)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-theocracy)
+=>
+	(research ri-theocracy)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-illumination)
+=>
+	(research ri-illumination)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-block-printing)
+=>
+	(research ri-block-printing)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-fervor)
+=>
+	(research ri-fervor)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-herbal-medicine)
+=>
+	(research ri-herbal-medicine)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-redemption)
+=>
+	(research ri-redemption)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-atonement)
+=>
+	(research ri-atonement)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-heresy)
+=>
+	(research ri-heresy)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-faith)
+=>
+	(research ri-faith)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-sanctity)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-sanctity)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-theocracy)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-theocracy)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-illumination)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-illumination)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-block-printing)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-block-printing)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-fervor)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-fervor)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-herbal-medicine)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-herbal-medicine)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-redemption)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-redemption)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-atonement)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-atonement)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-heresy)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-heresy)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-faith)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-faith)
+)
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+
+;NAVY UPGRADES
+#load-if-not-defined VIETNAMESE-CIV
+#load-if-not-defined BURMESE-CIV
+#load-if-not-defined KHMER-CIV
+#load-if-not-defined BRITON-CIV
+#load-if-not-defined CELTIC-CIV
+#load-if-not-defined CHINESE-CIV
+#load-if-not-defined FRANKISH-CIV
+#load-if-not-defined GOTHIC-CIV
+#load-if-not-defined MONGOL-CIV
+#load-if-not-defined PERSIAN-CIV
+#load-if-not-defined TEUTONIC-CIV
+#load-if-not-defined TURKISH-CIV
+#load-if-not-defined AZTEC-CIV
+#load-if-not-defined HUN-CIV
+#load-if-not-defined MAYAN-CIV
+#load-if-not-defined SPANISH-CIV
+#load-if-not-defined INCAN-CIV
+#load-if-not-defined INDIAN-CIV
+#load-if-not-defined MAGYAR-CIV
+#load-if-not-defined SLAVIC-CIV
+#load-if-not-defined ETHIOPIAN-CIV
+#load-if-not-defined MALIAN-CIV
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-careening)
+	(goal warship-training-disabled 0)
+=>
+	(research ri-careening)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-war-galley)
+	(goal warship-training-disabled 0)
+=>
+	(research ri-war-galley)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-fast-fire-ship)
+	(goal warship-training-disabled 0)
+=>
+	(research ri-fast-fire-ship)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-galleon)
+	(goal warship-training-disabled 0)
+=>
+	(research ri-galleon)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-heavy-demolition-ship)
+	(goal warship-training-disabled 0)
+=>
+	(research ri-heavy-demolition-ship)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-cannon-galleon)
+	(goal warship-training-disabled 0)
+=>
+	(research ri-cannon-galleon)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-shipwright)
+	(goal warship-training-disabled 0)
+=>
+	(research ri-shipwright)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-dry-dock)
+	(goal warship-training-disabled 0)
+=>
+	(research ri-dry-dock)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-careening)
+	(goal warship-training-disabled 0)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-careening)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-war-galley)
+	(goal warship-training-disabled 0)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-war-galley)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-fast-fire-ship)
+	(goal warship-training-disabled 0)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-fast-fire-ship)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-galleon)
+	(goal warship-training-disabled 0)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-galleon)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-heavy-demolition-ship)
+	(goal warship-training-disabled 0)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-heavy-demolition-ship)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-cannon-galleon)
+	(goal warship-training-disabled 0)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-cannon-galleon)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-shipwright)
+	(goal warship-training-disabled 0)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-shipwright)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-dry-dock)
+	(goal warship-training-disabled 0)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-dry-dock)
+)
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+
+
+;defense
+#load-if-not-defined MALAY-CIV
+#load-if-not-defined VIETNAMESE-CIV
+#load-if-not-defined BURMESE-CIV
+#load-if-not-defined KHMER-CIV
+#load-if-not-defined BRITON-CIV
+#load-if-not-defined CELTIC-CIV
+#load-if-not-defined CHINESE-CIV
+#load-if-not-defined FRANKISH-CIV
+#load-if-not-defined GOTHIC-CIV
+#load-if-not-defined JAPANESE-CIV
+#load-if-not-defined MONGOL-CIV
+#load-if-not-defined PERSIAN-CIV
+#load-if-not-defined SARACEN-CIV
+#load-if-not-defined TEUTONIC-CIV
+#load-if-not-defined TURKISH-CIV
+#load-if-not-defined VIKING-CIV
+#load-if-not-defined AZTEC-CIV
+#load-if-not-defined HUN-CIV
+#load-if-not-defined MAYAN-CIV
+#load-if-not-defined SPANISH-CIV
+#load-if-not-defined INCAN-CIV
+#load-if-not-defined INDIAN-CIV
+#load-if-not-defined ITALIAN-CIV
+#load-if-not-defined MAGYAR-CIV
+#load-if-not-defined SLAVIC-CIV
+#load-if-not-defined BERBERS-CIV
+#load-if-not-defined ETHIOPIAN-CIV
+#load-if-not-defined MALIAN-CIV
+#load-if-not-defined PORTUGUESE-CIV
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-murder-holes)
+=>
+	(research ri-murder-holes)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-chemistry)
+=>
+	(research ri-chemistry)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(goal warship-training-disabled 0)
+	(can-research ri-heated-shot)
+=>
+	(research ri-heated-shot)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-arrowslits)
+=>
+	(research ri-arrowslits)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-town-watch)
+=>
+	(research ri-town-watch)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-town-patrol)
+=>
+	(research ri-town-patrol)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-treadmill-crane)
+=>
+	(research ri-treadmill-crane)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-masonry)
+=>
+	(research ri-masonry)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-architecture)
+=>
+	(research ri-architecture)
+)
+(defrule
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(can-research ri-hoardings)
+=>
+	(research ri-hoardings)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-murder-holes)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-murder-holes)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-chemistry)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-chemistry)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(goal warship-training-disabled 0)
+	(can-research-with-escrow ri-heated-shot)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-heated-shot)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-arrowslits)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-arrowslits)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-town-watch)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-town-watch)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-town-patrol)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-town-patrol)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-treadmill-crane)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-treadmill-crane)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-masonry)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-masonry)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-architecture)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-architecture)
+)
+(defrule
+	(goal age-advancement 0)
+	(goal no-research 0)(goal castle-unique-goal 0)(goal imperial-unique-goal 0)
+	(nand (current-age < castle-age)
+		(goal strategy-save-escrow 1))
+	(can-research-with-escrow ri-hoardings)
+=>
+	(release-escrow food)
+	(release-escrow gold)
+	(release-escrow wood)
+	(release-escrow stone)
+	(research ri-hoardings)
+)
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+#end-if
+
+
