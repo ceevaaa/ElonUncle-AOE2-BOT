@@ -1,0 +1,1788 @@
+; =======================
+; ==== SCOUT CONTROL ====
+; =======================
+(defrule
+	(or	(game-time s:> sn-home-exploration-time)
+		(or	(game-time < 110)
+			(or	(up-compare-goal G-2nd-tick != 0)
+				(building-type-count town-center <= 0))))
+	=>
+	(up-jump-rule 4))
+;-----------------------------------------------------------------------
+(defrule
+	(up-compare-goal G-sheep-total >= 6)
+	(up-gaia-type-count-total c: gold >= 6)
+	(up-gaia-type-count-total c: stone >= 4)
+	(or	(and	(goal G-boarsteal 1)
+			(up-compare-goal G-gametype <= GAMETYPE-1v1))
+		(up-gaia-type-count c: deer >= 2))
+	=>
+	(up-reset-search 1 1 1 1)
+	(up-reset-filters)
+	(set-strategic-number sn-focus-player-number 0)
+	(up-set-target-point P-self-x)
+	(up-filter-distance c: -1 c: 24)
+	(set-goal G-temp3 337149))
+(defrule
+	(goal G-temp3 337149)
+	(up-find-remote c: stone-mine c: 1)
+	(up-find-remote c: gold-mine c: 1)
+	=>
+	(chat-to-player my-player-number "sheep, deer, stone, gold found")
+	(up-modify-goal G-shit-found c:+ 1)
+	(disable-self))
+(defrule
+	(dropsite-min-distance boar-hunting < 35)
+	=>
+	(up-reset-search 1 1 1 1)
+	(up-reset-filters)
+	(set-strategic-number sn-focus-player-number 0)
+	(up-set-target-point P-self-x)
+	(up-filter-distance c: -1 c: 36)
+	(set-goal G-temp3 337150))
+(defrule
+	(goal G-temp3 337150)
+	(or	(up-find-remote c: wild-boar c: 3)
+		(up-find-remote c: javelina c: 3))
+	(or	(not	(map-type yucatan))
+		(up-set-target-object search-remote c: 2))
+	(or	(up-set-target-object search-remote c: 1)
+		(and	(up-set-target-by-id g: ID-current-boar)
+			(up-object-data object-data-hitpoints <= 0)))
+	=>
+	(chat-to-player my-player-number "boars found")
+	(up-modify-goal G-shit-found c:+ 1)
+	(disable-self))
+;-----------------------------------------------------------------------
+(defrule
+	(goal G-shit-found 2)
+	(or	(dropsite-min-distance deer-hunting < 32)
+		(and	(goal G-boarsteal 1)
+			(and	(game-time < 220); 3:40
+				(up-compare-goal G-gametype <= GAMETYPE-1v1))))
+	(up-compare-goal G-scout-unit != villager-class)
+	=>
+	(set-strategic-number sn-home-exploration-time 120); start deer lure immediately
+	(disable-self))
+
+(defrule
+	(up-compare-goal G-scouting < GV-enemy)
+	(goal G-boarsteal 1)
+	(game-time s:> sn-home-exploration-time)
+	(game-time < 220); 3:40
+	=>
+	(up-get-fact game-time 0 G-temp1)
+	(up-modify-goal G-temp1 c:/ 8))
+
+(defrule
+	(up-compare-goal G-scouting < GV-enemy)
+	(game-time s:> sn-home-exploration-time)
+	(or	(dropsite-min-distance deer-hunting >= 32)
+		(and	(up-compare-goal G-gametype <= GAMETYPE-1v1)
+			(and	(goal G-boarsteal 1)
+				(and	(game-time < 220)
+					(dropsite-min-distance deer-hunting g:> G-temp1)))))
+	(up-compare-goal G-scout-unit != villager-class)
+	(up-compare-goal G-scout-unit > 0)
+	=>
+	(set-goal G-scouting GV-enemy)
+	(up-modify-goal G-boarsteal c:+ 1)
+;	(set-strategic-number sn-number-explore-groups 0)
+;	(set-strategic-number sn-total-number-explorers 0)
+	(chat-to-player my-player-number "start searching for enemy"))
+;	(disable-self))
+#load-if-defined MONGOL-CIV #load-if-defined YUCATAN-MAP
+(defrule
+	(up-compare-goal G-scouting < GV-enemy)
+	(game-time s:> sn-home-exploration-time)
+	(up-compare-goal G-scout-unit != villager-class)
+	(up-compare-goal G-scout-unit > 0)
+	=>
+	(set-goal G-scouting GV-enemy)
+	(up-modify-goal G-boarsteal c:+ 1)
+;	(set-strategic-number sn-number-explore-groups 0)
+;	(set-strategic-number sn-total-number-explorers 0)
+	(chat-to-player my-player-number "start searching for enemy"))
+#end-if #end-if
+
+(defrule
+	(up-compare-goal G-scouting < GV-enemy)
+	(game-time s:> sn-home-exploration-time)
+	(dropsite-min-distance deer-hunting < 32)
+	(up-compare-goal G-scout-unit != villager-class)
+	(up-compare-goal G-scout-unit > 0)
+;	(nand	(dropsite-min-distance deer-hunting > 26)
+;		(and	(goal G-boarsteal 1)
+;			(and	(up-compare-goal G-gametype <= GAMETYPE-1v1)
+;				(game-time < 220)))); 3:40
+	=>
+	(set-goal G-scouting GV-deerlure)
+	(chat-to-player my-player-number "starting deer lure")
+	(disable-self))
+
+(defrule
+	(up-compare-goal G-scouting < GV-enemy)
+	(game-time s:> sn-home-exploration-time)
+	(or	(goal G-scout-unit villager-class)
+		(goal G-scout-unit 0))
+	=>
+	(chat-to-player my-player-number "non-military-scout unit, no advanced scouting")
+	(set-goal G-scouting GV-enemyfound); no duc scouting for gay scout units yet
+	(disable-self))
+
+(defrule
+	(goal G-scouting GV-deerlure)
+	(or	(goal G-age GV-upcastle)
+		(or	(and	(goal G-build-order GV-feudal-war)
+				(up-compare-goal G-age >= GV-upfeudal))
+			(up-compare-goal G-deers-lured >= 4)))
+	=>
+	(set-goal ID-target-deer -1)
+	(set-goal G-scouting GV-enemy)
+;	(set-strategic-number sn-number-explore-groups 0)
+;	(set-strategic-number sn-total-number-explorers 0)
+;	(up-reset-scouts)
+	(chat-to-player my-player-number "start searching for enemy")
+	(disable-self))
+
+(defrule
+	(up-compare-goal G-scouting <= GV-point4)
+	(up-compare-goal G-scouting >= GV-enemy)
+	(strategic-number sn-total-number-explorers g:>= G-starting-scouts)
+	=>
+	(up-modify-sn sn-number-explore-groups c:- 1)
+	(up-modify-sn sn-total-number-explorers c:- 1))
+(defrule
+	(up-compare-goal G-scouting <= GV-point4)
+	(up-compare-goal G-scouting >= GV-enemy)
+;	(or	(goal G-map-explored 100)
+		(up-compare-const ALLYCOUNT > 0);)
+;	(strategic-number sn-total-number-explorers g:< G-starting-scouts)
+	=>
+	(up-modify-sn sn-number-explore-groups c:+ 1)
+	(up-modify-sn sn-total-number-explorers c:+ 1)
+	(chat-to-player my-player-number "non-DUC scouting")
+	(enable-timer T-scout 1); ?
+	(set-goal G-scouting GV-retardscouting))
+
+#load-if-defined UP-2-PLAYER-GAME
+(defrule
+	(goal G-scouting GV-retardscouting)
+	(timer-triggered T-scout)
+	=>
+	(up-send-scout group-type-land-explore scout-opposite)
+	(set-strategic-number sn-blot-size 1)
+	(disable-timer T-scout)
+;	(chat-to-player my-player-number "searching for enemy")
+	(enable-timer T-scout 180)
+	(disable-self))
+(defrule
+	(goal G-scouting GV-retardscouting)
+	(timer-triggered T-scout)
+	(players-building-count target-player == 0)
+	=>
+	(up-send-scout group-type-land-explore scout-mirror)
+	(disable-timer T-scout)
+;	(chat-to-player my-player-number "enemy not found, searching mirror")
+	(enable-timer T-scout 180)
+	(disable-self))
+(defrule
+	(goal G-scouting GV-retardscouting)
+	(timer-triggered T-scout)
+	(players-building-count target-player == 0)
+	=>
+	(up-send-scout group-type-land-explore scout-flank)
+	(disable-timer T-scout)
+;	(chat-to-player my-player-number "enemy not found, searching flank")
+	(disable-self))
+#else
+(defrule
+	(goal G-scouting GV-retardscouting)
+	(timer-triggered T-scout)
+	=>
+	(up-send-scout group-type-land-explore scout-flank)
+	(disable-timer T-scout)
+	(chat-to-player my-player-number "scouting flank")
+	(enable-timer T-scout SCOUTTIMER)
+	(disable-self))
+(defrule
+	(goal G-scouting GV-retardscouting)
+	(timer-triggered T-scout)
+	=>
+	(up-send-scout group-type-land-explore scout-mirror)
+	(disable-timer T-scout)
+	(chat-to-player my-player-number "scouting mirror")
+	(enable-timer T-scout SCOUTTIMER)
+	(disable-self))
+(defrule
+	(goal G-scouting GV-retardscouting)
+	(timer-triggered T-scout)
+	=>
+	(up-send-scout group-type-land-explore scout-opposite)
+	(set-strategic-number sn-blot-size 1)
+	(disable-timer T-scout)
+	(chat-to-player my-player-number "scouting opposite")
+	(disable-self))
+#end-if
+#load-if-defined UP-MULTIPLE-ENEMIES
+(defrule
+	(up-compare-goal G-scouting >= GV-enemy)
+	(up-compare-goal G-scouting < GV-enemyfound)
+	(players-building-count every-enemy > 0)
+	(or	(up-compare-goal G-boarsteal < 1)
+		(game-time >= 450)); 7:30
+	=>
+	(set-strategic-number sn-number-explore-groups 1)
+	(set-strategic-number sn-total-number-explorers 1)
+	(up-reset-scouts)
+	(chat-to-player my-player-number "all enemies found")
+	(disable-timer T-scout)
+	(enable-timer T-scout 30)
+	(set-goal G-scouting GV-enemyfound)
+	(disable-self))
+#else
+(defrule
+	(up-compare-goal G-scouting >= GV-enemy)
+	(up-compare-goal G-scouting < GV-enemyfound)
+	(players-building-count target-player > 0)
+	(or	(up-compare-goal G-boarsteal < 1)
+		(game-time >= 450)); 7:30
+	=>
+	(set-strategic-number sn-number-explore-groups 1)
+	(set-strategic-number sn-total-number-explorers 1)
+	(up-reset-scouts)
+	(chat-to-player my-player-number "enemy found")
+	(disable-timer T-scout)
+	(enable-timer T-scout 30)
+	(set-goal G-scouting GV-enemyfound)
+	(disable-self))
+#end-if
+(defrule
+	(up-compare-goal G-scouting >= GV-enemy)
+	(up-compare-goal G-scouting < GV-enemyfound)
+	(players-building-count target-player > 0)
+	(players-building-type-count target-player town-center == 0)
+	(up-compare-goal G-boarsteal >= 2)
+	(game-time < 440); 7:20
+	=>
+	(disable-timer T-scout)
+	(enable-timer T-scout 20)
+	(disable-self))
+(defrule
+	(up-compare-goal G-scouting >= GV-enemy)
+	(up-compare-goal G-scouting < GV-enemyfound)
+	(players-building-type-count target-player town-center > 0)
+	(up-compare-goal G-boarsteal >= 2)
+	(game-time < 450); 7:30
+	=>
+	(set-strategic-number sn-number-explore-groups 1)
+	(set-strategic-number sn-total-number-explorers 1)
+	(chat-to-player my-player-number "enemy found, looking for boar")
+	(set-goal G-scouting GV-boarsteal)
+	(disable-timer T-scout)
+	(disable-self))
+(defrule
+	(up-compare-goal G-scouting >= GV-enemy)
+	(up-compare-goal G-scouting < GV-enemyfound)
+	(players-building-count target-player > 0)
+	(players-building-type-count target-player town-center == 0)
+	(timer-triggered T-scout)
+	(up-compare-goal G-boarsteal >= 2)
+	(game-time < 450); 7:30
+	=>
+	(set-strategic-number sn-number-explore-groups 1)
+	(set-strategic-number sn-total-number-explorers 1)
+	(chat-to-player my-player-number "enemy found")
+	(set-goal G-scouting GV-boarsteal)
+	(disable-timer T-scout)
+	(enable-timer T-scout 5)
+	(disable-self))
+(defrule
+	(goal G-scouting GV-boarsteal)
+	(up-compare-goal G-boarsteal < 3)
+	(timer-triggered T-scout)
+	(players-building-type-count target-player town-center == 0)
+	=>
+	(disable-timer T-scout)
+	(enable-timer T-scout 40)
+	(up-send-scout group-type-land-explore position-target))
+(defrule
+	(goal G-scouting GV-boarsteal)
+	(or	(goal G-boarsteal GV-done-boar)
+		(and	(up-compare-goal G-boarsteal < GV-move-boar)
+			(game-time >= 510))); 8:30
+	=>
+	(set-strategic-number sn-number-explore-groups 1)
+	(set-strategic-number sn-total-number-explorers 1)
+	(up-reset-scouts)
+	(chat-to-player my-player-number "resetting scout")
+	(disable-timer T-scout)
+	(enable-timer T-scout 10)
+	(set-goal G-scouting GV-enemyfound)
+;	(set-goal G-boarsteal 0)
+	(disable-self))
+(defrule
+	(goal G-boarsteal GV-done-boar)
+	(goal G-scouting GV-enemyfound)
+	(players-building-count target-player <= 0)
+	(timer-triggered T-scout)
+	=>
+	(set-goal G-scouting GV-retardscouting)
+	(up-modify-sn sn-number-explore-groups g:= G-starting-scouts)
+	(up-modify-sn sn-total-number-explorers g:= G-starting-scouts)
+	(chat-to-player my-player-number "resume search for enemy")
+	(disable-self))
+(defrule
+	(up-compare-goal G-boarsteal >= 3)
+	(up-compare-goal G-boarsteal <= 10)
+	(up-compare-goal G-scouting != GV-boarsteal)
+	=>
+	(chat-to-player my-player-number "boar steal failed")
+	(set-goal G-boarsteal GV-done-boar))
+(defrule
+;	(unit-type-count SCOUT-UNIT > 0)
+	(or	(timer-triggered T-scout)
+		(and	(players-current-age target-player == feudal-age)
+			(players-current-age-time target-player <= 2)))
+	(goal G-scouting GV-enemyfound)
+	(players-building-count target-player > 0)
+	(players-building-type-count target-player castle == 0); remove this?
+	(up-compare-goal G-scout-unit != villager-class)
+	(up-compare-goal G-scout-unit > 0)
+	=>
+	(up-send-scout group-type-land-explore position-target)
+	(disable-timer T-scout)
+	(chat-to-player my-player-number "rescouting enemy")
+	(enable-timer T-scout SCOUTTIMER))
+
+; =================
+; ==== GENERAL ====
+; =================
+; == DROP FOOD ==
+(defrule; drop food to click feudal
+	(goal G-age 1)
+	(goal G-force-tc-idle 1)
+	(food-amount >= 360); ?
+	(food-amount < 500)
+	=>
+	(up-drop-resources 907 c: 5); 907 = forage
+	(up-drop-resources 949 c: 5); 949 = farms
+	(up-drop-resources 910 c: 6); 910 = boar
+	(up-drop-resources 909 c: 10); 909 = deer
+	(up-drop-resources 958 c: 5)); 958 = sheep
+(defrule; drop food to click castle
+	(goal G-age GV-feudal)
+	(goal G-force-tc-idle 1)
+;	(food-amount > 724)
+;	(gold-amount > 184)
+	(food-amount < 800)
+	=>
+	(up-drop-resources 907 c: 7); 907 = forage
+	(up-drop-resources 910 c: 6); 910 = boar
+	(up-drop-resources 909 c: 10); 909 = deer
+	(up-drop-resources 949 c: 5)); 949 = farms
+(defrule; drop gold to click castle
+	(goal G-age GV-feudal)
+	(goal G-force-tc-idle 1)
+	(gold-amount > 184)
+	(gold-amount < 200)
+	=>
+	(up-drop-resources gold c: 5))
+(defrule; drop deer to click castle
+	(goal G-age GV-feudal)
+	(or	(goal G-build-order GV-fast-castle)
+		(goal G-build-order GV-slow-castle))
+	(building-type-count-total blacksmith > 0)
+	=>
+	(up-drop-resources 909 c: 15));  909 = deer
+(defrule; drop food to maintain vill production
+	(current-age == dark-age)
+	(up-train-site-ready c: villager)
+	(food-amount < 50)
+	(housing-headroom > 0)
+	=>
+	(up-drop-resources 910 c: 8); 910 = boar
+	(up-drop-resources 909 c: 17); 909 = deer
+	(up-drop-resources 958 c: 5)); 958 = sheep
+
+; == VILLAGER PRODUCTION ==
+(defrule
+	(true)
+	=>
+	(set-goal G-vills 0))
+(defrule; dont stop making vills to save pop space for trade too early
+	(goal G-trade 1)
+	(unit-type-count-total villager g:< G-desired-vills)
+	=>
+	(up-modify-goal G-temp1 g:= G-desired-trade)
+	(up-modify-goal G-temp1 c:/ 2))
+(defrule
+;	(unit-type-count-total villager g:< G-desired-vills)
+	(civilian-population g:< G-desired-vills)
+	(or	(up-compare-goal G-trade != 1)
+		(or	(unit-type-count-total villager g:< G-trade-vills)
+			(unit-type-count-total trade-cart g:< G-temp1)))
+	(up-compare-goal G-force-tc-idle != 1)
+	=>
+	(set-goal G-vills 1))
+(defrule
+	(goal G-escrowing imperial-age)
+	(goal G-vills 1)
+;	(goal G-knights 0); ?
+	(food-amount < 1050); 1000
+	(up-get-fact food-amount 0 G-temp1)
+	(up-get-fact gold-amount 0 G-temp2)
+	(or	(gold-amount >= 800)
+		(and	(up-compare-goal G-temp1 g:< G-temp2)
+			(gold-amount >= 500)))
+	(up-compare-goal G-rebuild <= 0)
+	(up-modify-goal G-temp3 g:= G-desired-vills)
+	(up-modify-goal G-temp3 c:/ 3)
+	(up-modify-goal G-temp3 c:max 15)
+	(unit-type-count-total villager g:>= G-temp1)
+	=>
+;	(chat-to-player my-player-number "pausing vill production to go imp")
+	(set-goal G-vills 0))
+(defrule
+	(up-compare-goal G-age >= GV-upimp)
+	(goal G-vills 1)
+	(unit-type-count-total villager g:< G-desired-vills)
+	=>
+	(up-get-fact building-type-count town-center G-temp1)
+	(up-add-object-cost c: villager g: G-temp1))
+(defrule
+	(goal G-vills 1)
+	(up-can-train G-esc-state c: villager)
+	(or	(up-compare-goal G-strat != GV-klewproper)
+		(or	(up-research-status c: ri-chain-mail >= research-pending)
+			(or	(game-time > 1500)
+				(current-age < castle-age))))
+	=>
+	(up-train G-esc-state c: villager))
+(defrule
+	(civilian-population g:> G-max-vills)
+;	(goal G-trade 1)
+	=>
+	(delete-unit villager))
+(defrule
+	(goal G-trade 0)
+	(unit-type-count trade-cart > 0)
+	(or	(civilian-population g:>= G-desired-vills)
+		(population g:> G-184-pop))
+	=>
+	(delete-unit trade-cart))
+
+; == DETECT ENEMY STRATEGY ==
+;(defrule
+;	(players-military-population target-player > 2)
+;	=>
+;	(chat-to-player my-player-number "Enemy producing military units")
+;	(disable-self))
+(defrule
+	(players-military-population target-player > 2)
+	(players-current-age target-player == dark-age)
+	(game-time < 570); 9:30
+	=>
+	(set-goal G-enemy-strategy GV-enemy-drush)
+	(chat-to-player my-player-number "Enemy drushing")
+	(disable-self))
+;(defrule
+;	(players-building-type-count target-player market > 0)
+;	(players-current-age target-player == feudal-age)
+;	(goal G-enemy-strategy 0)
+;	(game-time < 960)
+;	=>
+;	(set-goal G-enemy-strategy GV-enemy-fc)
+;	(chat-to-player my-player-number "Enemy fast castling")
+;	(disable-self))
+(defrule
+	(up-building-type-in-town c: watch-tower > 0)
+	(goal G-attack -1)
+	(strategic-number sn-maximum-town-size < 30)
+	(goal G-trushed 0)
+	=>
+;	(chat-to-player my-player-number "enemy tower in town")
+	(set-goal G-trushed 1))
+(defrule
+	(strategic-number sn-maximum-town-size >  19)
+	(up-building-type-in-town c: watch-tower == 0)
+	(goal G-trushed 1)
+	=>
+	(set-goal G-trushed 0))
+
+; == ENEMY TC COORDS ==
+(defrule
+	(strategic-number sn-target-player-number g:!= G-tc-coords-player)
+	(players-building-type-count target-player town-center > 0)
+	=>
+	(up-modify-goal G-tc-coords-player s:= sn-target-player-number)
+	(up-modify-sn sn-focus-player-number s:= sn-target-player-number)
+	(up-reset-search 1 1 1 1)
+	(up-reset-filters)
+	(up-find-remote c: town-center c: 1)
+	(up-set-target-object search-remote c: 0)
+	(up-get-point position-object P-enemytc-x))
+;	(up-send-flare P-enemytc-x)
+
+; == DELETE WALLS ==
+(defrule
+	(or	(goal G-maptype GV-land-walled)
+		(goal G-maptype GV-water-walled))
+	(or	(or	(goal G-trade 1)
+			(wall-completed-percentage 2 < 100))
+		(and	(game-time > 2100); 35min
+			(strategic-number SN-team-superiority >= 105)))
+	(strategic-number SN-team-superiority >= 75)
+	=>
+	(up-delete-objects c: wall-class c: 32767)
+	(up-delete-objects c: gate-class c: 32767)
+	(disable-self))
+
+; ====================
+; ==== LN / NOMAD ====
+; ====================
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+	(unit-type-count villager-class > 0)
+	=>
+	(set-strategic-number sn-home-exploration-time 600)
+	(up-reset-search 1 1 1 1)
+	(up-reset-filters)
+	(up-find-local c: villager-class c: 240)
+	(up-get-search-state G-local-total)
+	(set-goal P-self-x 0)
+	(set-goal P-self-y 0)
+	(set-goal G-temp1 0); current vill
+	(set-goal G-temp2 765987)
+	(disable-self))
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+;	(unit-type-count villager-class > 0)
+	=>
+	(set-strategic-number sn-percent-civilian-explorers 100)
+	(set-strategic-number sn-minimum-civilian-explorers 1)
+	(set-strategic-number sn-cap-civilian-explorers 255)
+	(set-strategic-number sn-total-number-explorers 255)
+	(set-strategic-number sn-total-number-explorers 255)
+	(set-strategic-number sn-number-explore-groups 255)
+	(set-strategic-number sn-minimum-explore-group-size 1)
+	(set-strategic-number sn-maximum-explore-group-size 1)
+	(set-strategic-number sn-initial-exploration-required 0)
+	(disable-self))
+(defrule
+	(goal G-temp2 765987)
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+	(unit-type-count villager-class > 0)
+	(up-compare-goal G-temp1 g:< G-local-total)
+	=>
+	(up-set-target-object search-local g: G-temp1)
+	(up-get-point position-object P-object-x)
+	(up-add-point P-self-x P-object-x c: 1)
+	(up-modify-goal G-temp1 c:+ 1)
+	(up-jump-rule -1))
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+	(unit-type-count villager-class > 0)
+	=>
+	(up-modify-goal P-self-x g:/ G-local-total)
+	(up-modify-goal P-self-y g:/ G-local-total)
+	(set-goal G-temp2 -1)
+	(disable-self))
+
+(defrule; gather vills
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+	(wood-amount < 275)
+	=>
+	(up-reset-search 1 1 1 1)
+	(up-reset-filters)
+	(up-find-local c: villager-class c: 240)
+	(up-target-point P-self-x action-move -1 -1)
+	(disable-self))
+
+;(defrule
+;	(goal G-starting-tcs 0)
+;	(building-type-count-total mill == 0)
+;	(or	(resource-found food)
+;		(or	(and	(building-type-count-total lumber-camp >= 1)
+;				(unit-type-count villager >= 10))
+;			(unit-type-count villager-food == 0)))
+;	(nand	(goal G-docking 1)
+;		(building-type-count-total dock == 0))
+;	(building-type-count town-center >= 1)
+;	(can-build mill)
+;	=>
+;	(set-strategic-number sn-mill-max-distance 48)
+;	(set-strategic-number sn-camp-max-distance 16); doesnt influence mill, but the nomad lc
+;	(set-strategic-number sn-preferred-mill-placement -1); this work??
+;	(build mill))
+
+(defrule
+	(goal G-starting-tcs 0)
+	(strategic-number sn-camp-max-distance == 20)
+	=>
+	(set-strategic-number sn-camp-max-distance 26)); more?
+
+; == Nomad ==
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+	(building-type-count-total lumber-camp <= 0)
+	(resource-found wood)
+	(can-build town-center)
+	=>
+	(set-strategic-number sn-camp-max-distance 255)
+	(set-strategic-number sn-town-center-placement lumber-camp)
+	(build town-center))
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count lumber-camp == 0)
+	(building-type-count town-center == 0)
+	(building-type-count-total town-center == 1)
+	=>
+	(up-get-fact unit-type-count villager G-temp1)
+	(up-assign-builders c: town-center-foundation g: G-temp1)
+	(set-strategic-number sn-town-center-placement mining-camp)
+	(disable-self))
+
+; == LN ==
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+	(building-type-count-total lumber-camp <= 0)
+	(wood-amount < 275)
+	(resource-found wood)
+	=>
+	(set-strategic-number sn-camp-max-distance 255)
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(build lumber-camp))
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+	(building-type-count-total lumber-camp >= 1)
+	(wood-amount < 275)
+	=>
+	(set-goal G-eco-balance GV-ln-start)
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-minimum-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(disable-self))
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+	(building-type-count lumber-camp >= 1)
+	=>
+	(up-reset-search 1 1 1 1)
+	(up-reset-filters)
+	(up-find-local c: lumber-camp c: 1)
+	(up-set-target-object search-local c: 0)
+	(up-get-point position-object P-self-x)
+	(up-send-flare P-self-x)
+	(disable-self))
+(defrule
+	(current-age > dark-age)
+	=>
+	(up-jump-rule 4))
+;-----------------------------------------------------------------------
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+	(building-type-count lumber-camp >= 1)
+	(can-build town-center)
+	=>
+	(up-full-reset-search)
+	(up-set-target-point P-self-x)
+	(up-filter-distance c: -1 c: 45); 30
+	(up-find-resource c: deer-class c: 1)
+	(up-filter-status c: status-resource c: list-active)
+	(up-find-resource c: forage-bush-class c: 1)
+	(up-filter-status c: status-ready c: list-active)
+	(up-find-resource c: wild-boar c: 1)
+	(up-find-resource c: javelina c: 1)
+	(up-filter-status c: status-gather c: list-active)
+	(up-find-resource c: shore-fish-class c: 1))
+;	(up-find-remote c: gold-mine c: 1))
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+	(building-type-count lumber-camp >= 1)
+	(can-build town-center)
+	(up-set-target-object search-remote c: 0)
+	=>
+	(chat-to-player my-player-number "build TC at food")
+	(up-get-point position-object P-placement-x)
+	(set-strategic-number sn-placement-zone-size 2)
+	(set-strategic-number sn-placement-fail-delta 0)
+	(up-build place-point 0 c: town-center))
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count-total town-center <= 0)
+	(building-type-count lumber-camp >= 1)
+	(can-build town-center)
+	(not	(up-set-target-object search-remote c: 0))
+	=>
+	(chat-to-player my-player-number "build TC at lumber camp")
+	(up-set-placement-data my-player-number lumber-camp c: 0)
+	(set-strategic-number sn-placement-zone-size 5)
+	(set-strategic-number sn-placement-fail-delta 0)
+	(up-build place-control 0 c: town-center))
+(defrule; 1st house
+	(goal G-starting-tcs 0)
+	(building-type-count-total house == 0)
+	(building-type-count lumber-camp >= 1)
+	(building-type-count town-center == 0)
+	(building-type-count-total town-center == 1)
+	(can-build house)
+	=>
+	(up-reset-search 1 1 1 1)
+	(up-reset-filters)
+	(up-filter-exclude -1 actionid-build -1 -1)
+	(up-find-local c: villager-class c: 1)
+	(up-set-target-object search-local c: 0)
+	(up-get-point position-object P-placement-x)
+	(up-set-target-point P-placement-x)
+	(set-strategic-number sn-placement-zone-size 3)
+	(set-strategic-number sn-placement-fail-delta 0)
+	(up-build place-point 0 c: house))
+;-----------------------------------------------------------------------
+(defrule
+	(goal G-starting-tcs 0)
+	(building-type-count lumber-camp >= 1)
+	(building-type-count town-center == 0)
+	(building-type-count-total town-center == 1)
+	=>
+	(up-get-fact unit-type-count villager G-temp1)
+	(up-modify-goal G-temp1 c:- 1)
+	(up-assign-builders c: town-center-foundation g: G-temp1)
+	(set-strategic-number sn-town-center-placement mining-camp)
+	(disable-self))
+
+; =====================
+; ==== BUILD ORDER ====
+; =====================
+#load-if-not-defined HUN-CIV
+(defrule; first house
+	(building-type-count-total house == 0)
+	(up-compare-goal G-starting-tcs >= 1)
+	(population-headroom > 0)
+	(housing-headroom < 3)
+	(can-build house)
+	(building-type-count town-center >= 1)
+	=>
+	(up-assign-builders c: house c: 2)
+	(up-set-placement-data my-player-number villager-class c: 1)
+	(up-build place-control 0 c: house)
+	(disable-self)) #end-if
+(defrule; find food
+	(building-type-count town-center >= 1)
+	=>
+	(set-strategic-number sn-percent-civilian-explorers 100)
+	(set-strategic-number sn-minimum-civilian-explorers 1)
+	(set-strategic-number sn-cap-civilian-explorers 100)
+	(up-modify-sn sn-total-number-explorers g:= G-starting-scouts)
+	(up-modify-sn sn-total-number-explorers c:+ 1)
+	(up-modify-sn sn-number-explore-groups g:= G-starting-scouts)
+	(set-strategic-number sn-minimum-explore-group-size 1)
+	(set-strategic-number sn-maximum-explore-group-size 1)
+	(set-strategic-number sn-initial-exploration-required 0)
+	(disable-self))
+(defrule; stop villager scouting
+	(building-type-count town-center >= 1)
+	(or	(resource-found food)
+		(or	(up-compare-goal G-sheep-total >= 2)
+			(not	(sheep-and-forage-too-far))))
+	=>
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-minimum-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+	(up-modify-sn sn-total-number-explorers g:= G-starting-scouts)
+	(up-modify-sn sn-number-explore-groups g:= G-starting-scouts)
+	(set-goal G-eco-balance GV-early-dark)
+	(up-retask-gatherers wood c: 6)
+	(disable-self))
+(defrule; build mill
+	(building-type-count-total mill < 1)
+	(building-type-count-total town-center >= 1)
+	(up-pending-objects c: mill < 1)
+	(nand	(goal G-docking 1)
+		(building-type-count-total dock < 1))
+	(resource-found food)
+	(can-build mill)
+	=>
+	(set-goal G-temp7 1925553))
+(defrule
+	(goal G-temp7 1925553)
+	=>
+	(up-full-reset-search)
+	(up-set-target-point P-self-x)
+	(up-filter-distance c: 5 c: 20)
+	(up-filter-status c: status-resource c: list-active)
+	(up-find-resource c: forage-bush-class c: 1)
+	(up-filter-distance c: 5 c: 35)
+	(up-find-resource c: forage-bush-class c: 1)
+	(up-filter-distance c: 5 c: 45)
+	(up-find-resource c: forage-bush-class c: 1))
+(defrule
+	(goal G-temp7 1925553)
+	(up-set-target-object search-remote c: 0)
+	=>
+	(chat-to-player my-player-number "default mill")
+	(up-get-point position-object P-placement-x)
+	(set-strategic-number sn-placement-zone-size 2)
+	(set-strategic-number sn-placement-fail-delta 0)
+	(up-build place-point 0 c: mill))
+(defrule
+	(building-type-count-total mill < 1)
+	(building-type-count-total town-center >= 1)
+	(game-time s:> SN-emergency-mill-time)
+	(up-pending-objects c: mill < 1)
+	(up-compare-goal G-rebuild < 2)
+	(can-build mill)
+	(nand	(goal G-docking 1)
+		(building-type-count-total dock < 1))
+	(or	(and	(building-type-count-total lumber-camp >= 1)
+			(unit-type-count villager >= 10))
+		(unit-type-count villager-food == 0))
+	=>
+	(set-goal G-temp7 1925554))
+(defrule
+	(building-type-count-total mill < 1)
+	(building-type-count-total town-center >= 1)
+	(game-time s:> SN-emergency-mill-time)
+	(up-pending-objects c: mill < 1)
+	(up-compare-goal G-rebuild < 2)
+	(can-build mill)
+	(nand	(goal G-docking 1)
+		(building-type-count-total dock < 1))
+	(goal G-starting-tcs 0)
+;	(building-type-count-total lumber-camp == 0)
+	(dropsite-min-distance wood < 4)
+	=>
+	(set-goal G-temp7 1925554))
+(defrule
+	(goal G-temp7 1925554)
+	(or	(goal G-scout-unit villager-class)
+		(not	(up-set-target-by-id g: ID-myscout)))
+	=>
+	(up-full-reset-search)
+	(up-set-target-point P-self-x)
+	(up-filter-distance c: 8 c: 40); 30
+	(up-find-resource c: deer-class c: 1)
+	(up-filter-status c: status-gather c: list-active)
+	(up-find-resource c: shore-fish-class c: 1)
+	(up-jump-rule 1))
+(defrule
+	(goal G-temp7 1925554)
+	=>
+	(up-full-reset-search)
+	(up-set-target-point P-self-x)
+	(up-filter-distance c: 8 c: 20)
+	(up-filter-status c: status-gather c: list-active)
+	(up-find-resource c: shore-fish-class c: 1)
+	(up-filter-distance c: 35 c: 45)
+	(up-filter-status c: status-ready c: list-active)
+	(up-find-resource c: deer-class c: 1)
+	(up-filter-distance c: 20 c: 40); 30
+	(up-filter-status c: status-gather c: list-active)
+	(up-find-resource c: shore-fish-class c: 1))
+(defrule
+	(goal G-temp7 1925554)
+	(up-set-target-object search-remote c: 0)
+	=>
+	(chat-to-player my-player-number "nonstandard mill")
+	(up-get-point position-object P-placement-x)
+	(set-strategic-number sn-placement-zone-size 2)
+	(set-strategic-number sn-placement-fail-delta 0)
+	(up-build place-point 0 c: mill)
+	(up-jump-rule 1))
+(defrule
+	(goal G-temp7 1925554)
+;	(not	(up-set-target-object search-remote c: 0)); redundant since skipped
+	(or	(unit-type-count villager >= 10)
+		(unit-type-count villager-food == 0))
+	=>
+	(chat-to-player my-player-number "pure farm mill")
+	(up-set-placement-data my-player-number town-center c: -9)
+	(set-strategic-number sn-placement-zone-size 2)
+	(set-strategic-number sn-placement-fail-delta 0)
+	(up-build place-control 0 c: mill))
+
+(defrule; begin wood gathering
+	(unit-type-count villager >= 8)
+	(nand	(civ-selected celtic)
+		(unit-type-count villager < 9))
+	(goal G-age 1)
+	=>
+	(set-goal G-eco-balance GV-mid-dark)
+	(disable-self))
+
+(defrule; 1st lumber failsafe
+	(building-type-count-total lumber-camp < 1)
+	(up-pending-placement c: lumber-camp)
+	=>
+;	(chat-to-player my-player-number "lumber camp failsafe")
+	(up-modify-sn sn-camp-max-distance c:+ 1))
+
+; == first lumber camp ==
+(defrule
+	(not	(resource-found wood))
+	(game-time > 20)
+	(up-timer-status T-5 != timer-running)
+	=>
+	(up-modify-sn sn-camp-max-distance c:+ 2))
+(defrule
+	(building-type-count-total lumber-camp == 0)
+	(or	(building-type-count-total mill >= 1)
+		(or	(not	(resource-found food))
+			(dropsite-min-distance food >= 25)))
+	(resource-found wood)
+	(unit-type-count villager-wood >= 2)
+	(can-build lumber-camp)
+	(unit-type-count villager >= 8)
+	=>
+	(set-goal G-temp8 3947511))
+(defrule
+	(goal G-temp8 3947511)
+	=>
+	(up-full-reset-search)
+	(up-set-target-point P-self-x)
+	(up-find-resource c: wood c: 40)
+	(up-clean-search search-remote object-data-distance search-order-asc)
+	(up-get-search-state G-local-total)
+	(up-modify-goal G-temp1 g:= G-remote-total)
+	(up-modify-goal G-temp2 g:= G-remote-total)
+	(up-modify-goal G-temp2 c:- 1)
+	(up-modify-goal G-temp1 c:/ 4)
+	(up-modify-goal G-temp1 c:max 8)
+	(up-modify-goal G-temp1 g:min G-temp2)
+	(up-remove-objects search-remote object-data-index g:< G-temp1))
+(defrule
+	(goal G-temp8 3947511)
+	(up-set-target-object search-remote c: 0)
+	=>
+	(up-get-object-data object-data-distance G-temp1)
+	(up-modify-sn sn-camp-max-distance g:= G-temp1))
+(defrule
+	(goal G-temp8 3947511)
+	=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(build lumber-camp)
+	(set-goal G-saving-wood 0))
+
+; == boar lure ==
+#load-if-defined MAYAN-CIV; mayans take boar earlier
+(defrule
+	(unit-type-count villager >= 8)
+	(or	(unit-type-count villager >= 10)
+		(and	(unit-type-count livestock-class <= 0)
+			(dropsite-min-distance deer-hunting > 8)))
+	(or	(not	(research-available ri-loom))
+		(dropsite-min-distance live-boar < 20))
+	(dropsite-min-distance boar-hunting < 36)
+	=>
+	(set-goal G-boar-mode GV-hunt-1st)
+	(chat-to-player my-player-number "hunt 1st boar")
+	(disable-self))
+#else
+(defrule
+	(unit-type-count villager >= 8)
+	(or	(unit-type-count villager >= 11)
+		(and	(unit-type-count livestock-class <= 0)
+			(dropsite-min-distance deer-hunting > 8)))
+	(or	(not	(research-available ri-loom))
+		(dropsite-min-distance live-boar < 20))
+	(dropsite-min-distance boar-hunting < 36)
+	=>
+	(set-goal G-boar-mode GV-hunt-1st)
+	(chat-to-player my-player-number "hunt 1st boar")
+	(disable-self))
+#end-if
+(defrule; 2nd boar lure
+	(goal G-boar-mode GV-pause-hunt)
+	(up-set-target-by-id g: ID-current-boar)
+	(up-object-data object-data-carry < REMAININGBOAR)
+	(dropsite-min-distance live-boar < 35)
+;	(unit-type-count villager >= 15)
+	=>
+	(chat-to-player my-player-number "hunt 2nd boar")
+	(set-goal G-boar-mode GV-hunt-2nd)
+	(set-goal ID-current-boar -1)
+	(disable-self))
+(defrule; 3+ boars
+	(goal G-boar-mode GV-hunt-done)
+	(up-set-target-by-id g: ID-current-boar)
+	(up-object-data object-data-hitpoints == 0)
+	(up-object-data object-data-carry < REMAININGBOAR)
+	(dropsite-min-distance live-boar < 35)
+	=>
+	(chat-to-player my-player-number "HUNT MOAR BOAR!!!")
+	(set-goal ID-current-boar -1)
+	(up-modify-goal G-boar-mode c:- 1))
+
+(defrule; shift economy
+	(goal G-age 1)
+	(unit-type-count-total villager > 14)
+	=>
+	(set-goal G-eco-balance GV-late-dark)
+	(disable-self))
+
+(defrule; enable deer hunting
+	(goal G-age GV-upfeudal)
+;	(up-compare-goal G-strat != GV-klewproper)
+	=>
+;	(set-strategic-number sn-enable-boar-hunting 1)
+	(set-strategic-number sn-maximum-hunt-drop-distance 16)
+	(set-strategic-number sn-minimum-number-hunters 0)
+	(disable-self))
+#load-if-defined MONGOL-CIV #load-if-defined YUCATAN-MAP
+(defrule
+	(goal G-age GV-upfeudal)
+	=>
+	(set-strategic-number sn-minimum-number-hunters 8)
+	(disable-self))
+#end-if #end-if
+
+(defrule; 2nd lumber
+	(building-type-count-total lumber-camp == 1)
+	(resource-found wood)
+	(building-type-count-total mill >= 1)
+;	(current-age <= feudal-age)
+	(or	(current-age <= feudal-age)
+		(goal G-strat GV-klewproper))
+	(or	(up-compare-goal G-strat != GV-klewproper)
+		(building-type-count-total barracks >= 2))
+	(can-build lumber-camp)
+	=>
+	(set-strategic-number sn-allow-adjacent-dropsites 1)
+	(chat-to-player my-player-number "second lumber camp")
+	(build lumber-camp))
+(defrule; first gold mine
+	(resource-found gold)
+	(or	(building-type-count-total lumber-camp >= 2)
+		(up-compare-goal G-build-order != GV-feudal-war))
+	(building-type-count-total mining-camp == 0)
+	(or	(goal G-eco-balance GV-early-feudal)
+		(goal G-age GV-upfeudal))
+	(up-compare-goal G-strat != GV-klewproper)
+	=>
+	(set-goal G-saving-wood 1))
+(defrule; mining camp
+	(building-type-count-total mining-camp == 0)
+	(up-compare-goal G-age >= GV-upfeudal)
+	(strategic-number sn-gold-gatherer-percentage > 0)
+	(or	(building-type-count-total barracks > 0)
+		(up-compare-goal G-build-order != GV-feudal-war))
+	(can-build mining-camp)
+;	(resource-found gold)
+	(dropsite-min-distance gold < 255)
+	(dropsite-min-distance gold > 4)
+	(up-compare-goal G-strat != GV-klewproper)
+	=>
+;	(chat-to-player my-player-number "triggerrerererer")
+	(set-strategic-number sn-allow-adjacent-dropsites 0)
+	(build mining-camp)
+	(set-goal G-saving-wood 1))
+
+(defrule; build barracks
+	(building-type-count-total barracks == 0)
+	(building-type-count-total lumber-camp >= 1)
+	(building-type-count-total mill >= 1)
+	(nand	(goal G-docking 1)
+		(building-type-count-total dock < 1))
+	(building-type-count-total town-center >= 1)
+	(up-compare-goal G-build-order != GV-fast-castle)
+	(up-compare-goal G-strat != GV-boom)
+	(or	(building-type-count-total mining-camp >= 1)
+		(goal G-build-order GV-feudal-war))
+	(can-build barracks)
+;	(current-age == dark-age)
+	=>
+	(set-strategic-number sn-maximum-town-size 2)
+	(build barracks))
+(defrule
+	(building-type-count-total barracks > 0)
+	(building-type-count-total mining-camp > 0)
+	=>
+	(set-goal G-saving-wood 0)
+	(disable-self))
+
+(defrule; market
+	(current-age == feudal-age)
+	(can-build market)
+;	(or	(goal G-saving-wood 1)
+;		(goal G-strat GV-klewproper))
+	(goal G-build-order GV-fast-castle)
+	(building-type-count-total market == 0)
+	(building-type-count-total barracks == 0)
+	=>
+	(set-strategic-number sn-maximum-town-size 8)
+	(build market)
+	(set-goal G-saving-wood 1))
+(defrule; market failsafe
+	(current-age == feudal-age)
+	(can-build market)
+	(goal G-build-order GV-fast-castle)
+	(building-type-count-total market == 0)
+	(building-type-count-total barracks == 0)
+	(building-type-count-total blacksmith > 0)
+	=>
+	(set-strategic-number sn-maximum-town-size 8)
+	(build market)
+	(set-goal G-saving-wood 0))
+(defrule; fc range
+	(current-age == feudal-age)
+	(can-build archery-range)
+	(building-type-count-total archery-range == 0)
+;	(goal G-saving-wood 1)
+	(goal G-build-order GV-slow-castle)
+	(up-compare-goal G-strat != GV-krushboom)
+	(up-compare-goal G-strat != GV-krush)
+	=>
+	(set-strategic-number sn-maximum-town-size 4)
+	(build archery-range)
+	(set-goal G-saving-wood 1))
+(defrule; fc stable
+	(current-age == feudal-age)
+	(can-build stable)
+	(building-type-count-total stable == 0)
+;	(goal G-saving-wood 1)
+	(goal G-build-order GV-slow-castle)
+	(or	(goal G-strat GV-krushboom)
+		(goal G-strat GV-krush))
+	=>
+	(set-strategic-number sn-maximum-town-size 4)
+	(build stable)
+	(set-goal G-saving-wood 1))
+(defrule; blacksmith for fast castle
+	(current-age == feudal-age)
+	(up-compare-goal G-build-order != GV-feudal-war)
+	(can-build blacksmith)
+	(or	(building-type-count-total market > 0)
+		(or	(building-type-count-total archery-range > 0)
+			(building-type-count-total stable > 0)))
+;	(goal G-saving-wood 1)
+	(building-type-count-total blacksmith == 0)
+	=>
+	(set-goal G-saving-wood 0)
+	(set-strategic-number sn-disable-builder-assistance 0)
+	(set-strategic-number sn-maximum-town-size 6)
+	(build blacksmith))
+(defrule; double ranges
+	(current-age == feudal-age)
+	(can-build archery-range)
+	(goal G-build-order GV-feudal-war)
+	(building-type-count-total archery-range < 2)
+	(nand	(goal G-strat GV-vanguard)
+		(and	(building-type-count-total archery-range >= 1)
+			(building-type-count-total blacksmith == 0)))
+	=>
+	(set-strategic-number sn-maximum-town-size 8)
+	(build archery-range))
+(defrule; blacksmith for feudal war
+	(current-age == feudal-age)
+	(goal G-build-order GV-feudal-war)
+	(building-type-count-total blacksmith == 0)
+	(building-type-count-total archery-range >= 1)
+	(or	(building-type-count-total archery-range >= 2)
+		(goal G-strat GV-vanguard))
+	(building-type-count-total farm >= 6)
+	(can-build blacksmith)
+	=>
+	(set-strategic-number sn-maximum-town-size 2)
+	(build blacksmith))
+(defrule
+	(building-type-count-total blacksmith > 0)
+	=>
+	(set-goal G-saving-wood 0)
+	(disable-self))
+(defrule
+	(building-type-count-total archery-range > 1)
+	(building-type-count-total blacksmith > 0)
+	=>
+	(set-goal G-saving-wood 0)
+	(disable-self))
+(defrule; blacksmith failsafe
+	(or	(or	(building-type-count-total archery-range >= 2)
+			(and	(building-type-count-total archery-range >= 1)
+				(up-compare-goal G-build-order != GV-feudal-war)))
+		(building-type-count-total market >= 1))
+	(current-age == feudal-age)
+	(can-build blacksmith)
+	(building-type-count-total blacksmith == 0)
+	=>
+	(set-strategic-number sn-maximum-town-size 2)
+	(build blacksmith))
+
+(defrule; lower hunting distance
+	(goal G-eco-balance GV-early-castle)
+	=>
+;	(set-strategic-number sn-enable-boar-hunting 1)
+	(set-strategic-number sn-maximum-hunt-drop-distance 12)
+;	(set-strategic-number sn-minimum-boar-lure-group-size 0)
+	(set-strategic-number sn-minimum-number-hunters 0)
+	(disable-self))
+
+; == FORCE TC IDLE ==
+(defrule
+	(goal G-age 1)
+	(up-compare-goal G-build-order != GV-feudal-war)
+	(up-compare-goal G-build-order != GV-fast-castle)
+	(or	(unit-type-count-total villager >= SC-VILLS)
+		(unit-type-count-total villager g:>= G-desired-vills))
+	(food-amount >= 420)
+	(building-type-count-total lumber-camp > 0)
+	(building-type-count-total mill > 0)
+	=>
+	(set-goal G-force-tc-idle 1)
+	(disable-self))
+(defrule
+	(goal G-age 1)
+	(goal G-build-order GV-slow-castle)
+	(or	(unit-type-count-total villager >= SC-VILLS)
+		(unit-type-count-total villager g:>= G-desired-vills))
+	(food-amount >= 360); mongol shiet
+	(building-type-count-total lumber-camp > 0)
+	(building-type-count-total mill > 0)
+	=>
+	(set-goal G-force-tc-idle 1)
+	(disable-self))
+(defrule
+	(goal G-age 1)
+	(goal G-build-order GV-fast-castle)
+	(or	(unit-type-count-total villager g:>= G-fc-vills)
+		(unit-type-count-total villager g:>= G-desired-vills))
+	(or	(unit-type-count-total villager g:>= G-fc-vills-nodeer)
+		(or	(up-compare-goal G-deers-lured > 0)
+			(unit-type-count-total villager g:>= G-desired-vills)))
+	(food-amount >= 380)
+	(building-type-count-total lumber-camp > 0)
+	(building-type-count-total mill > 0)
+	=>
+	(set-goal G-force-tc-idle 1)
+	(disable-self))
+(defrule
+	(goal G-age 1)
+	(goal G-build-order GV-feudal-war)
+	(or	(unit-type-count-total villager >= 21)
+		(unit-type-count-total villager g:>= G-desired-vills))
+	(or	(unit-type-count-total villager >= 25)
+		(food-amount >= 420))
+	(building-type-count-total lumber-camp > 0)
+	(building-type-count-total mill > 0)
+	=>
+	(set-goal G-force-tc-idle 1)
+	(disable-self))
+(defrule
+	(goal G-age GV-feudal)
+	(food-amount >= CASTLEUPIDLEFOOD)
+	(or	(up-compare-goal G-build-order != GV-feudal-war)
+		(and	(food-amount >= CASTLEUPIDLEFOOD)
+			(gold-amount >= 190)))
+	(gold-amount >= 170)
+	(or	(building-type-count-total market > 0)
+		(or	(building-type-count-total archery-range > 0)
+			(building-type-count-total stable > 0)))
+	(building-type-count-total blacksmith > 0)
+	=>
+	(set-goal G-force-tc-idle 1)
+	(disable-self))
+(defrule
+	(goal G-age GV-feudal)
+	(up-compare-goal G-build-order != GV-feudal-war)
+	(unit-type-count-total villager >= 30)
+	=>
+	(set-goal G-force-tc-idle 1)
+	(disable-self))
+
+; ==========================
+; ==== GARRISON CONTROL ====
+; ==========================
+(defrule
+	(true)
+	=>
+	(up-get-fact enemy-units-in-town 0 G-temp1)
+	(up-modify-sn SN-enemy-units-in-town g:= G-temp1)
+	(up-get-fact military-population 0 G-temp2)
+	(up-modify-goal G-temp1 g:%/ G-temp2))
+(defrule
+	(military-population == 0)
+	=>
+	(set-goal G-temp1 1000))
+(defrule
+	(strategic-number SN-enemy-units-in-town < 4)
+	=>
+	(set-goal G-temp1 0))
+(defrule
+	(building-type-count watch-tower >= 1)
+	=>
+	(up-modify-goal G-temp1 c:* 2)
+	(up-modify-goal G-temp1 c:/ 3))
+(defrule
+	(or	(up-compare-goal G-temp1 c:>= 250); enemy has 250% of own forces
+		(military-population < 4))
+	(or	(up-compare-goal G-garrisoning != 1)
+		(goal G-5th-tick 2)); make sure it doesnt bug, but dont spam it too much
+	(unit-type-count mangonel == 0)
+	(unit-type-count eagle-warrior-line < 4)
+	(unit-type-count knight-line < 3)
+	(building-type-count castle == 0)
+	=>
+	(up-gather-inside c: barracks c: 1)
+	(up-gather-inside c: stable c: 1)
+	(up-gather-inside c: archery-range c: 1)
+	(up-gather-inside c: monastery c: 1)
+	(up-gather-inside c: siege-workshop c: 1)
+	(set-goal G-garrisoning 1))
+(defrule
+	(or	(goal G-garrisoning 1)
+		(goal G-5th-tick 2)); make sure it doesnt bug, but dont spam it too much
+	(or	(up-compare-goal G-temp1 c:< 175)
+		(or	(unit-type-count eagle-warrior-line >= 4)
+			(or	(unit-type-count mangonel-line > 0)
+				(building-type-count castle >= 1))))
+	=>
+	(up-gather-inside c: barracks c: 0)
+	(up-gather-inside c: stable c: 0)
+	(up-gather-inside c: archery-range c: 0)
+	(up-gather-inside c: monastery c: 0)
+	(up-gather-inside c: siege-workshop c: 0)
+	(set-goal G-garrisoning 0))
+(defrule
+	(or	(goal G-garrisoning 1)
+		(goal G-5th-tick 2)); make sure it doesnt bug, but dont spam it too much
+	(unit-type-count knight-line >= 3)
+	(players-current-age target-player <= feudal-age)
+	=>
+	(up-gather-inside c: barracks c: 0)
+	(up-gather-inside c: stable c: 0)
+	(up-gather-inside c: archery-range c: 0)
+	(up-gather-inside c: monastery c: 0)
+	(up-gather-inside c: siege-workshop c: 0)
+	(set-goal G-garrisoning 0))
+(defrule
+	(goal G-garrisoning 0)
+	(goal G-5th-tick 2)
+	=>
+	(up-ungarrison c: barracks)
+	(up-ungarrison c: archery-range)
+	(up-ungarrison c: stable)
+	(up-ungarrison c: siege-workshop))
+
+; ===========================
+; ==== resource exchange ====
+; ===========================
+(defrule
+	(true)
+	=>
+	(up-modify-goal G-temp1 g:= G-free-gold)
+	(up-modify-goal G-temp2 g:= G-free-gold)
+	(up-modify-goal G-temp1 g:- G-free-food)
+	(up-modify-goal G-temp2 g:- G-free-wood)
+	(up-modify-goal G-temp3 g:neg G-temp1)
+	(up-modify-goal G-temp4 g:neg G-temp2)
+	(up-modify-goal G-temp3 c:z/ 300)
+	(up-modify-goal G-temp4 c:z/ 300)
+	(set-goal G-temp5 0)
+	(set-goal G-temp6 0))
+
+; == build market ==
+(defrule
+	(building-type-count-total market == 0)
+	(up-compare-goal G-free-wood >= 250)
+	(or	(up-compare-goal G-temp1 > MARKET-THRESHOLD-POS)
+		(or	(up-compare-goal G-temp1 < MARKET-THRESHOLD-NEG)
+			(or	(up-compare-goal G-temp2 > MARKET-THRESHOLD-POS)
+				(up-compare-goal G-temp2 < MARKET-THRESHOLD-NEG))))
+	(up-timer-status T-clicked-up != timer-running)
+	(nand	(goal G-age GV-upcastle)
+		(wood-amount < 960))
+	(can-build market)
+	=>
+	(set-goal G-temp5 4222197))
+(defrule
+	(goal G-temp5 4222197)
+	=>
+	(chat-to-player my-player-number "build market")
+	(set-strategic-number sn-placement-fail-delta 0)
+	(set-strategic-number sn-placement-to-center 1)
+	(up-set-placement-data my-player-number -1 c: -10)
+	(up-build place-control 0 c: market))
+(defrule
+	(building-type-count-total market == 0)
+	(up-compare-goal G-age >= GV-upcastle)
+	(building-type-count-total town-center < 2)
+	(stone-amount < 100)
+	(or	(dropsite-min-distance stone c:> 30)
+		(not	(resource-found stone)))
+	(can-build market)
+	=>
+	(chat-to-player my-player-number "build market to buy stone")
+	(set-strategic-number sn-placement-fail-delta 0)
+	(set-strategic-number sn-placement-to-center 1)
+	(up-set-placement-data my-player-number -1 c: -10)
+	(up-build place-control 0 c: market))
+
+; == SELL ==
+(defrule
+	(up-compare-goal G-temp1 < MARKET-THRESHOLD-NEG)
+	(up-compare-goal G-free-food > 0)
+	(up-compare-goal G-temp5 g:< G-temp3)
+	(can-sell-commodity food)
+	(nand	(current-age == feudal-age)
+		(and	(food-amount < 900)
+			(gold-amount >= 200)))
+	=>
+	(chat-to-player my-player-number "sell food")
+	(sell-commodity food)
+	(up-modify-goal G-temp5 c:+ 1)
+	(up-jump-rule -1))
+(defrule
+	(up-compare-goal G-temp2 < MARKET-THRESHOLD-NEG)
+	(up-compare-goal G-free-wood > 0)
+	(wood-amount >= 375)
+	(up-compare-goal G-temp6 g:< G-temp4)
+	(can-sell-commodity wood)
+	(nand	(building-type-count-total town-center < 2)
+		(and	(up-compare-goal G-age >= GV-upcastle)
+			(and	(wood-amount < 1100)
+				(stone-amount >= 100))))
+	=>
+	(chat-to-player my-player-number "sell wood")
+	(sell-commodity wood)
+	(up-modify-goal G-temp6 c:+ 1)
+	(up-jump-rule -1))
+(defrule
+	(goal G-strat GV-trashwar)
+	(up-compare-goal G-free-gold < 0)
+	(can-sell-commodity stone)
+	=>
+	(chat-to-player my-player-number "sell stone")
+	(sell-commodity stone))
+(defrule
+	(current-age == feudal-age)
+	(goal G-age GV-feudal)
+	(wood-amount >= 200)
+	(food-amount >= 790)
+	(gold-amount < 200)
+	(building-type-count blacksmith > 0)
+	(can-sell-commodity wood)
+	=>
+	(chat-to-player my-player-number "sell wood for castle-up")
+	(sell-commodity wood))
+(defrule
+	(current-age == feudal-age)
+	(goal G-age GV-feudal)
+	(food-amount >= 900)
+	(gold-amount < 200)
+	(building-type-count blacksmith > 0)
+	(can-sell-commodity food)
+	=>
+	(chat-to-player my-player-number "sell food for castle-up")
+	(sell-commodity food))
+
+; == BUY ==
+(defrule
+	(goal G-maptype GV-land-walled)
+	(up-compare-goal G-age >= GV-upcastle)
+	(gold-amount < 100)
+	(unit-type-count-total monk == 0)
+	(cc-players-unit-type-count 0 relic >= 3)
+	(or	(cc-players-unit-type-count 0 relic >= 5)
+		(up-compare-const ALLYCOUNT < 2))
+	=>
+	(set-goal G-temp8 283765))
+
+(defrule
+;	(goal G-trade 1)
+	(up-compare-goal G-temp1 > MARKET-THRESHOLD-POS)
+	(up-compare-goal G-free-gold >= 100)
+	(can-buy-commodity food)
+	(nand	(goal G-temp8 283765)
+		(gold-amount < 200))
+	=>
+	(chat-to-player my-player-number "buy food")
+	(buy-commodity food))
+(defrule
+;	(goal G-trade 1)
+	(up-compare-goal G-temp2 > MARKET-THRESHOLD-POS)
+	(up-compare-goal G-free-gold >= 100)
+	(can-buy-commodity wood)
+	(nand	(goal G-temp8 283765)
+		(gold-amount < 200))
+	=>
+	(chat-to-player my-player-number "buy wood")
+	(buy-commodity wood))
+(defrule
+	(current-age == feudal-age)
+	(goal G-age GV-feudal)
+	(gold-amount >= 350)
+	(food-amount < 780)
+	(building-type-count blacksmith > 0)
+	(can-buy-commodity food)
+	=>
+	(chat-to-player my-player-number "buy food for castle-up")
+	(buy-commodity food))
+(defrule
+	(building-type-count-total town-center g:< G-desiredtcs)
+	(stone-amount < 100)
+	(or	(dropsite-min-distance stone c:> 30)
+		(not	(resource-found stone)))
+	(wood-amount > 250)
+	(up-compare-goal G-age >= GV-upcastle)
+	(can-buy-commodity stone)
+	=>
+	(chat-to-player my-player-number "buy stone for TC")
+	(buy-commodity stone))
+(defrule
+	(goal G-rebuild 2)
+	(wood-amount > 250)
+	(stone-amount < 100)
+	(up-pending-objects c: town-center < 1)
+	(can-buy-commodity stone)
+	=>
+	(chat-to-player my-player-number "buy stone for TC")
+	(buy-commodity stone))
+
+; =========================
+; ==== builder numbers ====
+; =========================
+(defrule
+	(current-age == castle-age)
+	=>
+	(up-assign-builders c: barracks c: 2)
+	(up-assign-builders c: archery-range c: 2)
+	(disable-self))
+(defrule
+	(building-type-count town-center >= 1)
+	=>
+	(up-assign-builders c: castle c: 6)
+	(up-assign-builders c: town-center-foundation c: 5)
+	(up-assign-builders c: siege-workshop c: 2)
+	(up-assign-builders c: watch-tower c: 3)
+	(disable-self))
+(defrule
+	(goal G-strat GV-krushboom)
+	(building-type-count town-center >= 1)
+	=>
+	(up-assign-builders c: town-center-foundation c: 3))
+(defrule
+	(or	(up-compare-goal G-age >= GV-upimp)
+		(civilian-population > 75))
+	=>
+	(up-assign-builders c: castle c: 8)
+	(up-assign-builders c: town-center-foundation c: 6)
+	(up-assign-builders c: siege-workshop c: 2)
+	(up-assign-builders c: monastery c: 2)
+	(up-assign-builders c: barracks c: 3)
+	(disable-self))
+(defrule
+	(goal G-strat GV-boom)
+	(building-type-count town-center >= 1)
+	=>
+	(up-assign-builders c: town-center-foundation c: 6)
+	(disable-self))
+(defrule
+	(building-type-count house > 0)
+	=>
+	(up-assign-builders c: house c: 1)
+	(disable-self))
+(defrule
+	(building-type-count siege-workshop > 0)
+	=>
+	(up-assign-builders c: siege-workshop c: 1)
+	(disable-self))
+(defrule
+	(building-type-count blacksmith == 0)
+	(food-amount > 700)
+;	(up-compare-goal G-build-order != GV-feudal-war)
+	(or	(building-type-count market > 0)
+		(or	(building-type-count archery-range > 0)
+			(building-type-count stable > 0)))
+	=>
+	(up-assign-builders c: blacksmith c: 2)
+	(disable-self))
+(defrule
+	(current-age == dark-age)
+	(goal G-build-order GV-fast-castle)
+	(wood-amount > 300)
+	=>
+	(up-assign-builders c: market c: 2)
+	(disable-self))
+
+; =======================
+; ==== SPECIFIC MAPS ====
+; =======================
+#load-if-defined GHOST-LAKE-MAP
+(defrule
+	(goal G-saving-wood 1)
+	=>
+	(set-strategic-number sn-camp-max-distance 16)
+	(disable-self))
+(defrule
+	(building-type-count-total mining-camp > 0)
+	(strategic-number sn-camp-max-distance == 12)
+	=>
+	(set-strategic-number sn-camp-max-distance 20)
+	(disable-self))
+#end-if
+#load-if-defined GOLD-RUSH-MAP
+(defrule
+	(true)
+	=>
+	(chat-to-player my-player-number "map detected: Gold Rush")
+	(up-assign-builders c: town-center-foundation c: 5)
+	(up-assign-builders c: castle c: 7)
+	(set-strategic-number sn-town-center-placement mining-camp)
+	(set-strategic-number sn-gold-defend-priority 1.0)
+	(set-strategic-number sn-stone-defend-priority 0)
+	(set-strategic-number sn-forage-defend-priority 0)
+	(set-strategic-number sn-relic-defend-priority 0)
+	(set-strategic-number sn-town-defend-priority 0)
+	(set-strategic-number sn-dropsite-separation-distance 1)
+	(disable-self))
+(defrule
+	(goal G-saving-wood 1)
+	=>
+	(set-strategic-number sn-camp-max-distance 12)
+	(disable-self))
+(defrule
+	(building-type-count-total mining-camp > 0)
+	(strategic-number sn-camp-max-distance == 12)
+	=>
+	(set-strategic-number sn-camp-max-distance 20)
+	(disable-self))
+#end-if
+
+; ========================
+; ==== WEIRD SETTINGS ====
+; ========================
+(defrule; vill scouting
+;	(or	(goal G-scout-unit -1)
+;		(and	(goal G-scout-unit villager-class)
+;			(up-compare-goal G-sheepshagger <= 0)))
+	(or	(up-compare-goal G-scout-unit <= 0)
+		(goal G-scout-unit villager-class))
+	(building-type-count town-center >= 1)
+	(strategic-number sn-minimum-civilian-explorers == 0)
+	(military-population <= 0)
+	(up-compare-goal G-scouting < GV-enemyfound)
+	=>
+	(set-goal G-scout-unit villager-class)
+	(set-strategic-number sn-percent-civilian-explorers 20)
+	(set-strategic-number sn-minimum-civilian-explorers 1)
+	(set-strategic-number sn-cap-civilian-explorers 1)
+	(set-strategic-number sn-total-number-explorers 1)
+	(set-strategic-number sn-number-explore-groups 1))
+;	(disable-self))
+;(defrule
+;	(strategic-number sn-minimum-civilian-explorers == 1)
+;	(or	(goal ID-myscout -1)
+;		(and	(up-set-target-by-id g: ID-myscout)
+;			(up-object-data object-data-action != actionid-explore)))
+;	=>
+;	(set-goal G-scout-unit villager-class)
+;	(up-reset-search 1 1 1 1)
+;	(up-reset-filters)
+;	(up-filter-include -1 actionid-explore -1 -1)
+;	(up-find-local c: villager-class c: 1)
+;	(up-set-target-object search-local c: 0)
+;	(up-get-object-data object-data-id ID-myscout))
+(defrule
+	(strategic-number sn-percent-civilian-explorers == 20)
+	(resource-found food)
+	(military-population > 0)
+	=>
+	(chat-to-player my-player-number "start scouting properly")
+	(set-strategic-number sn-percent-civilian-explorers 0)
+	(set-strategic-number sn-minimum-civilian-explorers 0)
+	(set-strategic-number sn-cap-civilian-explorers 0)
+;	(set-strategic-number sn-total-number-explorers 1)
+;	(set-strategic-number sn-number-explore-groups 1)
+;	(set-goal G-scout-unit 0)
+	(set-goal G-scouting GV-enemy)
+	(up-reset-search 1 1 1 1)
+	(up-reset-filters)
+	(up-filter-include cmdid-military -1 -1 -1); actionid-explore
+	(up-find-local c: -1 c: 1)
+	(up-set-target-object search-local c: 0)
+	(up-get-object-data object-data-id ID-myscout)
+	(up-get-object-data object-data-type G-scout-unit))
+
+(defrule; multiple scouts
+	(game-time < 13)
+	(up-compare-goal G-starting-scouts > 1)
+	(strategic-number sn-minimum-civilian-explorers == 0)
+	=>
+	(up-modify-sn sn-total-number-explorers g:= G-starting-scouts)
+	(up-modify-sn sn-number-explore-groups g:= G-starting-scouts)
+	(disable-self))
+
+(defrule; disable civilian militia if enemy is close
+	(strategic-number sn-number-civilian-militia > 0)
+	(up-compare-goal P-enemytc-x > 0)
+	(or	(and	(up-building-type-in-town c: town-center >= 1)
+			(goal G-attack -1))
+		(up-point-distance P-self-x P-enemytc-x < 36))
+	=>
+	(chat-to-player my-player-number "enemy close, disabling civilian militia")
+	(set-strategic-number sn-allow-civilian-defense 0)
+	(set-strategic-number sn-allow-civilian-offense 0)
+	(set-strategic-number sn-number-civilian-militia 0))
+
+; ================
+; ==== RESIGN ====
+; ================
+#load-if-defined UP-2-PLAYER-GAME
+(defrule
+	(goal G-2nd-tick 1)
+	(game-time > 10)
+	(strategic-number SN-raw-superiority < 30)
+	(players-population any-enemy >= 25)
+	=>
+	(up-get-fact civilian-population 0 G-temp1)
+	(up-get-target-fact civilian-population 0 G-temp2)
+	(up-modify-goal G-temp1 g:%/ G-temp2))
+(defrule
+	(goal G-2nd-tick 1)
+	(game-time > 10)
+	(strategic-number SN-raw-superiority < 30)
+	(players-population any-enemy >= 25)
+	(up-compare-goal G-temp1 <= 40)
+	=>
+;	(up-delete-objects c: -1 c: 32767)
+	(chat-to-all CHAT-RESIGN)
+	(resign))
+#else
+#load-if-defined UP-ALLY-IN-GAME
+(defrule
+	(game-time > 10)
+	(population g:< G-med-pop)
+	(strategic-number SN-team-superiority <= 20)
+	(or	(not	(player-in-game every-ally))
+		(and	(players-population every-ally g:< G-low-pop)
+			(and	(players-population any-enemy g:> G-med-pop)
+				(unit-type-count villager < 30))))
+	=>
+	(chat-to-all CHAT-RESIGN)
+	(resign))
+(defrule
+	(game-time > 10)
+	(unit-type-count villager == 0)
+	(building-type-count town-center == 0)
+	=>
+	(chat-to-all "g")
+	(resign))
+#else; FFA / 1vX
+(defrule
+	(game-time > 10)
+	(unit-type-count villager == 0)
+	(building-type-count town-center == 0)
+	=>
+	(chat-to-all "g")
+	(resign))
+#end-if
+#end-if

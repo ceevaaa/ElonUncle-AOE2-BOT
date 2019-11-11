@@ -1,0 +1,92 @@
+; ==== BOOM SWITCH ====
+(defrule
+	(goal G-maptype GV-land-michi)
+	(population-cap > 50)
+	(game-time > 30)
+	=>
+	(set-goal G-strat GV-boom)
+	(set-goal G-locked-strat 1)
+	(chat-to-allies "I'm booming")
+	(disable-self))
+(defrule
+	(goal G-age GV-upimp)
+	(goal G-strat GV-boom)
+	=>
+	(set-goal G-locked-strat 0)
+	(disable-self))
+
+(defrule
+	(goal G-strat GV-boom)
+	(up-compare-goal G-desiredtcs < 4)
+	(nand	(goal G-maptype GV-land-open)
+		(or	(civ-selected mayan)
+			(civ-selected aztec)))
+	=>
+	(set-goal G-desiredtcs 4))
+
+; ==== CASTLE ECO ====
+#load-if-defined AZTEC-CIV
+(defrule; == while researching castle-up ==
+	(goal G-eco-balance GV-early-castle)
+	(goal G-strat GV-boom)
+	=>
+	(set-strategic-number sn-food-gatherer-percentage 38)
+	(set-strategic-number sn-wood-gatherer-percentage 57)
+	(set-strategic-number sn-gold-gatherer-percentage 5)
+	(set-strategic-number sn-stone-gatherer-percentage 0))
+#else
+(defrule; == while researching castle-up ==
+	(goal G-eco-balance GV-early-castle)
+	(goal G-strat GV-boom)
+	=>
+	(set-strategic-number sn-food-gatherer-percentage 41)
+	(set-strategic-number sn-wood-gatherer-percentage 54)
+	(set-strategic-number sn-gold-gatherer-percentage 5)
+	(set-strategic-number sn-stone-gatherer-percentage 0))
+#end-if
+#load-if-defined AZTEC-CIV
+(defrule; == eco balance ==
+	(goal G-strat GV-boom)
+	(building-type-count-total town-center > 2)
+	(goal G-age GV-castle)
+	=>
+	(set-strategic-number sn-food-gatherer-percentage 55)
+	(set-strategic-number sn-wood-gatherer-percentage 40)
+	(set-strategic-number sn-gold-gatherer-percentage 5)
+	(set-strategic-number sn-stone-gatherer-percentage 0))
+(defrule
+	(goal G-strat GV-boom)
+	(food-amount > 500)
+	(goal G-age GV-castle)
+	=>
+	(set-strategic-number sn-food-gatherer-percentage 45)
+	(set-strategic-number sn-wood-gatherer-percentage 40)
+	(set-strategic-number sn-gold-gatherer-percentage 15)
+	(set-strategic-number sn-stone-gatherer-percentage 0))
+#else
+(defrule; == eco balance ==
+	(goal G-strat GV-boom)
+	(building-type-count-total town-center > 2)
+	(goal G-age GV-castle)
+	=>
+	(set-strategic-number sn-food-gatherer-percentage 60)
+	(set-strategic-number sn-wood-gatherer-percentage 35)
+	(set-strategic-number sn-gold-gatherer-percentage 5)
+	(set-strategic-number sn-stone-gatherer-percentage 0))
+(defrule
+	(goal G-strat GV-boom)
+	(food-amount > 500)
+	(goal G-age GV-castle)
+	=>
+	(set-strategic-number sn-food-gatherer-percentage 50)
+	(set-strategic-number sn-wood-gatherer-percentage 35)
+	(set-strategic-number sn-gold-gatherer-percentage 15)
+	(set-strategic-number sn-stone-gatherer-percentage 0))
+#end-if
+(defrule; == build TCs ==
+	(goal G-strat GV-boom)
+	(current-age == castle-age)
+	(building-type-count-total town-center <= 3)
+	(can-build town-center)
+	=>
+	(build town-center))
