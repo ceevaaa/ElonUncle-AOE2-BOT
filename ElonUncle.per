@@ -3606,6 +3606,8 @@
 ; CAMPS
 ; ---------------------------
 
+(load "ElonUncle/General")
+
 (defrule
 	(building-type-count town-center >= 1)
 	(game-time > 15)
@@ -6886,7 +6888,12 @@
 	(acknowledge-taunt this-any-ally 6)
 	(chat-to-player this-any-ally "I apologize. I am low on stone.")
 )
-;
+
+; ---------------------------
+; Booming
+; ---------------------------
+
+(load "ElonUncle/boom")
 
 ; ---------------------------
 ; Gather tweaks
