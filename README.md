@@ -39,4 +39,4 @@ I was able to win only 7 out of 10 matches, surprisingly ElonUncle actually perf
 
 **For all those wondering why I didn't try with Hardest AI**  
 The answer is simple, they cheat in between the games with the resources.
-Also I need to match against Barbarian and other top level AI's; Also Age of Empires: Definitive Edition already released I will shift onto DE.
+I need to match against Barbarian and other top level AI's; Also Age of Empires: Definitive Edition already released I will shift onto DE.
