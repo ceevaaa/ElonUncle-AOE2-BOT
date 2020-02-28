@@ -14,7 +14,7 @@ Copy-Paste your AI files into the game directory ie ".ai" and ".per"
 <img src="https://github.com/ceevaaa/ElonUncle/blob/master/images/thefiles.PNG" width="600">  
 
 **The First four pictures are against the Moderate Original AI**  
-Piece of Cake ; won 10 out of 10
+won 10 out of 10
 <p float="left">
   <img src="https://github.com/ceevaaa/ElonUncle/blob/master/images/IMG1.png" width="200">  
   <img src="https://github.com/ceevaaa/ElonUncle/blob/master/images/IMG2.png" width="200">  
@@ -23,7 +23,7 @@ Piece of Cake ; won 10 out of 10
 </p>  
 
 **The next two pictures are against the Moderate AI**  
-Easy Peasy Lemon Squezzy ; won 10 out of 10
+won 10 out of 10
 <p float="left">
   <img src="https://github.com/ceevaaa/ElonUncle/blob/master/images/IMG5.png" width="200">  
   <img src="https://github.com/ceevaaa/ElonUncle/blob/master/images/IMG6.png" width="200">  
